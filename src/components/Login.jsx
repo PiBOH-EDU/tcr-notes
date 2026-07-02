@@ -4,19 +4,15 @@ import { BANNED } from '../data/banned';
 
 const CLASS_PASSWORD = 'Barsanti1FT';
 
-function normalizeName(input) {
-  const trimmed = input.trim();
-  const parts = trimmed.split(/\s+/).filter(Boolean);
-  if (parts.length >= 2) {
-    const [nome, ...cognomeParts] = parts;
-    const cognome = cognomeParts.join('');
-    return `${cognome}.${nome}`.toLowerCase();
-  }
-  return trimmed.toLowerCase();
+function normalizeName(cognome, nome) {
+  const c = cognome.trim().toLowerCase().replace(/\s+/g, '');
+  const n = nome.trim().toLowerCase().replace(/\s+/g, '');
+  return `${c}.${n}`;
 }
 
 export default function Login({ onLogin, theme }) {
-  const [name, setName] = useState('');
+  const [cognome, setCognome] = useState('');
+  const [nome, setNome] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -24,13 +20,15 @@ export default function Login({ onLogin, theme }) {
     e.preventDefault();
     setError('');
 
-    const trimmedName = name.trim();
-    if (!trimmedName || !password) {
-      setError('Entrambi i campi sono obbligatori.');
+    const trimmedCognome = cognome.trim();
+    const trimmedNome = nome.trim();
+
+    if (!trimmedCognome || !trimmedNome || !password) {
+      setError('Tutti i campi sono obbligatori.');
       return;
     }
 
-    const normalizedName = normalizeName(trimmedName);
+    const normalizedName = normalizeName(trimmedCognome, trimmedNome);
 
     // Controllo lista bannati (formato: cognome.nome)
     const isBanned = BANNED.some((b) => b.toLowerCase() === normalizedName);
@@ -68,24 +66,38 @@ export default function Login({ onLogin, theme }) {
             : 'bg-white border-gray-200'
         }`}
       >
-        <h1 className="text-2xl font-bold mb-2 text-center">📚 Catcher Notes</h1>
+        <h1 className="text-2xl font-bold mb-2 text-center">📚 trc-notes</h1>
         <p className="text-sm text-center mb-6 opacity-80">
           Appunti collaborativi — The Catcher in the Rye
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Nome e Cognome</label>
+            <label className="block text-sm font-medium mb-1">Cognome</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={cognome}
+              onChange={(e) => setCognome(e.target.value)}
               className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 theme === 'dark'
                   ? 'bg-gray-700 border-gray-600 text-white'
                   : 'bg-gray-50 border-gray-300 text-gray-900'
               }`}
-              placeholder="Mario Rossi"
+              placeholder="Rossi"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Nome (o nomi)</label>
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                theme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white'
+                  : 'bg-gray-50 border-gray-300 text-gray-900'
+              }`}
+              placeholder="Mario"
             />
           </div>
           <div>

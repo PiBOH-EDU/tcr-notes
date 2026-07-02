@@ -1,0 +1,9 @@
+.screen-supabase
+.screen-supabase/
+.screen-supabase/*
+/.screen-supabase
+/.screen-supabase/
+/.screen-supabase/*
+*/.screen-supabase
+*/.screen-supabase/
+*/.screen-supabase/*

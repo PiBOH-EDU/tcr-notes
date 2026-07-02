@@ -1,4 +1,4 @@
-# arenaai.md — Catcher Notes App
+# arenaai.md — trc-notes App
 
 ## Regole Fondamentali del Progetto
 
@@ -29,7 +29,19 @@
 - Footer con nota di copyright e versione.
 - File `.env.example` e query SQL per setup Supabase.
 
-### v0.0.1_ALPHA — Normalizzazione nomi in formato cognome.nome
+### v0.0.1_ALPHA — Rinominato progetto in trc-notes + fix tema bianco
+- **Data:** 2026-07-02
+- **Modifiche:**
+  - Rinominata cartella progetto da `catcher-notes` a `trc-notes` (nome repo).
+  - Aggiornati `package.json`, `index.html`, titoli UI e `arenaai.md`.
+  - Aggiunta classe `dark` di default al `<body>` in `index.html` per evitare flash bianco all'avvio.
+
+### v0.0.1_ALPHA — Login con campi separati Cognome / Nome
+- **Data:** 2026-07-02
+- **Modifiche:**
+  - Sostituito il campo singolo "Nome e Cognome" con due campi separati: **Cognome** e **Nome (o nomi)**.
+  - Aggiornata la funzione `normalizeName(cognome, nome)` per combinare i due campi nel formato `cognome.nome` (minuscolo, senza spazi).
+  - Migliorata l'usabilità e ridotti gli errori di input da parte degli utenti.
 - **Data:** 2026-07-02
 - **Modifiche:**
   - Aggiornata la logica di login per normalizzare l'input utente nel formato `cognome.nome` (tutto minuscolo, senza spazi).
