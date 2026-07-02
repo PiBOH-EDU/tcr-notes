@@ -3,9 +3,13 @@
    ============================================================
 
    Formato identificativi: cognome.nome (tutto minuscolo, senza spazi)
-   Esempio: per "Rossi Mario" -> "rossi.mario"
-   Esempio doppio nome: per "De Luca Anna Maria" -> "deluca.annamaria"
-   Esempio triplo nome: per "Mardarie Denis Andrei Florin" -> "mardarie.denisandreiflorin"
+
+   Esempi:
+     "Rossi Mario"              -> "rossi.mario"
+     "Bianchi Lucia"            -> "bianchi.lucia"
+     "Verdi Antonio"            -> "verdi.antonio"
+     "Bianchi Ginevra Anna"     -> "bianchi.ginevraanna"
+     "De Luca Marco Giuseppe"   -> "deluca.marcogiuseppe"
 
    ISTRUZIONI per aggiungere un utente:
    1. Scrivi il cognome seguito da punto seguito dal nome (o nomi attaccati)
@@ -16,8 +20,8 @@
    ESEMPIO CORRETTO:
      export const AUTHORIZED = [
        "rossi.mario",
-       "bianchi.luca",
-       "verdi.giulia",
+       "bianchi.lucia",
+       "verdi.antonio",
      ];
 
    NOTA: se lasci l'array vuoto ([]), TUTTI gli studenti con la

@@ -13,14 +13,31 @@
 
 ## Changelog
 
-### v0.0.2.3 — README + nomi predefiniti + fix crash
+### [0.2.4] — Checkbox docs, nomi fittizi, SECURITY & DISCLAIMER
 - **Autore:** PiBOH
 - **Data:** 2026-07-02
 
 #### Aggiunte
-- Creato README.md dettagliato con guida completa alla configurazione Supabase.
-- Aggiunti nomi predefiniti in `authorized.js`: bonaldo.pietro, aluisio.gabriele, bianco.nicola, mardarie.denisandreiflorin, mollo.michele, cecchetto.jacopo.
-- Aggiornati commenti in `authorized.js` e `banned.js` con istruzioni più chiare per evitare errori di sintassi.
+- Campo checkbox obbligatorio in login per confermare lettura di `SECURITY.md` e `DISCLAIMER.md`.
+- File `docs/SECURITY.md` con policy di sicurezza e segnalazione vulnerabilità.
+- File `docs/DISCLAIMER.md` con avvertenza legale completa ed esclusione di responsabilità.
+- File `CHANGELOG.md` strutturato secondo le norme di Keep a Changelog.
+
+#### Modifiche
+- Login: campo Nome/i sopra, Cognome sotto, con spiegazione per nomi multipli.
+- Messaggio errore autorizzati: aggiunto "Controlla di aver inserito correttamente i dati utente."
+- Sostituiti nomi reali con nomi fittizi standard in tutti gli esempi (rossi.mario, bianchi.lucia, verdi.antonio, ecc.).
+- Aggiornata versione ovunque a **0.2.4**.
+
+### [0.0.2.3] — README + GUIDA-SUPABASE.md + nomi predefiniti + fix crash
+- **Autore:** PiBOH
+- **Data:** 2026-07-02
+
+#### Aggiunte
+- Creato `README.md` con panoramica progetto, requisiti, avvio e deploy.
+- Creato `GUIDA-SUPABASE.md` dettagliato con guida passo-passo alla configurazione del server Supabase.
+- Aggiunti nomi predefiniti in `authorized.js`.
+- Aggiornati commenti in `authorized.js` e `banned.js`.
 - Aggiornata versione ovunque a **0.0.2.3**.
 
 ### v0.0.2.2 — Ripristino Supabase + struttura gerarchica realtime

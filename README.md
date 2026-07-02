@@ -118,9 +118,9 @@ Apri il file [`src/data/authorized.js`](./src/data/authorized.js) e aggiungi l'i
 
 ```javascript
 export const AUTHORIZED = [
-  "cognome.nome",
   "rossi.mario",
-  "bianchi.lucagiuseppe",
+  "bianchi.lucia",
+  "verdi.antonio",
 ];
 ```
 
@@ -134,8 +134,10 @@ export const AUTHORIZED = [
 | Nome reale | Identificativo |
 |------------|----------------|
 | Rossi Mario | `rossi.mario` |
-| De Luca Anna Maria | `deluca.annamaria` |
-| Mardarie Denis Andrei Florin | `mardarie.denisandreiflorin` |
+| Bianchi Lucia | `bianchi.lucia` |
+| Verdi Antonio | `verdi.antonio` |
+| Bianchi Ginevra Anna | `bianchi.ginevraanna` |
+| De Luca Marco Giuseppe | `deluca.marcogiuseppe` |
 
 > **Nota:** se lasci `AUTHORIZED = []` (vuoto), **chiunque** con la password di classe potrà accedere.
 
@@ -205,4 +207,4 @@ Materiale privato protetto da copyright. Accesso e modifica riservati esclusivam
 
 ---
 
-**Versione 0.0.2.3** — autore PiBOH
+**Versione 0.2.4** — autore PiBOH

@@ -11,20 +11,26 @@ function normalizeName(cognome, nome) {
 }
 
 export default function Login({ onLogin, theme }) {
-  const [cognome, setCognome] = useState('');
   const [nome, setNome] = useState('');
+  const [cognome, setCognome] = useState('');
   const [password, setPassword] = useState('');
+  const [acceptedDocs, setAcceptedDocs] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    const trimmedCognome = cognome.trim();
     const trimmedNome = nome.trim();
+    const trimmedCognome = cognome.trim();
 
-    if (!trimmedCognome || !trimmedNome || !password) {
+    if (!trimmedNome || !trimmedCognome || !password) {
       setError('Tutti i campi sono obbligatori.');
+      return;
+    }
+
+    if (!acceptedDocs) {
+      setError('Devi confermare di aver letto SECURITY.md e DISCLAIMER.md per proseguire.');
       return;
     }
 
@@ -45,7 +51,7 @@ export default function Login({ onLogin, theme }) {
     );
 
     if (AUTHORIZED.length > 0 && !isInAuthorizedList) {
-      setError('Accesso negato: non sei nella lista degli autorizzati.');
+      setError('Accesso negato: non sei nella lista degli autorizzati. Controlla di aver inserito correttamente i dati utente.');
       return;
     }
 
@@ -73,6 +79,26 @@ export default function Login({ onLogin, theme }) {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* NOME/I */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Nome (o nomi)</label>
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                theme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white'
+                  : 'bg-gray-50 border-gray-300 text-gray-900'
+              }`}
+              placeholder="Mario"
+            />
+            <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+              Se hai più nomi, scrivili tutti attaccati (es. "AnnaMaria" o "DenisAndreiFlorin")
+            </p>
+          </div>
+
+          {/* COGNOME */}
           <div>
             <label className="block text-sm font-medium mb-1">Cognome</label>
             <input
@@ -87,20 +113,8 @@ export default function Login({ onLogin, theme }) {
               placeholder="Rossi"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Nome (o nomi)</label>
-            <input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                theme === 'dark'
-                  ? 'bg-gray-700 border-gray-600 text-white'
-                  : 'bg-gray-50 border-gray-300 text-gray-900'
-              }`}
-              placeholder="Mario"
-            />
-          </div>
+
+          {/* PASSWORD */}
           <div>
             <label className="block text-sm font-medium mb-1">Password di classe</label>
             <input
@@ -115,9 +129,48 @@ export default function Login({ onLogin, theme }) {
               placeholder="••••••••"
             />
           </div>
+
+          {/* CHECKBOX OBBLIGATORIO */}
+          <div className="flex items-start gap-2">
+            <input
+              id="accept-docs"
+              type="checkbox"
+              checked={acceptedDocs}
+              onChange={(e) => setAcceptedDocs(e.target.checked)}
+              className="mt-1 w-4 h-4 accent-blue-600 cursor-pointer"
+            />
+            <label
+              htmlFor="accept-docs"
+              className={`text-sm cursor-pointer ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}
+            >
+              Dichiaro di aver letto e compreso i file{' '}
+              <a
+                href="./docs/SECURITY.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline"
+              >
+                SECURITY.md
+              </a>{' '}
+              e{' '}
+              <a
+                href="./docs/DISCLAIMER.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline"
+              >
+                DISCLAIMER.md
+              </a>
+              . *
+            </label>
+          </div>
+
           {error && (
             <div className="text-red-500 text-sm text-center font-medium">{error}</div>
           )}
+
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
