@@ -1,3 +1,14 @@
+```
+    _   _____ _____ _____ _   _ _____ _____ ___  _   _ _____ _
+   / \ |_   _|_   _| ____| \ | |__  /|_ _|/ _ \| \ | | ____| |
+  / _ \  | |   | | |  _| |  \| | / /  | || | | |  \| |  _| | |
+ / ___ \ | |   | | | |___| |\  |/ /_  | || |_| | |\  | |___|_|
+/_/   \_\|_|   |_| |_____|_| \_/____||___|\___/|_| \_|_____(_)
+
+Questa è ancora una release di anteprima, solo pochi sono autorizzati ad utilizzare il sito.
+```
+
+
 # 📚 tcr-notes
 
 Appunti collaborativi in tempo reale per la classe **1FT** dell'ITT "Barsanti" (A.S. 2025/2026).
