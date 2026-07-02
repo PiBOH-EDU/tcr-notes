@@ -44,8 +44,6 @@ export default function Login({ onLogin, theme }) {
     }
 
     // 2. Controllo lista autorizzati
-    // Se AUTHORIZED ha elementi, l'utente DEVE essere nella lista.
-    // Se AUTHORIZED è vuoto, la password è sufficiente (modalità classe).
     const isInAuthorizedList = AUTHORIZED.some(
       (a) => a.toLowerCase() === normalizedName
     );
@@ -75,7 +73,7 @@ export default function Login({ onLogin, theme }) {
       >
         <h1 className="text-2xl font-bold mb-2 text-center">📚 tcr-notes</h1>
         <p className="text-sm text-center mb-6 opacity-80">
-          Appunti collaborativi — The Catcher in the Rye
+          Una classe, Tanti appunti, Un unico diario
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -151,6 +149,7 @@ export default function Login({ onLogin, theme }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
                 SECURITY.md
               </a>
@@ -160,6 +159,7 @@ export default function Login({ onLogin, theme }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
                 DISCLAIMER.md
               </a>{' '}
@@ -169,6 +169,7 @@ export default function Login({ onLogin, theme }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
                 CODE OF CONDUCT.md
               </a>

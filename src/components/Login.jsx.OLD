@@ -30,7 +30,7 @@ export default function Login({ onLogin, theme }) {
     }
 
     if (!acceptedDocs) {
-      setError('Devi confermare di aver letto SECURITY.md e DISCLAIMER.md per proseguire.');
+      setError('Devi confermare di aver letto SECURITY.md, DISCLAIMER.md e CODE OF CONDUCT.md per proseguire.');
       return;
     }
 
@@ -147,21 +147,33 @@ export default function Login({ onLogin, theme }) {
             >
               Dichiaro di aver letto e compreso i file{' '}
               <a
-                href="./docs/SECURITY.md"
+                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/SECURITY.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
                 SECURITY.md
+              </a>
+              ,{' '}
+              <a
+                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/DISCLAIMER.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                DISCLAIMER.md
               </a>{' '}
               e{' '}
               <a
-                href="./docs/DISCLAIMER.md"
+                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/CODE%20OF%20CONDUCT.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
               >
-                DISCLAIMER.md
+                CODE OF CONDUCT.md
               </a>
               . *
             </label>
