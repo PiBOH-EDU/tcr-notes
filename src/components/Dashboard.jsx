@@ -72,7 +72,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
       >
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold">
-            📖 trc-notes — Appunti 1FT
+            📖 tcr-notes — Appunti 1FT
           </h1>
           <span
             className={`text-xs px-2 py-1 rounded-full ${

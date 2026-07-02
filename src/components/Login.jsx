@@ -66,7 +66,7 @@ export default function Login({ onLogin, theme }) {
             : 'bg-white border-gray-200'
         }`}
       >
-        <h1 className="text-2xl font-bold mb-2 text-center">📚 trc-notes</h1>
+        <h1 className="text-2xl font-bold mb-2 text-center">📚 tcr-notes</h1>
         <p className="text-sm text-center mb-6 opacity-80">
           Appunti collaborativi — The Catcher in the Rye
         </p>

@@ -29,7 +29,15 @@
 - Footer con nota di copyright e versione.
 - File `.env.example` e query SQL per setup Supabase.
 
-### v0.0.1_ALPHA — Rinominato progetto in trc-notes + fix tema bianco
+### v0.0.1_ALPHA — Rinominato progetto in tcr-notes (fix nome repo + fix tema bianco)
+- **Data:** 2026-07-02
+- **Modifiche:**
+  - Rinominata cartella progetto da `trc-notes` a `tcr-notes` (corretto nome repo GitHub `PiBOH-EDU/tcr-notes`).
+  - Aggiornati `package.json`, `index.html`, titoli UI (`Login.jsx`, `Dashboard.jsx`) e `arenaai.md`.
+  - Aggiunta classe `dark` di default al `<body>` in `index.html`.
+  - Aggiunto stile inline critico nel `<head>` di `index.html` per impostare immediatamente sfondo `#111827` e testo `#f3f4f6` prima del caricamento di qualsiasi CSS/JS.
+  - Aggiornato `vite.config.js` con `base: './'` per build con path relativi (compatibile Vercel).
+  - Eseguito build di produzione per verificare corretta generazione del CSS dark.
 - **Data:** 2026-07-02
 - **Modifiche:**
   - Rinominata cartella progetto da `catcher-notes` a `trc-notes` (nome repo).
