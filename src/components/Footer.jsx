@@ -13,7 +13,7 @@ export default function Footer({ theme }) {
         indicati nel file AUTORIZZATI.md. La visualizzazione non autorizzata è
         vietata.
       </p>
-      <p className="mt-1">Versione 0.2.5 — autore PiBOH</p>
+      <p className="mt-1">Versione 0.3.0 — autore PiBOH https://piboh.github.io </p>
     </footer>
   );
 }
