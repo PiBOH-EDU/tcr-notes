@@ -1,3 +1,7 @@
+node_modules
+node_modules/
+dist
+dist/
 .screen-supabase
 .screen-supabase/
 .screen-supabase/*
@@ -16,3 +20,12 @@
 */.env
 */.env/
 */.env/*
+.ignore
+.ignore/
+.ignore/*
+/.ignore
+/.ignore/
+/.ignore/*
+*/.ignore
+*/.ignore/
+*/.ignore/*

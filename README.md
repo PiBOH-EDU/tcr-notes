@@ -185,8 +185,11 @@ history
 ## 🛠️ Troubleshooting
 
 ### L'app rimane bianca / non carica
-- Verifica che il file `.env` esista e contenga le chiavi corrette
-- Controlla la console del browser (F12) per errori di connessione a Supabase
+- **Se hai appena creato o modificato il file `.env`, riavvia il server** (`Ctrl+C` poi `npm run dev`). Vite legge le variabili d'ambiente solo all'avvio: modificare il `.env` a server già attivo non ha effetto, e pulire cache/cronologia del browser non risolve, perché non è un problema del browser.
+- Verifica che il file si chiami esattamente `.env` (su Windows l'estensione potrebbe essere nascosta e diventare `.env.txt`) e sia nella root del progetto, allo stesso livello di `package.json`.
+- Verifica che contenga esattamente `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`, senza virgolette o spazi finali.
+- Se il deploy è su Vercel, le stesse variabili vanno impostate anche lì (Project Settings → Environment Variables) seguite da un nuovo deploy.
+- Controlla la console del browser (F12): dalla v0.2.4.1 un messaggio d'errore chiaro compare invece della pagina bianca se la configurazione Supabase non è valida.
 
 ### "Failed to fetch" o errori Supabase
 - Verifica che le tabelle siano state create correttamente (SQL Editor)
@@ -207,4 +210,4 @@ Materiale privato protetto da copyright. Accesso e modifica riservati esclusivam
 
 ---
 
-**Versione 0.2.4** — autore PiBOH
+**Versione 0.2.4.1** — autore PiBOH

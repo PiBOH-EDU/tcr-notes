@@ -94,7 +94,7 @@ export default function Login({ onLogin, theme }) {
               placeholder="Mario"
             />
             <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              Se hai più nomi, scrivili tutti attaccati (es. "AnnaMaria" o "DenisAndreiFlorin")
+              Se hai più nomi, scrivili tutti attaccati (es. "AnnaMaria" o "PaoloGiuseppe")
             </p>
           </div>
 

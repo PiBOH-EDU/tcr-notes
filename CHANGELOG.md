@@ -7,6 +7,16 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.2.4.1] - 2026-07-02
+
+### Corretto
+- **Schermata bianca dopo la configurazione del `.env`**: `src/lib/supabase.js` chiamava `createClient()` in modo eager al caricamento del modulo. Poiché `Dashboard.jsx` ed `Editor.jsx` (che importano il client Supabase) sono importati staticamente da `App.jsx`, il modulo veniva eseguito anche prima del login, e un `.env` mancante/malformato faceva crashare l'intera app React lasciando visibile solo lo sfondo statico di `index.html`. Aggiunta validazione esplicita delle variabili d'ambiente con messaggio d'errore chiaro invece del crash silenzioso.
+- Aggiunto `ErrorBoundary` (`src/components/ErrorBoundary.jsx`) attorno ad `<App />` in `main.jsx`: qualsiasi errore di rendering ora mostra un messaggio diagnostico invece di una pagina bianca.
+- **Nome reale residuo negli esempi**: il placeholder in `Login.jsx` per l'inserimento di nomi multipli usava `"DenisAndreiFlorin"`, coincidente con un utente reale presente in `authorized.js`. Sostituito con un nome interamente fittizio (`"PaoloGiuseppe"`).
+
+### Nota
+- Ricorda: Vite legge il file `.env` solo all'avvio del server (`npm run dev`). Se lo modifichi mentre il server è già attivo, riavvialo — pulire cache/cronologia del browser non ha alcun effetto su questo tipo di problema.
+
 ## [0.2.4] - 2026-07-02
 
 ### Aggiunto

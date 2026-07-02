@@ -13,6 +13,17 @@
 
 ## Changelog
 
+### [0.2.4.1] — Fix schermata bianca da .env + nome reale residuo
+- **Autore:** PiBOH
+- **Data:** 2026-07-02
+
+#### Corretto
+- Schermata bianca al posto del login dopo aver configurato `.env`: `src/lib/supabase.js` eseguiva `createClient()` in modo eager al caricamento del modulo (import statico da `Dashboard.jsx`/`Editor.jsx`, caricati comunque da `App.jsx` anche prima del login). Un `.env` mancante o malformato faceva crashare tutta l'app React, lasciando visibile solo lo sfondo statico di `index.html`. Aggiunta validazione esplicita con messaggio d'errore chiaro.
+- Aggiunto `ErrorBoundary` attorno ad `<App />` per evitare pagine bianche su qualsiasi errore di rendering futuro.
+- Placeholder in `Login.jsx` per nomi multipli usava per errore `"DenisAndreiFlorin"`, coincidente con un utente reale in `authorized.js`. Sostituito con nome fittizio.
+- **Causa radice del problema riportato:** Vite legge il `.env` solo all'avvio del server — va riavviato (`npm run dev`) dopo ogni modifica al file; pulire cache/cronologia browser non ha effetto.
+- Aggiornata versione ovunque a **0.2.4.1**.
+
 ### [0.2.4] — Checkbox docs, nomi fittizi, SECURITY & DISCLAIMER
 - **Autore:** PiBOH
 - **Data:** 2026-07-02

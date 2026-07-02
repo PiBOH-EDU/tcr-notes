@@ -1,6 +1,6 @@
 # 📘 GUIDA SUPABASE — Configurazione Server per tcr-notes
 
-> Questa guida spiega passo dopo passo come configurare il backend Supabase per l'app **tcr-notes v0.2.4**.
+> Questa guida spiega passo dopo passo come configurare il backend Supabase per l'app **tcr-notes v0.2.4.1**.
 
 ---
 
@@ -256,4 +256,4 @@ CREATE POLICY "Allow all" ON public.history FOR ALL TO anon, authenticated USING
 
 ---
 
-**Guida scritta per tcr-notes v0.2.4** — autore PiBOH
+**Guida scritta per tcr-notes v0.2.4.1** — autore PiBOH

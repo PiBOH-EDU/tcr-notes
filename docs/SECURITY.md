@@ -41,4 +41,4 @@ Se scopri una vulnerabilità di sicurezza all'interno di **tcr-notes**, ti pregh
 
 ---
 
-**tcr-notes v0.2.4** — autore PiBOH
+**tcr-notes v0.2.4.1** — autore PiBOH
