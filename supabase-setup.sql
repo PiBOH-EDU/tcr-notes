@@ -1,54 +1,51 @@
--- Tabella note per l'app Catcher Notes
--- Esegui questa query nell'SQL Editor di Supabase
+-- ============================================================
+-- SETUP DATABASE tcr-notes v0.0.2.2
+-- Esegui queste query nell'SQL Editor di Supabase
+-- ============================================================
 
-create table if not exists public.notes (
-  id uuid default gen_random_uuid() primary key,
-  title text not null,
-  content text default '',
-  last_edited_by text,
-  updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+-- Tabella titoli
+CREATE TABLE IF NOT EXISTS public.titles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Tabella capitoli
+CREATE TABLE IF NOT EXISTS public.chapters (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title_id UUID REFERENCES public.titles(id) ON DELETE CASCADE NOT NULL,
+  name TEXT NOT NULL,
+  content TEXT DEFAULT '',
+  last_edited_by TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  UNIQUE(title_id, name)
+);
+
+-- Tabella cronologia
+CREATE TABLE IF NOT EXISTS public.history (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  chapter_id UUID REFERENCES public.chapters(id) ON DELETE CASCADE NOT NULL,
+  content TEXT DEFAULT '',
+  edited_by TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- Abilita Row Level Security
-alter table public.notes enable row level security;
+ALTER TABLE public.titles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.chapters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.history ENABLE ROW LEVEL SECURITY;
 
--- Policy aperta per anon/authenticated (da restringere in produzione se necessario)
-create policy "Allow all access" on public.notes
-  for all
-  to anon, authenticated
-  using (true)
-  with check (true);
+-- Policy aperte (modificare in produzione se necessario)
+CREATE POLICY "Allow all" ON public.titles
+  FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
 
--- Abilita Realtime per la tabella notes
-alter publication supabase_realtime add table public.notes;
+CREATE POLICY "Allow all" ON public.chapters
+  FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
 
--- Inserimento dati di esempio (opzionale)
-insert into public.notes (title, content) values
-  ('Capitolo 1 — Holden', ''),
-  ('Capitolo 2 — La famiglia', ''),
-  ('Capitolo 3 — Pencey Prep', ''),
-  ('Capitolo 4 — Ackley e Stradlater', ''),
-  ('Capitolo 5 — La lotta', ''),
-  ('Capitolo 6 — Dopo la lotta', ''),
-  ('Capitolo 7 — Addio a Pencey', ''),
-  ('Capitolo 8 — Il treno per New York', ''),
-  ('Capitolo 9 — L''Edmont Hotel', ''),
-  ('Capitolo 10 — Sunny', ''),
-  ('Capitolo 11 — La domenica', ''),
-  ('Capitolo 12 — Il pattinaggio', ''),
-  ('Capitolo 13 — La proposta', ''),
-  ('Capitolo 14 — La visita di Sally', ''),
-  ('Capitolo 15 — Incontro con nuns', ''),
-  ('Capitolo 16 — Il museo', ''),
-  ('Capitolo 17 — Phoebe', ''),
-  ('Capitolo 18 — La cavalleria', ''),
-  ('Capitolo 19 — Mr. Antolini', ''),
-  ('Capitolo 20 — La depressione', ''),
-  ('Capitolo 21 — La fuga', ''),
-  ('Capitolo 22 — Il carosello', ''),
-  ('Capitolo 23 — Il racconto', ''),
-  ('Capitolo 24 — Il manicomio', ''),
-  ('Analisi tematica', ''),
-  ('Personaggi principali', ''),
-  ('Simboli e metafore', '');
+CREATE POLICY "Allow all" ON public.history
+  FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+-- Abilita Realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE public.titles;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.chapters;

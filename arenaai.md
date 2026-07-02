@@ -13,20 +13,29 @@
 
 ## Changelog
 
-### v0.0.2.1 — Storage locale gerarchico + fix autorizzazioni
+### v0.0.2.3 — README + nomi predefiniti + fix crash
 - **Autore:** PiBOH
 - **Data:** 2026-07-02
 
 #### Aggiunte
-- Rimosse tutte le dipendenze e i riferimenti a Supabase.
-- Implementato sistema di storage completamente locale via `localStorage` (`src/lib/storage.js`).
-- Struttura dati gerarchica: `titles` → `chapters` → `content` + `history`.
-- Aggiunta gestione titoli: creazione, eliminazione, lista nella sidebar.
-- Aggiunta gestione capitoli: creazione, eliminazione, selezione.
-- Aggiunta cronologia automatica per ogni capitolo (ultime 50 versioni).
-- Aggiunta visualizzazione cronologia con possibilità di ripristino versioni precedenti.
-- Aggiunti pulsanti Esporta/Importa JSON per backup e ripristino dei dati.
-- Fix controllo autorizzazioni: se `AUTHORIZED` contiene nomi, solo quelli possono accedere (oltre alla password). Se è vuoto, la password è sufficiente.
-- Aggiornati commenti in `authorized.js` e `banned.js` con istruzioni chiare su come aggiungere utenti.
-- Fix stile inline in `index.html` per evitare flash bianco all'avvio.
-- Aggiornata versione ovunque a **0.0.2.1**.
+- Creato README.md dettagliato con guida completa alla configurazione Supabase.
+- Aggiunti nomi predefiniti in `authorized.js`: bonaldo.pietro, aluisio.gabriele, bianco.nicola, mardarie.denisandreiflorin, mollo.michele, cecchetto.jacopo.
+- Aggiornati commenti in `authorized.js` e `banned.js` con istruzioni più chiare per evitare errori di sintassi.
+- Aggiornata versione ovunque a **0.0.2.3**.
+
+### v0.0.2.2 — Ripristino Supabase + struttura gerarchica realtime
+- **Autore:** PiBOH
+- **Data:** 2026-07-02
+
+#### Aggiunte
+- Ripristinata integrazione Supabase Realtime per sincronizzazione in tempo reale.
+- Struttura database gerarchica: `titles` → `chapters` → `history`.
+- Tabella `titles`: contiene gli argomenti principali (es. "test1").
+- Tabella `chapters`: contiene i sotto-capitoli con `content`, `last_edited_by`, `updated_at`.
+- Tabella `history`: cronologia automatica delle modifiche (max 50 versioni per capitolo).
+- Realtime su `titles` e `chapters`: quando un utente crea/modifica/elimina, tutti gli altri vedono l'aggiornamento istantaneamente.
+- Realtime broadcast "typing": mostra "✍️ [utente] sta scrivendo..." quando un compagno modifica il testo.
+- Sincronizzazione contenuto in tempo reale: se un altro utente salva, il contenuto si aggiorna automaticamente nell'editor.
+- Export/Import JSON per backup e ripristino completo del database.
+- Fix controllo autorizzazioni: se `AUTHORIZED` è vuoto → password sufficiente; se ha elementi → solo whitelist può entrare; bannati bloccati sempre.
+- Aggiornata versione ovunque a **0.0.2.2**.

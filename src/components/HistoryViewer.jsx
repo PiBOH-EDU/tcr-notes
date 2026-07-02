@@ -1,33 +1,39 @@
 import { useState, useEffect } from 'react';
-import { getHistory, restoreHistory, getChapter } from '../lib/storage';
+import { getHistory, restoreHistory } from '../lib/storage';
 
-export default function HistoryViewer({ titleId, chapterId, theme, onRestore }) {
+export default function HistoryViewer({ chapterId, user, theme, onRestore }) {
   const [history, setHistory] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const [preview, setPreview] = useState('');
 
   useEffect(() => {
-    const h = getHistory(titleId, chapterId);
-    setHistory(h);
-    setSelectedIndex(null);
-    setPreview('');
-  }, [titleId, chapterId]);
+    loadHistory();
+  }, [chapterId]);
 
-  const handleSelect = (index) => {
-    setSelectedIndex(index);
-    setPreview(history[index]?.content || '');
+  const loadHistory = async () => {
+    try {
+      const h = await getHistory(chapterId);
+      setHistory(h);
+      setSelectedId(null);
+      setPreview('');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleRestore = () => {
-    if (selectedIndex === null) return;
-    // getHistory restituisce reverse, quindi l'indice è quello del reverse
-    // Ma restoreHistory si aspetta l'indice nell'array originale
-    // Ricostruisco l'indice originale
-    const originalIndex = history.length - 1 - selectedIndex;
-    const ok = restoreHistory(titleId, chapterId, originalIndex);
-    if (ok) {
+  const handleSelect = (item) => {
+    setSelectedId(item.id);
+    setPreview(item.content || '');
+  };
+
+  const handleRestore = async () => {
+    if (!selectedId) return;
+    try {
+      await restoreHistory(chapterId, selectedId, user);
       alert('Versione ripristinata con successo!');
       onRestore();
+    } catch (err) {
+      alert('Errore: ' + err.message);
     }
   };
 
@@ -51,12 +57,12 @@ export default function HistoryViewer({ titleId, chapterId, theme, onRestore }) 
           Versioni salvate ({history.length})
         </div>
         <div className="p-2 space-y-1">
-          {history.map((h, idx) => (
+          {history.map((h) => (
             <button
-              key={idx}
-              onClick={() => handleSelect(idx)}
+              key={h.id}
+              onClick={() => handleSelect(h)}
               className={`w-full text-left px-3 py-2 rounded-lg text-sm transition border ${
-                selectedIndex === idx
+                selectedId === h.id
                   ? theme === 'dark'
                     ? 'bg-blue-900/30 border-blue-700 text-blue-200'
                     : 'bg-blue-50 border-blue-200 text-blue-800'
@@ -65,9 +71,12 @@ export default function HistoryViewer({ titleId, chapterId, theme, onRestore }) 
                   : 'hover:bg-gray-100 border-transparent text-gray-700'
               }`}
             >
-              <div className="font-medium">{formatDate(h.timestamp)}</div>
+              <div className="font-medium">{formatDate(h.created_at)}</div>
+              <div className="text-xs opacity-60">
+                {h.edited_by ? `di ${h.edited_by}` : '—'}
+              </div>
               <div className="text-xs opacity-60 truncate">
-                {h.content.slice(0, 60) || '(vuoto)'}
+                {h.content?.slice(0, 60) || '(vuoto)'}
               </div>
             </button>
           ))}
@@ -91,7 +100,7 @@ export default function HistoryViewer({ titleId, chapterId, theme, onRestore }) 
       >
         <div className="p-3 border-b border-gray-700/30 flex items-center justify-between">
           <span className="font-semibold text-sm">Anteprima versione</span>
-          {selectedIndex !== null && (
+          {selectedId && (
             <button
               onClick={handleRestore}
               className="px-3 py-1.5 text-xs rounded bg-orange-600 hover:bg-orange-700 text-white transition"
@@ -101,7 +110,7 @@ export default function HistoryViewer({ titleId, chapterId, theme, onRestore }) 
           )}
         </div>
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm whitespace-pre-wrap opacity-90">
-          {selectedIndex !== null ? (
+          {selectedId ? (
             preview || <span className="opacity-50 italic">(contenuto vuoto)</span>
           ) : (
             <span className="opacity-50 italic">Seleziona una versione per visualizzarla</span>

@@ -1,39 +1,102 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 import { getChapter, saveChapter } from '../lib/storage';
 
-export default function Editor({ titleId, chapterId, theme }) {
+let globalTypingTimeout = null;
+
+export default function Editor({ chapterId, user, theme }) {
   const [content, setContent] = useState('');
+  const [lastEditedBy, setLastEditedBy] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
+  const [typingUser, setTypingUser] = useState(null);
   const [saving, setSaving] = useState(false);
+  const broadcastChannelRef = useRef(null);
   const debounceRef = useRef(null);
 
-  const loadContent = useCallback(() => {
-    const chapter = getChapter(titleId, chapterId);
+  const loadContent = useCallback(async () => {
+    const chapter = await getChapter(chapterId);
     if (chapter) {
       setContent(chapter.content || '');
-      setLastSaved(chapter.updatedAt);
+      setLastEditedBy(chapter.last_edited_by);
+      setLastSaved(chapter.updated_at);
     }
-  }, [titleId, chapterId]);
+  }, [chapterId]);
 
   useEffect(() => {
     loadContent();
   }, [loadContent]);
 
+  // Realtime: aggiornamenti dal DB
+  useEffect(() => {
+    const channel = supabase
+      .channel(`chapter-${chapterId}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'chapters', filter: `id=eq.${chapterId}` },
+        (payload) => {
+          if (payload.new.last_edited_by !== user) {
+            setContent(payload.new.content || '');
+            setLastEditedBy(payload.new.last_edited_by);
+            setLastSaved(payload.new.updated_at);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [chapterId, user]);
+
+  // Broadcast: chi sta scrivendo
+  useEffect(() => {
+    const channel = supabase.channel('notes-room');
+    broadcastChannelRef.current = channel;
+
+    channel
+      .on('broadcast', { event: 'typing' }, (payload) => {
+        const { user: typingName, chapterId: cid } = payload.payload;
+        if (typingName !== user && cid === chapterId) {
+          setTypingUser(typingName);
+          if (globalTypingTimeout) clearTimeout(globalTypingTimeout);
+          globalTypingTimeout = setTimeout(() => setTypingUser(null), 2000);
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [chapterId, user]);
+
   const handleSave = useCallback(
-    (newContent) => {
+    async (newContent) => {
       setSaving(true);
-      const ok = saveChapter(titleId, chapterId, newContent);
-      if (ok) {
-        setLastSaved(new Date().toISOString());
+      try {
+        const updated = await saveChapter(chapterId, newContent, user);
+        if (updated) {
+          setLastEditedBy(updated.last_edited_by);
+          setLastSaved(updated.updated_at);
+        }
+      } catch (err) {
+        console.error(err);
       }
       setSaving(false);
     },
-    [titleId, chapterId]
+    [chapterId, user]
   );
 
   const handleChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);
+
+    if (broadcastChannelRef.current) {
+      broadcastChannelRef.current.send({
+        type: 'broadcast',
+        event: 'typing',
+        payload: { user, chapterId },
+      });
+    }
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
@@ -63,9 +126,24 @@ export default function Editor({ titleId, chapterId, theme }) {
             <span className="text-green-400">✓ Salvato</span>
           )}
         </div>
-        <div className="opacity-70">
-          Ultimo salvataggio: {formatDate(lastSaved)}
+        <div className="text-sm">
+          {typingUser ? (
+            <span className="text-blue-400 font-medium animate-pulse">
+              ✍️ {typingUser} sta scrivendo...
+            </span>
+          ) : lastEditedBy ? (
+            <span className="opacity-70">
+              Ultima modifica di:{" "}
+              <span className="font-medium">{lastEditedBy}</span>
+            </span>
+          ) : (
+            <span className="opacity-50">Nessuna modifica registrata</span>
+          )}
         </div>
+      </div>
+
+      <div className="text-xs opacity-50 mb-2 text-right">
+        Salvato: {formatDate(lastSaved)}
       </div>
 
       <textarea

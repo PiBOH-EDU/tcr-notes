@@ -5,13 +5,15 @@
    Formato identificativi: cognome.nome (tutto minuscolo, senza spazi)
    Esempio: per "Rossi Mario" -> "rossi.mario"
    Esempio doppio nome: per "De Luca Anna Maria" -> "deluca.annamaria"
+   Esempio triplo nome: per "Mardarie Denis Andrei Florin" -> "mardarie.denisandreiflorin"
 
    ISTRUZIONI per aggiungere un utente:
-   1. Scrivi il cognome seguito da punto seguito dal nome, tutto minuscolo
-   2. Non usare spazi, accenti o caratteri speciali
-   3. Aggiungi la stringa tra virgolette dentro l'array AUTHORIZED
+   1. Scrivi il cognome seguito da punto seguito dal nome (o nomi attaccati)
+   2. Tutto minuscolo, nessuno spazio, nessun accento
+   3. Ogni elemento deve essere separato da una virgola
+   4. L'ultimo elemento NON deve avere la virgola finale
 
-   ESEMPIO:
+   ESEMPIO CORRETTO:
      export const AUTHORIZED = [
        "rossi.mario",
        "bianchi.luca",
@@ -25,5 +27,10 @@
    ============================================================ */
 
 export const AUTHORIZED = [
-  // Aggiungi qui i nomi autorizzati, es: "rossi.mario"
+  "bonaldo.pietro",
+  "aluisio.gabriele",
+  "bianco.nicola",
+  "mardarie.denisandreiflorin",
+  "mollo.michele",
+  "cecchetto.jacopo",
 ];

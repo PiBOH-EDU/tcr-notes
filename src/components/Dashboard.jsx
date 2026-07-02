@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 import {
   getTitles,
   createTitle,
@@ -6,8 +7,8 @@ import {
   getChapters,
   createChapter,
   deleteChapter,
-  exportData,
-  importData,
+  exportAllData,
+  importAllData,
 } from '../lib/storage';
 import ThemeToggle from './ThemeToggle';
 import Editor from './Editor';
@@ -18,24 +19,48 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
   const [selectedTitle, setSelectedTitle] = useState(null);
   const [chapters, setChapters] = useState([]);
   const [selectedChapter, setSelectedChapter] = useState(null);
-  const [view, setView] = useState('editor'); // 'editor' | 'history'
+  const [view, setView] = useState('editor');
   const [newTitle, setNewTitle] = useState('');
   const [newChapter, setNewChapter] = useState('');
   const [showNewTitle, setShowNewTitle] = useState(false);
   const [showNewChapter, setShowNewChapter] = useState(false);
   const [importError, setImportError] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  const refreshTitles = useCallback(() => {
-    setTitles(getTitles());
+  const refreshTitles = useCallback(async () => {
+    const data = await getTitles();
+    setTitles(data);
+    setLoading(false);
   }, []);
 
-  const refreshChapters = useCallback((titleId) => {
-    setChapters(getChapters(titleId));
+  const refreshChapters = useCallback(async (titleId) => {
+    const data = await getChapters(titleId);
+    setChapters(data);
   }, []);
 
   useEffect(() => {
     refreshTitles();
-  }, [refreshTitles]);
+
+    const channel = supabase
+      .channel('titles-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'titles' },
+        () => refreshTitles()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'chapters' },
+        () => {
+          if (selectedTitle) refreshChapters(selectedTitle);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [refreshTitles, refreshChapters, selectedTitle]);
 
   useEffect(() => {
     if (selectedTitle) {
@@ -45,44 +70,53 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
     }
   }, [selectedTitle, refreshChapters]);
 
-  const handleCreateTitle = () => {
-    const id = createTitle(newTitle);
-    if (id) {
+  const handleCreateTitle = async () => {
+    try {
+      await createTitle(newTitle);
       setNewTitle('');
       setShowNewTitle(false);
-      refreshTitles();
-      setSelectedTitle(id);
+      await refreshTitles();
+    } catch (err) {
+      alert('Errore: ' + err.message);
     }
   };
 
-  const handleDeleteTitle = (id) => {
-    if (!confirm(`Eliminare il titolo "${id}" e tutti i suoi capitoli?`)) return;
-    deleteTitle(id);
-    refreshTitles();
-    if (selectedTitle === id) {
-      setSelectedTitle(null);
-      setSelectedChapter(null);
+  const handleDeleteTitle = async (id, name) => {
+    if (!confirm(`Eliminare il titolo "${name}" e tutti i suoi capitoli?`)) return;
+    try {
+      await deleteTitle(id);
+      await refreshTitles();
+      if (selectedTitle === id) {
+        setSelectedTitle(null);
+        setSelectedChapter(null);
+      }
+    } catch (err) {
+      alert('Errore: ' + err.message);
     }
   };
 
-  const handleCreateChapter = () => {
+  const handleCreateChapter = async () => {
     if (!selectedTitle) return;
-    const id = createChapter(selectedTitle, newChapter);
-    if (id) {
+    try {
+      await createChapter(selectedTitle, newChapter);
       setNewChapter('');
       setShowNewChapter(false);
-      refreshChapters(selectedTitle);
-      setSelectedChapter(id);
-      setView('editor');
+      await refreshChapters(selectedTitle);
+    } catch (err) {
+      alert('Errore: ' + err.message);
     }
   };
 
-  const handleDeleteChapter = (id) => {
-    if (!confirm(`Eliminare il capitolo "${id}"?`)) return;
-    deleteChapter(selectedTitle, id);
-    refreshChapters(selectedTitle);
-    if (selectedChapter === id) {
-      setSelectedChapter(null);
+  const handleDeleteChapter = async (id, name) => {
+    if (!confirm(`Eliminare il capitolo "${name}"?`)) return;
+    try {
+      await deleteChapter(id);
+      await refreshChapters(selectedTitle);
+      if (selectedChapter === id) {
+        setSelectedChapter(null);
+      }
+    } catch (err) {
+      alert('Errore: ' + err.message);
     }
   };
 
@@ -90,9 +124,9 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
     const file = e.target.files[0];
     if (!file) return;
     try {
-      await importData(file);
+      await importAllData(file);
       setImportError('');
-      refreshTitles();
+      await refreshTitles();
       setSelectedTitle(null);
       setSelectedChapter(null);
       alert('Dati importati con successo!');
@@ -126,7 +160,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
         </div>
         <div className="flex items-center gap-3">
           <button
-            onClick={exportData}
+            onClick={exportAllData}
             className={`px-3 py-1.5 text-sm rounded-lg transition ${
               theme === 'dark'
                 ? 'bg-green-700 hover:bg-green-600 text-white'
@@ -240,9 +274,8 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                   >
                     <span className="font-medium truncate">{t.name}</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs opacity-50">{t.chapterCount} cap.</span>
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleDeleteTitle(t.id); }}
+                        onClick={(e) => { e.stopPropagation(); handleDeleteTitle(t.id, t.name); }}
                         className="text-red-400 hover:text-red-300 text-xs"
                         title="Elimina titolo"
                       >
@@ -252,7 +285,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                   </button>
                 </div>
               ))}
-              {titles.length === 0 && (
+              {titles.length === 0 && !loading && (
                 <div className="px-2 text-sm opacity-50">Nessun titolo. Creane uno!</div>
               )}
             </div>
@@ -267,7 +300,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                     theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
                   }`}
                 >
-                  Capitoli — {selectedTitle}
+                  Capitoli
                 </h2>
                 <button
                   onClick={() => setShowNewChapter((s) => !s)}
@@ -328,7 +361,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                   >
                     <span className="truncate">{c.name}</span>
                     <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteChapter(c.id); }}
+                      onClick={(e) => { e.stopPropagation(); handleDeleteChapter(c.id, c.name); }}
                       className="text-red-400 hover:text-red-300 text-xs"
                       title="Elimina capitolo"
                     >
@@ -354,9 +387,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                   onClick={() => setView('editor')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                     view === 'editor'
-                      ? theme === 'dark'
-                        ? 'bg-blue-600 border-blue-500 text-white'
-                        : 'bg-blue-600 border-blue-500 text-white'
+                      ? 'bg-blue-600 border-blue-500 text-white'
                       : theme === 'dark'
                       ? 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700'
                       : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -368,9 +399,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                   onClick={() => setView('history')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                     view === 'history'
-                      ? theme === 'dark'
-                        ? 'bg-blue-600 border-blue-500 text-white'
-                        : 'bg-blue-600 border-blue-500 text-white'
+                      ? 'bg-blue-600 border-blue-500 text-white'
                       : theme === 'dark'
                       ? 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700'
                       : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -380,20 +409,21 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                 </button>
                 <div className="flex-1" />
                 <span className="text-sm opacity-60">
-                  {selectedTitle} / {selectedChapter}
+                  {titles.find((t) => t.id === selectedTitle)?.name} /{' '}
+                  {chapters.find((c) => c.id === selectedChapter)?.name}
                 </span>
               </div>
 
               {view === 'editor' ? (
                 <Editor
-                  titleId={selectedTitle}
                   chapterId={selectedChapter}
+                  user={user}
                   theme={theme}
                 />
               ) : (
                 <HistoryViewer
-                  titleId={selectedTitle}
                   chapterId={selectedChapter}
+                  user={user}
                   theme={theme}
                   onRestore={() => setView('editor')}
                 />

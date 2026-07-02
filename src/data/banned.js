@@ -7,9 +7,10 @@
 
    ISTRUZIONI per bannare un utente:
    1. Scrivi il cognome.nome in formato minuscolo senza spazi
-   2. Aggiungi la stringa tra virgolette dentro l'array BANNED
+   2. Ogni elemento deve essere separato da una virgola
+   3. L'ultimo elemento NON deve avere la virgola finale
 
-   ESEMPIO:
+   ESEMPIO CORRETTO:
      export const BANNED = [
        "neri.giovanni",
        "rossi.paolo",
