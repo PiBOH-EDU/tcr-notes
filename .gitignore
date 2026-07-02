@@ -7,3 +7,12 @@
 */.screen-supabase
 */.screen-supabase/
 */.screen-supabase/*
+.env
+.env/
+.env/*
+/.env
+/.env/
+/.env/*
+*/.env
+*/.env/
+*/.env/*
