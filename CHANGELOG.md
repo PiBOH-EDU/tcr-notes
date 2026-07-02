@@ -7,6 +7,16 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-07-02
+
+### Aggiunto
+- Supporto per formattazione markdown
+
+## [0.3.1] - 2026-07-02
+
+### Aggiunto
+- Supporto per la visualizzazione degli utenti on-line
+
 ## [0.2.4.1] - 2026-07-02
 
 ### Corretto

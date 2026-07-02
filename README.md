@@ -217,8 +217,8 @@ history
 
 ## 📄 Licenza
 
-Materiale privato protetto da copyright. Accesso e modifica riservati esclusivamente ai soggetti autorizzati della classe 1FT (A.S. 2025/2026).
+Vedi il file LICENSE [qui](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/refs/heads/main/LICENSE)
 
 ---
 
-**Versione 0.2.4.1** — autore PiBOH
+**Versione 0.3.1** — autore PiBOH
