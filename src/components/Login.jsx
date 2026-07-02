@@ -30,25 +30,26 @@ export default function Login({ onLogin, theme }) {
 
     const normalizedName = normalizeName(trimmedCognome, trimmedNome);
 
-    // Controllo lista bannati (formato: cognome.nome)
+    // 1. Controllo lista bannati (formato: cognome.nome)
     const isBanned = BANNED.some((b) => b.toLowerCase() === normalizedName);
     if (isBanned) {
       setError('Accesso negato: utente bannato.');
       return;
     }
 
-    // Controllo lista autorizzati esplicita (formato: cognome.nome)
-    const isExplicitlyAuthorized = AUTHORIZED.some(
+    // 2. Controllo lista autorizzati
+    // Se AUTHORIZED ha elementi, l'utente DEVE essere nella lista.
+    // Se AUTHORIZED è vuoto, la password è sufficiente (modalità classe).
+    const isInAuthorizedList = AUTHORIZED.some(
       (a) => a.toLowerCase() === normalizedName
     );
 
-    // AUTORIZZATI.md: tutti i membri della classe 1FT sono autorizzati.
-    // La verifica di appartenenza alla classe è delegata alla password condivisa.
-    if (!isExplicitlyAuthorized && password !== CLASS_PASSWORD) {
-      setError('Password di classe errata.');
+    if (AUTHORIZED.length > 0 && !isInAuthorizedList) {
+      setError('Accesso negato: non sei nella lista degli autorizzati.');
       return;
     }
 
+    // 3. Controllo password
     if (password !== CLASS_PASSWORD) {
       setError('Password di classe errata.');
       return;

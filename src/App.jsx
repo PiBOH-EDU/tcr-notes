@@ -5,37 +5,37 @@ import Footer from './components/Footer';
 
 function App() {
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('catcher-theme');
+    const saved = localStorage.getItem('tcr-theme');
     return saved ? saved : 'dark';
   });
 
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('catcher-user');
+    const saved = localStorage.getItem('tcr-user');
     return saved || null;
   });
 
   const [isAuth, setIsAuth] = useState(() => {
-    return localStorage.getItem('catcher-auth') === 'true';
+    return localStorage.getItem('tcr-auth') === 'true';
   });
 
   useEffect(() => {
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(theme);
-    localStorage.setItem('catcher-theme', theme);
+    localStorage.setItem('tcr-theme', theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
   const handleLogin = (name) => {
-    localStorage.setItem('catcher-user', name);
-    localStorage.setItem('catcher-auth', 'true');
+    localStorage.setItem('tcr-user', name);
+    localStorage.setItem('tcr-auth', 'true');
     setUser(name);
     setIsAuth(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('catcher-user');
-    localStorage.removeItem('catcher-auth');
+    localStorage.removeItem('tcr-user');
+    localStorage.removeItem('tcr-auth');
     setUser(null);
     setIsAuth(false);
   };

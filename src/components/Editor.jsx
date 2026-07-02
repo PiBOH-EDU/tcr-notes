@@ -1,118 +1,77 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { supabase } from '../lib/supabase';
+import { getChapter, saveChapter } from '../lib/storage';
 
-let globalTypingTimeout = null;
-
-export default function Editor({ note, user, theme }) {
-  const [content, setContent] = useState(note.content || '');
-  const [lastEditedBy, setLastEditedBy] = useState(note.last_edited_by);
-  const [typingUser, setTypingUser] = useState(null);
+export default function Editor({ titleId, chapterId, theme }) {
+  const [content, setContent] = useState('');
+  const [lastSaved, setLastSaved] = useState(null);
   const [saving, setSaving] = useState(false);
-  const broadcastChannelRef = useRef(null);
   const debounceRef = useRef(null);
 
-  // Sincronizza stato locale quando cambia nota selezionata
+  const loadContent = useCallback(() => {
+    const chapter = getChapter(titleId, chapterId);
+    if (chapter) {
+      setContent(chapter.content || '');
+      setLastSaved(chapter.updatedAt);
+    }
+  }, [titleId, chapterId]);
+
   useEffect(() => {
-    setContent(note.content || '');
-    setLastEditedBy(note.last_edited_by);
-  }, [note.id]);
+    loadContent();
+  }, [loadContent]);
 
-  // Setup broadcast channel per "sta scrivendo"
-  useEffect(() => {
-    const channel = supabase.channel('notes-room');
-    broadcastChannelRef.current = channel;
-
-    channel
-      .on('broadcast', { event: 'typing' }, (payload) => {
-        const { user: typingName } = payload.payload;
-        if (typingName !== user) {
-          setTypingUser(typingName);
-          if (globalTypingTimeout) clearTimeout(globalTypingTimeout);
-          globalTypingTimeout = setTimeout(() => setTypingUser(null), 2000);
-        }
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [user]);
-
-  // Salva su Supabase con debounce
-  const saveNote = useCallback(
-    async (newContent) => {
+  const handleSave = useCallback(
+    (newContent) => {
       setSaving(true);
-      const { error } = await supabase
-        .from('notes')
-        .update({
-          content: newContent,
-          last_edited_by: user,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', note.id);
-
-      if (!error) {
-        setLastEditedBy(user);
+      const ok = saveChapter(titleId, chapterId, newContent);
+      if (ok) {
+        setLastSaved(new Date().toISOString());
       }
       setSaving(false);
     },
-    [note.id, user]
+    [titleId, chapterId]
   );
 
   const handleChange = (e) => {
     const newContent = e.target.value;
     setContent(newContent);
 
-    // Invia broadcast "sta scrivendo"
-    if (broadcastChannelRef.current) {
-      broadcastChannelRef.current.send({
-        type: 'broadcast',
-        event: 'typing',
-        payload: { user },
-      });
-    }
-
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      saveNote(newContent);
-    }, 800);
+      handleSave(newContent);
+    }, 1000);
+  };
+
+  const formatDate = (iso) => {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleString('it-IT');
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div>
       <div
-        className={`flex items-center justify-between mb-4 px-4 py-3 rounded-lg border ${
+        className={`flex items-center justify-between mb-3 px-4 py-2 rounded-lg border text-sm ${
           theme === 'dark'
             ? 'bg-gray-800 border-gray-700'
             : 'bg-white border-gray-200'
         }`}
       >
         <div className="flex items-center gap-3">
-          <span className="text-sm font-semibold">{note.title}</span>
-          {saving && (
-            <span className="text-xs opacity-60">Salvataggio...</span>
+          {saving ? (
+            <span className="text-yellow-400">💾 Salvataggio...</span>
+          ) : (
+            <span className="text-green-400">✓ Salvato</span>
           )}
         </div>
-        <div className="text-sm">
-          {typingUser ? (
-            <span className="text-blue-400 font-medium animate-pulse">
-              ✍️ {typingUser} sta scrivendo...
-            </span>
-          ) : lastEditedBy ? (
-            <span className="opacity-70">
-              Ultima modifica di:{" "}
-              <span className="font-medium">{lastEditedBy}</span>
-            </span>
-          ) : (
-            <span className="opacity-50">Nessuna modifica registrata</span>
-          )}
+        <div className="opacity-70">
+          Ultimo salvataggio: {formatDate(lastSaved)}
         </div>
       </div>
 
       <textarea
         value={content}
         onChange={handleChange}
-        className={`w-full h-[calc(100vh-260px)] p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-base leading-relaxed ${
+        className={`w-full h-[calc(100vh-300px)] p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-base leading-relaxed ${
           theme === 'dark'
             ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500'
             : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
