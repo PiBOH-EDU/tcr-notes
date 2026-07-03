@@ -28,6 +28,17 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.6.0] — Highlight con simboli visibili, cursore preciso in Markdown, versionamento schematico
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- `HighlightTextarea.jsx`: evidenziazione "GitHub-style" dove i delimitatori markdown (`**`, `~~`, `<!-- -->`) restano visibili ma attenuati (`opacity-60`), mentre il contenuto è formattato (grassetto, barrato, corsivo penombra).
+- `Editor.jsx`: cliccando nella preview Markdown, il cursore viene posizionato nel punto testuale corrispondente della textarea (stima via `caretPositionFromPoint` / `caretRangeFromPoint` + TreeWalker sui text nodes). Ignora il click se su un link.
+
+#### Modifiche
+- Bump versione schematica a **0.6.0** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+
 ### [0.5.0] — Highlight inline, no-save unchanged, badge Supabase, rimosso ❌ Align
 - **Autore:** PiBOH
 - **Data:** 2026-07-03

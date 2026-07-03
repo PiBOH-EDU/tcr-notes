@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-03
+
+### Aggiunto
+- **Highlight con simboli visibili**: il componente `HighlightTextarea` ora mostra i delimitatori markdown (`**`, `~~`, `<!-- -->`) in penombra, evidenziando solo il contenuto (grassetto, barrato, corsivo). Comportamento analogo all'editor integrato di GitHub.
+- **Cursore preciso in Markdown rendering**: cliccando su un punto specifico della preview Markdown, il cursore si posiziona nel punto testuale corrispondente della textarea (stima via `caretPositionFromPoint` / `caretRangeFromPoint`). I click sui link continuano ad aprire normalmente il collegamento.
+
 ## [0.5.0] - 2026-07-03
 
 ### Aggiunto

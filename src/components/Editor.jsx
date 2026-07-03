@@ -237,12 +237,46 @@ export default function Editor({ chapterId, user, theme }) {
     return d.toLocaleString('it-IT');
   };
 
-  const handleMarkdownClick = () => {
+  const domOffsetToTextOffset = (container, range) => {
+    if (!range || !container) return 0;
+    let offset = 0;
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (node === range.startContainer) {
+        return offset + Math.min(range.startOffset, node.textContent.length);
+      }
+      offset += node.textContent.length;
+    }
+    // Fallback se il range non punta a un text node (es. click su immagine)
+    return offset;
+  };
+
+  const handleMarkdownClick = (e) => {
+    // Se clicca su un link, lascia che il link funzioni normalmente
+    if (e.target.closest('a')) return;
+
+    let range = null;
+    if (document.caretPositionFromPoint) {
+      const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+      if (pos) {
+        range = document.createRange();
+        range.setStart(pos.offsetNode, pos.offset);
+        range.setEnd(pos.offsetNode, pos.offset);
+      }
+    } else if (document.caretRangeFromPoint) {
+      range = document.caretRangeFromPoint(e.clientX, e.clientY);
+    }
+
+    const estimatedOffset = domOffsetToTextOffset(e.currentTarget, range);
+
     setIsMarkdownView(false);
     setIsEditing(true);
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
+        const pos = Math.min(estimatedOffset, content.length);
+        textareaRef.current.setSelectionRange(pos, pos);
       }
     }, 0);
   };

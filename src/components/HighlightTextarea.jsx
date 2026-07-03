@@ -9,12 +9,21 @@ function escapeHtml(text) {
 
 function highlight(text) {
   let html = escapeHtml(text);
-  // Commenti HTML (multilinea)
-  html = html.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="opacity-30 italic">$1</span>');
-  // Grassetto
-  html = html.replace(/\*\*(.+?)\*\*/g, '<span class="font-bold">$1</span>');
-  // Barrato
-  html = html.replace(/~~(.+?)~~/g, '<span class="line-through opacity-60">$1</span>');
+  // Commenti HTML (multilinea) — delimitatori visibili ma attenuati
+  html = html.replace(
+    /(&lt;!--)([\s\S]*?)(--&gt;)/g,
+    '<span class="text-gray-400 opacity-50">$1</span><span class="opacity-30 italic">$2</span><span class="text-gray-400 opacity-50">$3</span>'
+  );
+  // Grassetto — asterischi visibili
+  html = html.replace(
+    /(\*\*)(.+?)(\*\*)/g,
+    '<span class="text-gray-400 opacity-60">$1</span><span class="font-bold">$2</span><span class="text-gray-400 opacity-60">$3</span>'
+  );
+  // Barrato — tilde visibili
+  html = html.replace(
+    /(~~)(.+?)(~~)/g,
+    '<span class="text-gray-400 opacity-60">$1</span><span class="line-through opacity-60">$2</span><span class="text-gray-400 opacity-60">$3</span>'
+  );
   return html;
 }
 
