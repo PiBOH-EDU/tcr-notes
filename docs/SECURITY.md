@@ -22,7 +22,7 @@ Se scopri una vulnerabilità di sicurezza all'interno di **tcr-notes**, ti pregh
 
 ### Cosa aspettarsi
 
-- Conferma di ricezione entro **5 giorni lavorativi**
+- Conferma di ricezione entro **20 giorni lavorativi**
 - Aggiornamenti sullo stato della segnalazione
 - Riconoscimento pubblico (se desiderato) dopo la risoluzione
 
@@ -43,4 +43,4 @@ Per i dettagli tecnici completi, vedi [`docs/LIMITATIONS.md`](./LIMITATIONS.md).
 
 ---
 
-**tcr-notes v0.2.4.1** — autore PiBOH
+**tcr-notes v0.4.3** — autore PiBOH
