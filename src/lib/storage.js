@@ -27,6 +27,17 @@ export async function deleteTitle(id) {
   return true;
 }
 
+export async function renameTitle(id, newName) {
+  const { data, error } = await supabase
+    .from('titles')
+    .update({ name: newName })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 /* ===================== CAPITOLI ===================== */
 
 export async function getChapters(titleId) {
@@ -53,6 +64,17 @@ export async function deleteChapter(id) {
   const { error } = await supabase.from('chapters').delete().eq('id', id);
   if (error) throw error;
   return true;
+}
+
+export async function renameChapter(id, newName) {
+  const { data, error } = await supabase
+    .from('chapters')
+    .update({ name: newName })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
 }
 
 /* ===================== CONTENUTO & CRONOLOGIA ===================== */

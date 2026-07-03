@@ -215,6 +215,16 @@ history
 
 ---
 
+## 📄 Documentazione
+
+- [`GUIDA-SUPABASE.md`](./GUIDA-SUPABASE.md) — Configurazione passo-passo del backend
+- [`docs/SECURITY.md`](./docs/SECURITY.md) — Policy di sicurezza
+- [`docs/DISCLAIMER.md`](./docs/DISCLAIMER.md) — Avvertenza legale
+- [`docs/LIMITATIONS.md`](./docs/LIMITATIONS.md) — Limitazioni dei servizi esterni
+- [`CHANGELOG.md`](./CHANGELOG.md) — Storia delle versioni
+
+---
+
 ## 📄 Licenza
 
 Vedi il file LICENSE [qui](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/refs/heads/main/LICENSE)

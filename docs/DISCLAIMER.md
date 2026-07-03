@@ -19,6 +19,8 @@ L'autore **non è imputabile** per:
 - Modifiche ai termini di servizio dei provider
 - Limitazioni tecniche o di banda imposte dai piani gratuiti
 
+Per l'elenco completo dei vincoli tecnici, consultare il file [`LIMITATIONS.md`](./LIMITATIONS.md).
+
 ## 3. Scopo del Software
 
 **tcr-notes** è stato creato esclusivamente come **strumento di supporto didattico** per i compagni di classe dell'autore (classe 1FT, ITT "Barsanti", A.S. 2025/2026).

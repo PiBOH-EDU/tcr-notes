@@ -17,6 +17,10 @@
 
 ---
 
+> ⚠️ Prima di iniziare, leggi anche [`docs/LIMITATIONS.md`](./docs/LIMITATIONS.md) per conoscere i vincoli del piano gratuito di Supabase.
+
+---
+
 ## 1. Prerequisiti
 
 Prima di iniziare, assicurati di avere:

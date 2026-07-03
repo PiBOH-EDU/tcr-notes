@@ -1,10 +1,10 @@
 export default function Footer({ theme }) {
   return (
     <footer
-      className={`text-center text-xs py-3 border-t ${
+      className={`px-6 py-4 text-xs text-center border-t ${
         theme === 'dark'
-          ? 'bg-gray-900 border-gray-800 text-gray-500'
-          : 'bg-gray-50 border-gray-200 text-gray-400'
+          ? 'bg-gray-900 border-gray-800 text-gray-400'
+          : 'bg-gray-100 border-gray-200 text-gray-500'
       }`}
     >
       <p>
@@ -13,7 +13,7 @@ export default function Footer({ theme }) {
         indicati nel file AUTORIZZATI.md. La visualizzazione non autorizzata è
         vietata.
       </p>
-      <p className="mt-1">Versione 0.3.1 — autore PiBOH https://piboh.github.io </p>
+      <p className="mt-1 opacity-70">Versione 0.4.3 autore PiBOH</p>
     </footer>
   );
 }

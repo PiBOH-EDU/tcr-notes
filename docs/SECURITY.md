@@ -39,6 +39,8 @@ Se scopri una vulnerabilità di sicurezza all'interno di **tcr-notes**, ti pregh
 - Le policy RLS (Row Level Security) sono configurate in modalità aperta per consentire l'accesso anonimo della classe
 - In ambienti di produzione con dati sensibili, si consiglia di implementare autenticazione utente lato server
 
+Per i dettagli tecnici completi, vedi [`docs/LIMITATIONS.md`](./LIMITATIONS.md).
+
 ---
 
 **tcr-notes v0.2.4.1** — autore PiBOH

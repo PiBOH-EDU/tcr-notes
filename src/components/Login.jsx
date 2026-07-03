@@ -14,7 +14,9 @@ export default function Login({ onLogin, theme }) {
   const [nome, setNome] = useState('');
   const [cognome, setCognome] = useState('');
   const [password, setPassword] = useState('');
-  const [acceptedDocs, setAcceptedDocs] = useState(false);
+  const [acceptedDocs, setAcceptedDocs] = useState(() => {
+    return localStorage.getItem('tcr-docs-accepted') === 'true';
+  });
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
@@ -60,6 +62,11 @@ export default function Login({ onLogin, theme }) {
     }
 
     onLogin(normalizedName);
+  };
+
+  const handleAcceptChange = (checked) => {
+    setAcceptedDocs(checked);
+    localStorage.setItem('tcr-docs-accepted', checked ? 'true' : 'false');
   };
 
   return (
@@ -134,7 +141,7 @@ export default function Login({ onLogin, theme }) {
               id="accept-docs"
               type="checkbox"
               checked={acceptedDocs}
-              onChange={(e) => setAcceptedDocs(e.target.checked)}
+              onChange={(e) => handleAcceptChange(e.target.checked)}
               className="mt-1 w-4 h-4 accent-blue-600 cursor-pointer"
             />
             <label
@@ -162,8 +169,8 @@ export default function Login({ onLogin, theme }) {
                 onClick={(e) => e.stopPropagation()}
               >
                 DISCLAIMER.md
-              </a>{' '}
-              e{' '}
+              </a>
+              {' '}e{' '}
               <a
                 href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/CODE%20OF%20CONDUCT.md"
                 target="_blank"

@@ -7,6 +7,27 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-07-03
+
+### Aggiunto
+- Menu Info (ℹ️) nell'header con dropdown che mostra versione, autore e link a tutta la documentazione (SECURITY, DISCLAIMER, LIMITATIONS, CODE OF CONDUCT, CHANGELOG, GUIDA SUPABASE, LICENSE).
+- Limite dimensione immagini: massimo 1.5 MB per file, con alert esplicativo se superato.
+
+### Modificato
+- UI mobile completamente rivista: header più compatto, bottoni ridimensionati, spaziature ottimizzate.
+- Status bar dell'editor più compatta su mobile con testi ridotti.
+- Toggle Markdown più piccolo su schermi stretti.
+- Toolbar markdown: separatori nascosti su mobile per risparmiare spazio.
+- Breadcrumb e tab Modifica/Cronologia impilati verticalmente su mobile.
+- Preview markdown con altezza minima adattiva (`min-h-[50vh]` su mobile, `calc(100vh-340px)` su desktop).
+- Esporta/Importa nascosti su schermi < 1024px (lg) per alleggerire l'header.
+
+## [0.4.2] - 2026-07-03
+
+### Aggiunto
+- File `docs/LIMITATIONS.md` con elenco dettagliato di tutte le limitazioni derivanti dall'uso di servizi esterni pubblici (Supabase, Vercel, browser).
+- Link a `LIMITATIONS.md` in `README.md`, `GUIDA-SUPABASE.md`, `docs/DISCLAIMER.md` e `docs/SECURITY.md`.
+
 ## [0.4.1] - 2026-07-03
 
 ### Aggiunto

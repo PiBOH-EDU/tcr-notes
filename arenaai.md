@@ -28,6 +28,31 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.4.3] — Menu Info, limite immagini 1.5MB, mobile UI overhaul
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Componente `InfoMenu.jsx` con dropdown che mostra versione, autore, classe e link a tutta la documentazione (SECURITY, DISCLAIMER, LIMITATIONS, CODE OF CONDUCT, CHANGELOG, GUIDA SUPABASE, LICENSE).
+- Controllo dimensione immagini in `MarkdownToolbar.jsx`: massimo 1.5 MB, alert con dimensione effettiva del file se superato.
+
+#### Modifiche
+- `Dashboard.jsx`: header rivisto — più compatto su mobile, badge utente nascosto su < sm, pulsanti Esporta/Importa nascosti su < lg, InfoMenu aggiunto.
+- `Editor.jsx`: status bar responsive (flex-col su mobile, flex-row su sm), toggle markdown ridimensionato, testi più piccoli su mobile.
+- `MarkdownToolbar.jsx`: separatori verticali nascosti su mobile (`hidden sm:inline`), bottoni con `whitespace-nowrap`.
+- Altezze editor/preview adattive: `min-h-[50vh]` su mobile vs `calc(100vh-340px)` su desktop.
+- Aggiornata versione ovunque a **0.4.3**.
+
+### [0.4.2] — Documentazione limitazioni servizi esterni
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Creato `docs/LIMITATIONS.md` con tabella completa dei vincoli di Supabase Free Tier (500MB, 2GB bandwidth, 200 connessioni, pausa dopo 7gg, ecc.), Vercel Hobby (cold start, no SLA, ecc.), browser (localStorage 5-10MB, immagini base64), sicurezza (no E2E, no audit log, RLS aperte).
+- Aggiunte raccomandazioni pratiche per gli utenti (export regolare, non caricare immagini grandi, monitorare spazio).
+- Link a `LIMITATIONS.md` inseriti in `README.md` (sezione Documentazione), `GUIDA-SUPABASE.md` (prima dei prerequisiti), `docs/DISCLAIMER.md` (sezione servizi terze parti), `docs/SECURITY.md` (sezione limitazioni).
+- Aggiornata versione ovunque a **0.4.2**.
+
 ### [0.4.1] — Rinomina titoli e capitoli
 - **Autore:** PiBOH
 - **Data:** 2026-07-03
