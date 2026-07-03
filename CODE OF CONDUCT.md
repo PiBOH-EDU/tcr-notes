@@ -24,7 +24,7 @@ Gli utenti autorizzati sono tenuti a:
 
 - **Collaborare in buona fede**: gli appunti sono uno strumento condiviso per il bene di tutta la classe; ogni contributo deve essere accurato e in buona fede.
 - **Rispettare il lavoro altrui**: non modificare, cancellare o sovrascrivere deliberatamente il lavoro dei compagni.
-- **Mantenere i contenuti pertinenti**: inserire esclusivamente materiale relativo al libro *The Catcher in the Rye* e alle attività didattiche della classe 1FT.
+- **Mantenere i contenuti pertinenti**: inserire esclusivamente materiale relativo al libro alle attività didattiche della classe 1FT.
 - **Usare un linguaggio appropriato**: comunicare in modo rispettoso, evitando insulti, linguaggio offensivo o contenuti inappropriati.
 - **Proteggere le credenziali**: non condividere la password di classe con soggetti esterni alla classe 1FT, come indicato in `docs/SECURITY.md`.
 - **Segnalare i problemi**: in caso di malfunzionamenti, contenuti errati o comportamenti scorretti, segnalare all'autore del progetto tramite i canali indicati in `docs/SECURITY.md`.
