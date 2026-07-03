@@ -1,0 +1,29 @@
+/* ============================================================
+   LISTA UTENTI BANNATI — src/data/banned.js
+   ============================================================
+
+   Formato identificativi: cognome.nome (tutto minuscolo, senza spazi)
+
+   Esempi:
+     "Neri Giovanni"     -> "neri.giovanni"
+     "Rossi Paolo"       -> "rossi.paolo"
+     "Bianchi Luca"      -> "bianchi.luca"
+
+   ISTRUZIONI per bannare un utente:
+   1. Scrivi il cognome.nome in formato minuscolo senza spazi
+   2. Ogni elemento deve essere separato da una virgola
+   3. L'ultimo elemento NON deve avere la virgola finale
+
+   ESEMPIO CORRETTO:
+     export const BANNED = [
+       "neri.giovanni",
+       "rossi.paolo",
+     ];
+
+   NOTA: un utente bannato NON può mai accedere, anche se inserito
+   nella lista AUTHORIZED o se conosce la password.
+   ============================================================ */
+
+export const BANNED = [
+  // Aggiungi qui i nomi bannati, es: "rossi.paolo"
+];

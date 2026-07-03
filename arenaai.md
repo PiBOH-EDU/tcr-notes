@@ -13,6 +13,51 @@
 
 ## Changelog
 
+### [0.2.4.1-sync] — Sincronizzazione workspace con repository remoto
+- **Data:** 2026-07-02
+- **Modifiche:**
+  - Sincronizzati tutti i file dal repository GitHub `PiBOH-EDU/tcr-notes` (branch main).
+  - Aggiornati: `package.json`, `src/lib/supabase.js`, `src/main.jsx`, `src/components/Editor.jsx`, `src/components/Login.jsx`, `src/components/Dashboard.jsx`, `src/components/Footer.jsx`, `src/lib/storage.js`, `tailwind.config.js`, `README.md`, `CHANGELOG.md`, `arenaai.md`, `CODE OF CONDUCT.md`, `LICENSE`, `.gitignore`, `docs/SECURITY.md`, `docs/DISCLAIMER.md`.
+  - Aggiunti nuovi file dal repo: `src/components/ErrorBoundary.jsx`.
+  - Build di produzione eseguito con successo per verificare integrità post-sincronizzazione.
+
+### [0.4.0-sync] — Sincronizzazione liste utenti dal repository remoto
+- **Data:** 2026-07-03
+- **Modifiche:**
+  - Sincronizzato `src/data/authorized.js` dal repository GitHub `PiBOH-EDU/tcr-notes` (branch main).
+  - Sincronizzato `src/data/banned.js` dal repository remoto.
+  - Build di produzione eseguito per verificare integrità post-sincronizzazione.
+
+### [0.4.1] — Rinomina titoli e capitoli
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Funzioni `renameTitle(id, newName)` e `renameChapter(id, newName)` in `src/lib/storage.js` per aggiornare i nomi su Supabase.
+- UI di rinomina inline nella sidebar: pulsante ✏️ accanto a ogni titolo e capitolo.
+- Input editabile con salvataggio su Enter/✓ e annullamento su Escape/✕.
+- Stati `editingTitleId`, `editingChapterId`, `editTitleValue`, `editChapterValue` in `Dashboard.jsx`.
+- Aggiornata versione ovunque a **0.4.1**.
+
+### [0.4.0] — Toolbar markdown, responsive mobile, upload immagini, issue templates
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Componente `MarkdownToolbar` con pulsanti per formattazione: grassetto, corsivo, barrato, H1/H2/H3, elenchi puntati/numerati, citazioni, blocchi codice inline e multilinea, link, upload immagini (base64 inline), allineamento centro/destra.
+- Supporto HTML in markdown tramite dipendenza `rehype-raw` per allineamento testo e formattazioni avanzate.
+- Upload immagini: input file nascosto che converte in data URL base64 e inserisce sintassi markdown `![nome](data:image/...)"`.
+- Dashboard completamente responsive: sidebar diventa drawer overlay su mobile attivabile da hamburger menu; header compatto con icone; overlay chiude sidebar al tap fuori.
+- Indicatori utenti online: contatore con pallino verde pulsante in header; lista dropdown al click.
+- Issue template GitHub in `.github/ISSUE_TEMPLATE/`: `bug_report.yml`, `feature_request.yml`, `config.yml` in stile XTetris.
+- Persistenza checkbox documenti in `localStorage` (`tcr-docs-accepted`): dopo la prima accettazione il checkbox rimane pre-flaggato.
+
+#### Modifiche
+- `Editor.jsx`: integrata toolbar, aggiunto `rehype-raw`, migliorata preview markdown con classi `prose`.
+- `Dashboard.jsx`: layout responsive con classi Tailwind `md:` e stati `sidebarOpen`/`showOnlineList`.
+- `Login.jsx`: checkbox usa `localStorage` per persistenza.
+- `package.json`: aggiunta dipendenza `rehype-raw`, versione bump a **0.4.0**.
+
 ### [0.2.4.1] — Fix schermata bianca da .env + nome reale residuo
 - **Autore:** PiBOH
 - **Data:** 2026-07-02

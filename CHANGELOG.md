@@ -7,15 +7,39 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-07-03
+
+### Aggiunto
+- Possibilità di rinominare titoli e capitoli direttamente dalla sidebar (pulsante ✏️ accanto al cestino).
+- Input inline con salva (Enter o ✓) e annulla (Escape o ✕) per la rinomina.
+
+## [0.4.0] - 2026-07-03
+
+### Aggiunto
+- Toolbar markdown nell'editor con pulsanti per grassetto, corsivo, barrato, titoli (H1/H2/H3), elenchi, citazioni, blocchi codice, link, immagini, allineamento centro/destra.
+- Supporto upload immagini inline (conversione base64) direttamente nell'editor.
+- Supporto HTML in markdown tramite `rehype-raw` per allineamento testo e altre formattazioni avanzate.
+- Interfaccia completamente responsive: sidebar diventa drawer con hamburger menu su mobile.
+- Indicatori utenti online con contatore e lista dropdown.
+- Issue template personalizzati (bug report, feature request, config) in `.github/ISSUE_TEMPLATE/`.
+- Persistenza checkbox documenti in `localStorage`: dopo la prima accettazione non è più necessario flaggare ad ogni login.
+
+### Modificato
+- Migliorata visualizzazione markdown con classe `prose` di Tailwind Typography.
+- Header ottimizzato per mobile con icone compatte e pulsanti raggruppati.
+- Ottimizzato layout della sidebar e dell'area principale per schermi piccoli.
+
 ## [0.3.1] - 2026-07-02
 
 ### Aggiunto
-- Supporto per formattazione markdown
+- Supporto per formattazione markdown con `react-markdown` e `remark-gfm`.
+- Toggle visualizzazione Markdown / Testo piano nell'editor.
+- Plugin Tailwind Typography per rendering markdown stilizzato.
 
 ## [0.3.1] - 2026-07-02
 
 ### Aggiunto
-- Supporto per la visualizzazione degli utenti on-line
+- Supporto per la visualizzazione degli utenti online tramite Supabase Presence.
 
 ## [0.2.4.1] - 2026-07-02
 
