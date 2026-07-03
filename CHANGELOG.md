@@ -7,14 +7,28 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.7] - 2026-07-03
+
+### Aggiunto
+- Stato "📝 Modificato" nell'editor: quando si scrive compare un indicatore arancione fino al salvataggio.
+- Pulsante allinea a sinistra (⬅️ Sinistra) e pulsante "❌ Align" per rimuovere i tag di allineamento dal testo selezionato.
+- Componente `MarkdownLink` che aggiunge automaticamente `https://` ai link senza protocollo, evitando redirect relativi al dominio.
+
+### Modificato
+- Cliccando sulla preview Markdown si passa direttamente a **Testo piano** (non più solo edit mode dentro Markdown).
+- Fix stato salvataggio: ora l'indicatore passa correttamente da ✅ Salvato → 📝 Modificato → ⏳ Salvataggio... → ✅ Salvato.
+- Emoji stati salvataggio aggiornate: 📝 Modificato, ⏳ Salvataggio..., ✅ Salvato.
+- Limite upload immagini ridotto a **500 KB**.
+- Toolbar: aggiunto bottone allinea sinistra e rimuovi allineamento.
+
 ## [0.4.6] - 2026-07-03
 
 ### Aggiunto
 - Menu Info: voce "🐛 Segnala un bug / Richiedi una funzionalità" che rimanda alla pagina issue template di GitHub.
-- Toolbar markdown: placeholder descrittivi al posto di stringhe vuote ("grassetto", "corsivo", "barrato", "Titolo principale", "Sottotitolo", "Sezione", "Elemento elenco", "Primo elemento", "Citazione famosa", "codice qui", "codice", "testo del link", "Testo centrato", "Testo a destra").
+- Toolbar markdown: placeholder descrittivi al posto di stringhe vuote.
 
 ### Modificato
-- Etichette toggle editor: "Testo piano" e "Rendering Markdown" al posto di "Testo" e "Markdown".
+- Etichette toggle editor: "Testo piano" e "Rendering Markdown".
 
 ## [0.4.5] - 2026-07-03
 

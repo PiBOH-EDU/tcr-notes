@@ -37,4 +37,6 @@ export const AUTHORIZED = [
   "mardarie.denisandreiflorin",
   "mollo.michele",
   "cecchetto.jacopo",
+  "pitzalis.vera",
+  "berton.alexgiulio",
 ];

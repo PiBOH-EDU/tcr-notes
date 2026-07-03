@@ -8,12 +8,25 @@ import MarkdownToolbar from './MarkdownToolbar';
 
 let globalTypingTimeout = null;
 
+function MarkdownLink({ node, href, children, ...props }) {
+  let url = href || '';
+  // Se l'URL non ha protocollo e non è un anchor/mailto, aggiungi https://
+  if (url && !url.match(/^[a-z][a-z0-9+.-]*:/i) && !url.startsWith('#') && !url.startsWith('/')) {
+    url = 'https://' + url;
+  }
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer" {...props}>
+      {children}
+    </a>
+  );
+}
+
 export default function Editor({ chapterId, user, theme }) {
   const [content, setContent] = useState('');
   const [lastEditedBy, setLastEditedBy] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
   const [typingUser, setTypingUser] = useState(null);
-  const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState('saved'); // 'saved' | 'dirty' | 'saving'
   const [isMarkdownView, setIsMarkdownView] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const broadcastChannelRef = useRef(null);
@@ -37,6 +50,7 @@ export default function Editor({ chapterId, user, theme }) {
       redoStack.current = [];
       setLastEditedBy(chapter.last_edited_by);
       setLastSaved(chapter.updated_at);
+      setSaveState('saved');
     }
   }, [chapterId]);
 
@@ -60,6 +74,7 @@ export default function Editor({ chapterId, user, theme }) {
             redoStack.current = [];
             setLastEditedBy(payload.new.last_edited_by);
             setLastSaved(payload.new.updated_at);
+            setSaveState('saved');
           }
         }
       )
@@ -91,26 +106,22 @@ export default function Editor({ chapterId, user, theme }) {
     };
   }, [chapterId, user]);
 
-  // Keyboard shortcuts: undo/redo + enter edit from preview
+  // Keyboard shortcuts
   useEffect(() => {
     const handler = (e) => {
-      // Ctrl/Cmd + Z = Undo
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
         performUndo();
         return;
       }
-      // Ctrl/Cmd + Y  OR  Ctrl/Cmd + Shift + Z = Redo
       if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
         e.preventDefault();
         performRedo();
         return;
       }
-      // Any printable key while in markdown preview -> enter edit mode
       if (isMarkdownView && !isEditing && !e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
         e.preventDefault();
         setIsEditing(true);
-        // Insert the pressed character after focus
         requestAnimationFrame(() => {
           if (textareaRef.current) {
             textareaRef.current.focus();
@@ -122,7 +133,6 @@ export default function Editor({ chapterId, user, theme }) {
           }
         });
       }
-      // Escape exits edit mode in markdown view
       if (e.key === 'Escape' && isMarkdownView && isEditing) {
         setIsEditing(false);
       }
@@ -131,15 +141,33 @@ export default function Editor({ chapterId, user, theme }) {
     return () => document.removeEventListener('keydown', handler);
   }, [isMarkdownView, isEditing, content]);
 
+  const triggerSave = useCallback(
+    async (newContent) => {
+      setSaveState('saving');
+      try {
+        const updated = await saveChapter(chapterId, newContent, user);
+        if (updated) {
+          setLastEditedBy(updated.last_edited_by);
+          setLastSaved(updated.updated_at);
+          lastSavedContent.current = newContent;
+          setSaveState('saved');
+        }
+      } catch (err) {
+        console.error(err);
+        setSaveState('dirty');
+      }
+    },
+    [chapterId, user]
+  );
+
   const updateContent = (newContent, skipUndo = false) => {
     setContent(newContent);
+    setSaveState('dirty');
 
     if (!skipUndo && !isUndoing.current) {
-      // Push to undo stack if different from last
       const last = undoStack.current[undoStack.current.length - 1];
       if (last !== newContent) {
         undoStack.current.push(newContent);
-        // Limit stack size
         if (undoStack.current.length > 100) {
           undoStack.current = undoStack.current.slice(-100);
         }
@@ -157,27 +185,9 @@ export default function Editor({ chapterId, user, theme }) {
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      handleSave(newContent);
-    }, 60000); // 1 minuto autosave
+      triggerSave(newContent);
+    }, 60000);
   };
-
-  const handleSave = useCallback(
-    async (newContent) => {
-      setSaving(true);
-      try {
-        const updated = await saveChapter(chapterId, newContent, user);
-        if (updated) {
-          setLastEditedBy(updated.last_edited_by);
-          setLastSaved(updated.updated_at);
-          lastSavedContent.current = newContent;
-        }
-      } catch (err) {
-        console.error(err);
-      }
-      setSaving(false);
-    },
-    [chapterId, user]
-  );
 
   const performUndo = () => {
     if (undoStack.current.length <= 1) return;
@@ -187,9 +197,8 @@ export default function Editor({ chapterId, user, theme }) {
     isUndoing.current = true;
     setContent(prev);
     isUndoing.current = false;
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
+    setSaveState(prev !== lastSavedContent.current ? 'dirty' : 'saved');
+    if (textareaRef.current) textareaRef.current.focus();
   };
 
   const performRedo = () => {
@@ -199,9 +208,8 @@ export default function Editor({ chapterId, user, theme }) {
     isUndoing.current = true;
     setContent(next);
     isUndoing.current = false;
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
+    setSaveState(next !== lastSavedContent.current ? 'dirty' : 'saved');
+    if (textareaRef.current) textareaRef.current.focus();
   };
 
   const handleChange = (e) => {
@@ -215,12 +223,26 @@ export default function Editor({ chapterId, user, theme }) {
   };
 
   const handleMarkdownClick = () => {
+    // Cliccando sulla preview si entra in modalità testo piano (non più markdown edit)
+    setIsMarkdownView(false);
     setIsEditing(true);
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
       }
     }, 0);
+  };
+
+  const saveStateUI = () => {
+    switch (saveState) {
+      case 'saving':
+        return <span className="text-yellow-400">⏳ Salvataggio...</span>;
+      case 'dirty':
+        return <span className="text-orange-400">📝 Modificato</span>;
+      case 'saved':
+      default:
+        return <span className="text-green-400">✅ Salvato</span>;
+    }
   };
 
   return (
@@ -234,14 +256,10 @@ export default function Editor({ chapterId, user, theme }) {
         }`}
       >
         <div className="flex items-center gap-2">
-          {saving ? (
-            <span className="text-yellow-400">💾 Salvataggio...</span>
-          ) : (
-            <span className="text-green-400">✓ Salvato</span>
-          )}
+          {saveStateUI()}
         </div>
         <div className="flex items-center gap-2">
-          {/* Undo / Redo buttons */}
+          {/* Undo / Redo */}
           <button
             onClick={performUndo}
             disabled={undoStack.current.length <= 1}
@@ -286,7 +304,7 @@ export default function Editor({ chapterId, user, theme }) {
             }`}
             role="switch"
             aria-checked={isMarkdownView}
-            title={isMarkdownView ? 'Markdown attivo' : 'Testo piano'}
+            title={isMarkdownView ? 'Rendering Markdown attivo' : 'Testo piano'}
           >
             <span
               className={`inline-block h-2.5 w-2.5 md:h-3 md:w-3 transform rounded-full bg-white transition ${
@@ -323,7 +341,7 @@ export default function Editor({ chapterId, user, theme }) {
       )}
 
       {/* Editor / Preview */}
-      {isMarkdownView && !isEditing ? (
+      {isMarkdownView ? (
         <div
           ref={previewRef}
           onClick={handleMarkdownClick}
@@ -335,11 +353,15 @@ export default function Editor({ chapterId, user, theme }) {
           tabIndex={0}
         >
           {content ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{ a: MarkdownLink }}
+            >
               {content}
             </ReactMarkdown>
           ) : (
-            <p className="opacity-50 italic">Clicca qui o premi un tasto per iniziare a scrivere...</p>
+            <p className="opacity-50 italic">Clicca qui per iniziare a scrivere...</p>
           )}
         </div>
       ) : (

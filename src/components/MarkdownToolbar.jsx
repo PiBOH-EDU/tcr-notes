@@ -22,11 +22,26 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
     const content = selected || placeholder;
     const replacement = before + content + after;
     ta.setRangeText(replacement, start, end, 'end');
-    // Se non c'era selezione, posiziona il cursore sul placeholder
     if (!selected) {
       const cursorPos = start + before.length + placeholder.length;
       ta.setSelectionRange(cursorPos, cursorPos);
     }
+    ta.focus();
+    ta.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+
+  const removeAlign = () => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    let text = ta.value;
+    const selected = text.slice(start, end);
+    // Rimuove <div align="center">, <div align="right">, <div align="left"> e il relativo </div>
+    const cleaned = selected
+      .replace(/<div\s+align="(center|right|left)">\n?/gi, '')
+      .replace(/\n?<\/div>/gi, '');
+    ta.setRangeText(cleaned, start, end, 'end');
     ta.focus();
     ta.dispatchEvent(new Event('input', { bubbles: true }));
   };
@@ -38,9 +53,9 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      const MAX_SIZE = 1 * 1024 * 1024; // 1 MB
+      const MAX_SIZE = 0.5 * 1024 * 1024; // 500 KB
       if (file.size > MAX_SIZE) {
-        alert(`File troppo grande! Dimensione massima: 1 MB. Il tuo file è ${(file.size / 1024 / 1024).toFixed(2)} MB.`);
+        alert(`File troppo grande! Dimensione massima: 500 KB. Il tuo file è ${(file.size / 1024).toFixed(1)} KB.`);
         return;
       }
       const reader = new FileReader();
@@ -101,15 +116,21 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
       <button type="button" onClick={() => insertWithPlaceholder('[', 'testo del link', '](https://esempio.it)')} className={btnClass} title="Link">
         Link
       </button>
-      <button type="button" onClick={insertImage} className={btnClass} title="Carica immagine (max 1MB)">
+      <button type="button" onClick={insertImage} className={btnClass} title="Carica immagine (max 500KB)">
         🖼 Img
       </button>
       <span className="w-px h-4 bg-gray-500/30 mx-0.5 hidden sm:inline" />
+      <button type="button" onClick={() => insertWithPlaceholder('<div align="left">\n', 'Testo a sinistra', '\n</div>')} className={btnClass} title="Allinea a sinistra">
+        ⬅️ Sinistra
+      </button>
       <button type="button" onClick={() => insertWithPlaceholder('<div align="center">\n', 'Testo centrato', '\n</div>')} className={btnClass} title="Allinea al centro">
         ⬜ Centro
       </button>
       <button type="button" onClick={() => insertWithPlaceholder('<div align="right">\n', 'Testo a destra', '\n</div>')} className={btnClass} title="Allinea a destra">
         ⬜ Destra
+      </button>
+      <button type="button" onClick={removeAlign} className={btnClass} title="Rimuovi allineamento">
+        ❌ Align
       </button>
     </div>
   );

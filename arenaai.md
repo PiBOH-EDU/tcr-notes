@@ -28,17 +28,32 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.4.7] — Fix stati salvataggio, click preview → testo piano, link markdown, limite 500KB
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Stato `saveState` in `Editor.jsx` con 3 stati: `saved` (✅), `dirty` (📝), `saving` (⏳). Ora quando l'utente scrive compare immediatamente "📝 Modificato", poi "⏳ Salvataggio..." durante il save, e infine "✅ Salvato".
+- Componente `MarkdownLink` che intercetta i link in rendering e aggiunge `https://` se manca il protocollo, fixando il problema dei redirect relativi al dominio dell'app.
+- Pulsante "⬅️ Sinistra" nella toolbar per allineamento a sinistra.
+- Pulsante "❌ Align" che rimuove i tag `<div align="...">` dal testo selezionato.
+
+#### Modifiche
+- `handleMarkdownClick`: cliccando sulla preview Markdown si passa direttamente a **Testo piano** (`setIsMarkdownView(false)`), non più solo edit mode dentro la preview.
+- Limite upload immagini ridotto a **500 KB**.
+- Aggiornata versione ovunque a **0.4.7**.
+
 ### [0.4.6] — Etichette toggle, placeholder toolbar, link feedback
 - **Autore:** PiBOH
 - **Data:** 2026-07-03
 
 #### Aggiunte
-- Menu Info: sezione "Feedback" con link a `https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose` per segnalare bug o richiedere funzionalità.
-- Toolbar markdown: funzione `insertWithPlaceholder` che inserisce testo descrittivo al posto di stringhe vuote quando non c'è selezione (es. "grassetto", "corsivo", "Titolo principale", "codice qui", "testo del link", ecc.).
+- Menu Info: sezione "Feedback" con link agli issue template.
+- Toolbar markdown: placeholder descrittivi.
 
 #### Modifiche
-- Toggle editor: etichette cambiate da "Testo"/"Markdown" a **"Testo piano"** e **"Rendering Markdown"**.
-- Aggiornata versione ovunque a **0.4.6**.
+- Toggle editor: "Testo piano" / "Rendering Markdown".
+- Versione **0.4.6**.
 
 ### [0.4.5] — Fix vulnerabilità Dependabot (vite, esbuild, launch-editor)
 - **Autore:** PiBOH
