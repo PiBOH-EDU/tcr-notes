@@ -43,4 +43,4 @@ Per i dettagli tecnici completi, vedi [`docs/LIMITATIONS.md`](./LIMITATIONS.md).
 
 ---
 
-**tcr-notes v0.4.9** — autore PiBOH
+**tcr-notes v0.2.4.1** — autore PiBOH

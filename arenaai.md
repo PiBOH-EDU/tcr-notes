@@ -28,6 +28,24 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.5.0] — Highlight inline, no-save unchanged, badge Supabase, rimosso ❌ Align
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Componente `HighlightTextarea.jsx` con doppio layer: textarea trasparente (`caret-blue-500`) sopra e `<pre>` formattato sotto. Evidenzia in tempo reale:
+  - `**testo**` → grassetto
+  - `~~testo~~` → barrato (opacity 60)
+  - `<!-- commento -->` → penombra (opacity 30, italic)
+  - Non applicato a link, headings, liste, codice, immagini.
+- **Badge promemoria Supabase**: banner rosso animato (`animate-pulse`) che appare se il progetto Supabase è in pausa o irraggiungibile. Check al mount e ogni 5 minuti via `setInterval`.
+
+#### Modifiche
+- `Editor.jsx`: `updateContent` e `triggerSave` ora controllano se `newContent === lastSavedContent.current` e skipano salvataggio/stato dirty se invariato.
+- `MarkdownToolbar.jsx`: rimosso pulsante "❌ Align".
+- `Dashboard.jsx`: aggiunto stato `supabaseStatus` e banner condizionale.
+- Aggiornata versione ovunque a **0.5.0**.
+
 ### [0.4.9] — Avviso dati personali
 - **Autore:** PiBOH
 - **Data:** 2026-07-03

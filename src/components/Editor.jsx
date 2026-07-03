@@ -5,12 +5,12 @@ import rehypeRaw from 'rehype-raw';
 import { supabase } from '../lib/supabase';
 import { getChapter, saveChapter } from '../lib/storage';
 import MarkdownToolbar from './MarkdownToolbar';
+import HighlightTextarea from './HighlightTextarea';
 
 let globalTypingTimeout = null;
 
 function MarkdownLink({ node, href, children, ...props }) {
   let url = href || '';
-  // Se l'URL non ha protocollo e non è un anchor/mailto, aggiungi https://
   if (url && !url.match(/^[a-z][a-z0-9+.-]*:/i) && !url.startsWith('#') && !url.startsWith('/')) {
     url = 'https://' + url;
   }
@@ -26,15 +26,13 @@ export default function Editor({ chapterId, user, theme }) {
   const [lastEditedBy, setLastEditedBy] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
   const [typingUser, setTypingUser] = useState(null);
-  const [saveState, setSaveState] = useState('saved'); // 'saved' | 'dirty' | 'saving'
+  const [saveState, setSaveState] = useState('saved');
   const [isMarkdownView, setIsMarkdownView] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const broadcastChannelRef = useRef(null);
   const debounceRef = useRef(null);
   const textareaRef = useRef(null);
-  const previewRef = useRef(null);
 
-  // Undo / Redo stacks
   const undoStack = useRef([]);
   const redoStack = useRef([]);
   const lastSavedContent = useRef('');
@@ -58,7 +56,6 @@ export default function Editor({ chapterId, user, theme }) {
     loadContent();
   }, [loadContent]);
 
-  // Realtime updates from DB
   useEffect(() => {
     const channel = supabase
       .channel(`chapter-${chapterId}`)
@@ -85,7 +82,6 @@ export default function Editor({ chapterId, user, theme }) {
     };
   }, [chapterId, user]);
 
-  // Broadcast typing
   useEffect(() => {
     const channel = supabase.channel('notes-room');
     broadcastChannelRef.current = channel;
@@ -106,10 +102,8 @@ export default function Editor({ chapterId, user, theme }) {
     };
   }, [chapterId, user]);
 
-  // Keyboard shortcuts
   useEffect(() => {
     const handler = (e) => {
-      // Ctrl/Cmd + S = Salva manuale
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
         handleManualSave();
@@ -149,6 +143,10 @@ export default function Editor({ chapterId, user, theme }) {
 
   const triggerSave = useCallback(
     async (newContent) => {
+      if (newContent === lastSavedContent.current) {
+        setSaveState('saved');
+        return;
+      }
       setSaveState('saving');
       try {
         const updated = await saveChapter(chapterId, newContent, user);
@@ -167,6 +165,12 @@ export default function Editor({ chapterId, user, theme }) {
   );
 
   const updateContent = (newContent, skipUndo = false) => {
+    if (newContent === lastSavedContent.current) {
+      setContent(newContent);
+      setSaveState('saved');
+      return;
+    }
+
     setContent(newContent);
     setSaveState('dirty');
 
@@ -195,6 +199,11 @@ export default function Editor({ chapterId, user, theme }) {
     }, 60000);
   };
 
+  const handleManualSave = () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    triggerSave(content);
+  };
+
   const performUndo = () => {
     if (undoStack.current.length <= 1) return;
     const current = undoStack.current.pop();
@@ -218,11 +227,6 @@ export default function Editor({ chapterId, user, theme }) {
     if (textareaRef.current) textareaRef.current.focus();
   };
 
-  const handleManualSave = () => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    triggerSave(content);
-  };
-
   const handleChange = (e) => {
     updateContent(e.target.value);
   };
@@ -234,7 +238,6 @@ export default function Editor({ chapterId, user, theme }) {
   };
 
   const handleMarkdownClick = () => {
-    // Cliccando sulla preview si entra in modalità testo piano (non più markdown edit)
     setIsMarkdownView(false);
     setIsEditing(true);
     setTimeout(() => {
@@ -270,7 +273,6 @@ export default function Editor({ chapterId, user, theme }) {
           {saveStateUI()}
         </div>
         <div className="flex items-center gap-2">
-          {/* Undo / Redo / Save */}
           <button
             onClick={performUndo}
             disabled={undoStack.current.length <= 1}
@@ -314,7 +316,6 @@ export default function Editor({ chapterId, user, theme }) {
             💾 Salva
           </button>
           <span className="w-px h-3 bg-gray-500/30 hidden sm:inline" />
-          {/* Toggle Markdown */}
           <button
             onClick={() => {
               setIsMarkdownView(!isMarkdownView);
@@ -368,7 +369,6 @@ export default function Editor({ chapterId, user, theme }) {
       {/* Editor / Preview */}
       {isMarkdownView ? (
         <div
-          ref={previewRef}
           onClick={handleMarkdownClick}
           className={`w-full min-h-[50vh] md:min-h-[calc(100vh-340px)] p-3 md:p-4 rounded-xl border cursor-text overflow-y-auto prose prose-sm max-w-none ${
             theme === 'dark'
@@ -390,15 +390,11 @@ export default function Editor({ chapterId, user, theme }) {
           )}
         </div>
       ) : (
-        <textarea
+        <HighlightTextarea
           ref={textareaRef}
           value={content}
           onChange={handleChange}
-          className={`w-full min-h-[50vh] md:h-[calc(100vh-340px)] p-3 md:p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm md:text-base leading-relaxed ${
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500'
-              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
-          }`}
+          theme={theme}
           placeholder="Inizia a scrivere gli appunti qui..."
           spellCheck={false}
         />

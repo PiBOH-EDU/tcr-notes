@@ -16,7 +16,7 @@ export default function Footer({ theme }) {
       <p className={`mt-1 text-[11px] ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
         ⚠️ Non inserire dati personali, numeri di telefono o informazioni sensibili negli appunti.
       </p>
-      <p className="mt-1 opacity-70">Versione 0.4.9 autore PiBOH</p>
+      <p className="mt-1 opacity-70">Versione 0.5.0 autore PiBOH</p>
     </footer>
   );
 }

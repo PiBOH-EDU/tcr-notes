@@ -37,6 +37,24 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
   const [editTitleValue, setEditTitleValue] = useState('');
   const [editChapterValue, setEditChapterValue] = useState('');
 
+  const [supabaseStatus, setSupabaseStatus] = useState('checking'); // 'online' | 'offline' | 'checking'
+
+  // --- Check Supabase status ---
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const { error } = await supabase.from('titles').select('id', { head: true, count: 'exact' });
+        if (error) throw error;
+        setSupabaseStatus('online');
+      } catch {
+        setSupabaseStatus('offline');
+      }
+    };
+    checkStatus();
+    const interval = setInterval(checkStatus, 5 * 60 * 1000); // ogni 5 min
+    return () => clearInterval(interval);
+  }, []);
+
   // --- Supabase Presence ---
   useEffect(() => {
     const presenceChannel = supabase.channel('online-users', {
@@ -345,6 +363,12 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
           </button>
         </div>
       </header>
+
+      {supabaseStatus === 'offline' && (
+        <div className="px-4 py-2 bg-red-900/40 text-red-300 text-xs text-center border-b border-red-800 animate-pulse">
+          ⚠️ Il progetto Supabase sembra essere in pausa o irraggiungibile. Riattivalo dalla dashboard di Supabase per ripristinare la sincronizzazione.
+        </div>
+      )}
 
       {importError && (
         <div className="px-4 py-2 bg-red-900/30 text-red-400 text-xs border-b border-red-800">

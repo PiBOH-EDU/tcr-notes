@@ -30,22 +30,6 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
     ta.dispatchEvent(new Event('input', { bubbles: true }));
   };
 
-  const removeAlign = () => {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    const start = ta.selectionStart;
-    const end = ta.selectionEnd;
-    let text = ta.value;
-    const selected = text.slice(start, end);
-    // Rimuove <div align="center">, <div align="right">, <div align="left"> e il relativo </div>
-    const cleaned = selected
-      .replace(/<div\s+align="(center|right|left)">\n?/gi, '')
-      .replace(/\n?<\/div>/gi, '');
-    ta.setRangeText(cleaned, start, end, 'end');
-    ta.focus();
-    ta.dispatchEvent(new Event('input', { bubbles: true }));
-  };
-
   const insertImage = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -128,9 +112,6 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
       </button>
       <button type="button" onClick={() => insertWithPlaceholder('<div align="right">\n', 'Testo a destra', '\n</div>')} className={btnClass} title="Allinea a destra">
         ⬜ Destra
-      </button>
-      <button type="button" onClick={removeAlign} className={btnClass} title="Rimuovi allineamento">
-        ❌ Align
       </button>
     </div>
   );

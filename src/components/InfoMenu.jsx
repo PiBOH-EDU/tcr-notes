@@ -50,7 +50,7 @@ export default function InfoMenu({ theme }) {
         >
           <div className="p-3 border-b border-gray-700/30">
             <div className="font-bold text-sm">📚 tcr-notes</div>
-            <div className="text-xs opacity-70 mt-0.5">Versione 0.4.8</div>
+            <div className="text-xs opacity-70 mt-0.5">Versione 0.5.0</div>
             <div className="text-xs opacity-70">Autore: PiBOH</div>
           </div>
           <div className="p-2">

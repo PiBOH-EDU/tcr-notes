@@ -7,6 +7,17 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-03
+
+### Aggiunto
+- **Highlight inline nel Testo piano**: il textarea evidenzia in tempo reale `**grassetto**`, `~~barrato~~` e `<!-- commenti -->` (penombra).
+- Componente `HighlightTextarea` con doppio layer (textarea trasparente sopra + pre formattato sotto).
+- **Badge promemoria Supabase**: banner rosso animato che appare se il progetto Supabase è in pausa o irraggiungibile. Check automatico ogni 5 minuti.
+
+### Modificato
+- **No-save se invariato**: se il testo non è stato modificato rispetto all'ultimo salvataggio, lo stato rimane "✅ Salvato" e non viene inviata alcuna richiesta a Supabase.
+- Rimosso pulsante "❌ Align" dalla toolbar.
+
 ## [0.4.9] - 2026-07-03
 
 ### Aggiunto
