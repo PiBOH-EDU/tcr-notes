@@ -1,0 +1,123 @@
+name: 🐛 Bug Report
+description: Qualcosa non funziona? Aiutaci a risolverlo!
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 🛠️ Bug Report
+        Grazie per la segnalazione! Compila il modulo sottostante.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-flight Checklist
+      options:
+        - label: Utilizzo [l'ultima versione](https://github.com/PiBOH-EDU/tcr-notes/releases/latest) dell'app.
+          required: true
+        - label: Ho verificato e non esiste un'altra issue simile.
+          required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: 📍 Dove credi che sia il bug?
+      description: Seleziona l'area dell'app.
+      options:
+        - 🔐 Login / Autenticazione
+        - 📝 Editor / Markdown
+        - 📁 Titoli / Capitoli
+        - 🕐 Cronologia
+        - ⚡ Realtime / Sync
+        - 🌗 Tema / UI
+        - 📱 Mobile / Responsive
+        - 💾 Export / Import
+        - 🔧 Supabase / Database
+        - ❓ Altro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: 📉 Con che frequenza accade?
+      options:
+        - 🔴 Sempre (100%)
+        - 🟠 Spesso (> 50%)
+        - 🟡 A volte (< 50%)
+        - 🟢 Raramente (una o due volte)
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce-steps
+    attributes:
+      label: 🔄 Passaggi fatti prima di inciampare nel bug
+      description: Passaggi chiari portano a una risoluzione più veloce!
+      placeholder: |
+        1. Vado su ...
+        2. Clicco su ...
+        3. Ved l'errore
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: 🆚 Cosa dovrebbe succedere vs. Cosa succede
+      description: Cosa è successo vs. cosa avrebbe dovuto succedere.
+      placeholder: |
+        Aspettativa: Il testo si salva.
+        Realtà: L'app mostra "Salvataggio..." all'infinito.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "---"
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: 🌐 Browser?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Opera
+        - Altro
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: 📱 Dispositivo?
+      options:
+        - Desktop
+        - Tablet
+        - Smartphone
+        - Altro
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: 📦 Versione App
+      placeholder: es. 0.3.1 (vedi footer in basso)
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📄 Logs / Screenshot
+      description: Incolla log o trascina screenshot qui.
+      render: shell
