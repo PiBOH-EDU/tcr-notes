@@ -295,7 +295,7 @@ export default function Editor({ chapterId, user, theme }) {
             />
           </button>
           <span className="text-[10px] md:text-xs opacity-70">
-            {isMarkdownView ? 'Markdown' : 'Testo'}
+            {isMarkdownView ? 'Rendering Markdown' : 'Testo piano'}
           </span>
         </div>
         <div className="truncate">

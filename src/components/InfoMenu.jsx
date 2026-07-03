@@ -10,6 +10,8 @@ const DOCS = [
   { label: '📄 LICENSE', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/LICENSE' },
 ];
 
+const FEEDBACK = { label: '🐛 Segnala un bug / Richiedi una funzionalità', url: 'https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose' };
+
 export default function InfoMenu({ theme }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -49,7 +51,7 @@ export default function InfoMenu({ theme }) {
         >
           <div className="p-3 border-b border-gray-700/30">
             <div className="font-bold text-sm">📚 tcr-notes</div>
-            <div className="text-xs opacity-70 mt-0.5">Versione 0.4.4</div>
+            <div className="text-xs opacity-70 mt-0.5">Versione 0.4.6</div>
             <div className="text-xs opacity-70">Autore: PiBOH</div>
           </div>
           <div className="p-2">
@@ -71,6 +73,21 @@ export default function InfoMenu({ theme }) {
                 {d.label}
               </a>
             ))}
+            <div className="text-xs font-semibold uppercase tracking-wider opacity-50 px-2 py-1 mt-1">
+              Feedback
+            </div>
+            <a
+              href={FEEDBACK.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`block px-2 py-1.5 rounded text-sm transition ${
+                theme === 'dark'
+                  ? 'hover:bg-gray-700 text-gray-300'
+                  : 'hover:bg-gray-100 text-gray-700'
+              }`}
+            >
+              {FEEDBACK.label}
+            </a>
           </div>
           <div className={`p-2 text-xs text-center border-t ${
             theme === 'dark' ? 'border-gray-700/30 text-gray-500' : 'border-gray-200 text-gray-400'

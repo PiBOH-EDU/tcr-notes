@@ -7,6 +7,28 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.6] - 2026-07-03
+
+### Aggiunto
+- Menu Info: voce "🐛 Segnala un bug / Richiedi una funzionalità" che rimanda alla pagina issue template di GitHub.
+- Toolbar markdown: placeholder descrittivi al posto di stringhe vuote ("grassetto", "corsivo", "barrato", "Titolo principale", "Sottotitolo", "Sezione", "Elemento elenco", "Primo elemento", "Citazione famosa", "codice qui", "codice", "testo del link", "Testo centrato", "Testo a destra").
+
+### Modificato
+- Etichette toggle editor: "Testo piano" e "Rendering Markdown" al posto di "Testo" e "Markdown".
+
+## [0.4.5] - 2026-07-03
+
+### Sicurezza
+- Fix 4 vulnerabilità Dependabot:
+  - `vite`: `server.fs.deny` bypass on Windows alternate paths (HIGH)
+  - `vite`: Path Traversal in Optimized Deps `.map` Handling (MODERATE)
+  - `launch-editor`: NTLMv2 hash disclosure via UNC path handling on Windows (MODERATE)
+  - `esbuild`: enables any website to send any requests to the development server and read the response (MODERATE)
+- Aggiornato `vite` da 5.4.21 a 6.4.3 (versione patchata).
+
+### Nota
+- Tutte le vulnerabilità riguardavano il **server di sviluppo locale**, non la build di produzione su Vercel. Nessun impatto sugli utenti finali.
+
 ## [0.4.4] - 2026-07-03
 
 ### Aggiunto

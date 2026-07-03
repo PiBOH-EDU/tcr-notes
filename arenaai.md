@@ -28,6 +28,32 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.4.6] — Etichette toggle, placeholder toolbar, link feedback
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Menu Info: sezione "Feedback" con link a `https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose` per segnalare bug o richiedere funzionalità.
+- Toolbar markdown: funzione `insertWithPlaceholder` che inserisce testo descrittivo al posto di stringhe vuote quando non c'è selezione (es. "grassetto", "corsivo", "Titolo principale", "codice qui", "testo del link", ecc.).
+
+#### Modifiche
+- Toggle editor: etichette cambiate da "Testo"/"Markdown" a **"Testo piano"** e **"Rendering Markdown"**.
+- Aggiornata versione ovunque a **0.4.6**.
+
+### [0.4.5] — Fix vulnerabilità Dependabot (vite, esbuild, launch-editor)
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Sicurezza
+- Fix 4 alert Dependabot:
+  - `vite` HIGH: `server.fs.deny` bypass on Windows alternate paths
+  - `vite` MODERATE: Path Traversal in Optimized Deps `.map` Handling
+  - `launch-editor` MODERATE: NTLMv2 hash disclosure via UNC path handling
+  - `esbuild` MODERATE: enables any website to send any requests to the development server
+- Aggiornato `vite` da 5.4.21 a 6.4.3 (versione patchata). `npm audit` riporta ora **0 vulnerabilità**.
+- Nota: tutte le vulnerabilità riguardavano il **server di sviluppo locale**, non la build di produzione su Vercel.
+- Aggiornata versione ovunque a **0.4.5**.
+
 ### [0.4.4] — Fix markdown editing, undo/redo, autosave 1min, limite 1MB
 - **Autore:** PiBOH
 - **Data:** 2026-07-03
