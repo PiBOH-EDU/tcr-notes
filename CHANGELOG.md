@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.9] - 2026-07-03
+
+### Aggiunto
+- Avviso su dati personali: banner nella schermata di login e nota nel footer che ricordano di non inserire dati sensibili negli appunti.
+- Sezione in `docs/LIMITATIONS.md` sulla riservatezza dei contenuti.
+
 ## [0.4.8] - 2026-07-03
 
 ### Aggiunto

@@ -83,6 +83,14 @@ export default function Login({ onLogin, theme }) {
           Una classe, Tanti appunti, Un unico diario
         </p>
 
+        <div className={`mb-4 p-3 rounded-lg text-xs border ${
+          theme === 'dark'
+            ? 'bg-yellow-900/20 border-yellow-700/50 text-yellow-200'
+            : 'bg-yellow-50 border-yellow-300 text-yellow-800'
+        }`}>
+          ⚠️ <strong>Attenzione:</strong> non inserire dati personali, numeri di telefono, indirizzi o informazioni sensibili negli appunti. Il contenuto è condiviso con tutta la classe.
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* NOME/I */}
           <div>

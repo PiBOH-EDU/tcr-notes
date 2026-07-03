@@ -97,6 +97,8 @@ Se l'app è deployata su Vercel (piano gratuito):
 
 ❌ **Recupero dati cancellati** — se un titolo/capitolo viene eliminato, non c'è un cestino. La cronologia salva solo il contenuto testuale, non la struttura.
 
+❌ **Riservatezza dei contenuti** — gli appunti sono visibili a tutti i membri della classe. Non inserire dati personali, numeri di telefono, indirizzi o informazioni sensibili.
+
 ---
 
 ## 6. Raccomandazioni

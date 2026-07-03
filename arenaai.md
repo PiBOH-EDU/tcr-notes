@@ -28,17 +28,29 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.4.9] — Avviso dati personali
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Banner avviso nella schermata di login: "⚠️ Attenzione: non inserire dati personali, numeri di telefono, indirizzi o informazioni sensibili negli appunti. Il contenuto è condiviso con tutta la classe."
+- Nota nel footer con lo stesso avviso.
+- Sezione in `docs/LIMITATIONS.md` sulla riservatezza dei contenuti.
+
+#### Modifiche
+- Aggiornata versione ovunque a **0.4.9**.
+
 ### [0.4.8] — Salvataggio manuale, menu info aggiornato
 - **Autore:** PiBOH
 - **Data:** 2026-07-03
 
 #### Aggiunte
-- Pulsante **💾 Salva** nella status bar dell'editor per salvataggio manuale immediato (azzera il debounce e chiama `triggerSave`).
-- Scorciatoia da tastiera `Ctrl+S` / `Cmd+S` per salvare manualmente (previene il download della pagina).
+- Pulsante **💾 Salva** nella status bar dell'editor per salvataggio manuale immediato.
+- Scorciatoia da tastiera `Ctrl+S` / `Cmd+S` per salvare manualmente.
 
 #### Modifiche
-- Menu Info: rimosso link a "GUIDA SUPABASE", aggiunto "(GitHub)" alla voce "Segnala un bug / Richiedi una funzionalità".
-- Aggiornata versione ovunque a **0.4.8**.
+- Menu Info: rimosso link a "GUIDA SUPABASE", aggiunto "(GitHub)" alla voce di feedback.
+- Versione **0.4.8**.
 
 ### [0.4.7-sync2] — README snellito, rimosse ripetizioni
 - **Data:** 2026-07-03

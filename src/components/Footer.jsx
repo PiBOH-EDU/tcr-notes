@@ -13,7 +13,10 @@ export default function Footer({ theme }) {
         indicati nel file AUTORIZZATI.md. La visualizzazione non autorizzata è
         vietata.
       </p>
-      <p className="mt-1 opacity-70">Versione 0.4.8 autore PiBOH</p>
+      <p className={`mt-1 text-[11px] ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
+        ⚠️ Non inserire dati personali, numeri di telefono o informazioni sensibili negli appunti.
+      </p>
+      <p className="mt-1 opacity-70">Versione 0.4.9 autore PiBOH</p>
     </footer>
   );
 }
