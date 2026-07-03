@@ -7,6 +7,20 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-07-03
+
+### Aggiunto
+- Pulsanti Annulla (↩) e Ripeti (↪) nella status bar dell'editor con scorciatoie da tastiera:
+  - `Ctrl+Z` = Annulla
+  - `Ctrl+Y` oppure `Ctrl+Shift+Z` = Ripeti
+- Stack undo/redo con storico fino a 100 stati, resettato al cambio capitolo.
+
+### Modificato
+- **Fix modalità Markdown**: ora premendo un tasto qualsiasi mentre si visualizza l'anteprima si entra automaticamente in modalità editing e il carattere viene inserito. `Escape` torna all'anteprima.
+- Rimosso blur automatico che chiudeva l'editor inaspettatamente.
+- Autosave aumentato da 1 secondo a **1 minuto** (60 secondi).
+- Limite dimensione immagini ridotto da 1.5 MB a **1 MB**.
+
 ## [0.4.3] - 2026-07-03
 
 ### Aggiunto

@@ -19,9 +19,9 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      const MAX_SIZE = 1.5 * 1024 * 1024; // 1.5 MB
+      const MAX_SIZE = 1 * 1024 * 1024; // 1 MB
       if (file.size > MAX_SIZE) {
-        alert(`File troppo grande! Dimensione massima: 1.5 MB. Il tuo file è ${(file.size / 1024 / 1024).toFixed(2)} MB.`);
+        alert(`File troppo grande! Dimensione massima: 1 MB. Il tuo file è ${(file.size / 1024 / 1024).toFixed(2)} MB.`);
         return;
       }
       const reader = new FileReader();
@@ -82,7 +82,7 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
       <button type="button" onClick={() => insert('[', '](url)')} className={btnClass} title="Link">
         Link
       </button>
-      <button type="button" onClick={insertImage} className={btnClass} title="Carica immagine (max 1.5MB)">
+      <button type="button" onClick={insertImage} className={btnClass} title="Carica immagine (max 1MB)">
         🖼 Img
       </button>
       <span className="w-px h-4 bg-gray-500/30 mx-0.5 hidden sm:inline" />

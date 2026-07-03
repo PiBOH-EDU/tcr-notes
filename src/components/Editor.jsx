@@ -19,11 +19,22 @@ export default function Editor({ chapterId, user, theme }) {
   const broadcastChannelRef = useRef(null);
   const debounceRef = useRef(null);
   const textareaRef = useRef(null);
+  const previewRef = useRef(null);
+
+  // Undo / Redo stacks
+  const undoStack = useRef([]);
+  const redoStack = useRef([]);
+  const lastSavedContent = useRef('');
+  const isUndoing = useRef(false);
 
   const loadContent = useCallback(async () => {
     const chapter = await getChapter(chapterId);
     if (chapter) {
-      setContent(chapter.content || '');
+      const text = chapter.content || '';
+      setContent(text);
+      lastSavedContent.current = text;
+      undoStack.current = [text];
+      redoStack.current = [];
       setLastEditedBy(chapter.last_edited_by);
       setLastSaved(chapter.updated_at);
     }
@@ -33,6 +44,7 @@ export default function Editor({ chapterId, user, theme }) {
     loadContent();
   }, [loadContent]);
 
+  // Realtime updates from DB
   useEffect(() => {
     const channel = supabase
       .channel(`chapter-${chapterId}`)
@@ -41,7 +53,11 @@ export default function Editor({ chapterId, user, theme }) {
         { event: 'UPDATE', schema: 'public', table: 'chapters', filter: `id=eq.${chapterId}` },
         (payload) => {
           if (payload.new.last_edited_by !== user) {
-            setContent(payload.new.content || '');
+            const text = payload.new.content || '';
+            setContent(text);
+            lastSavedContent.current = text;
+            undoStack.current = [text];
+            redoStack.current = [];
             setLastEditedBy(payload.new.last_edited_by);
             setLastSaved(payload.new.updated_at);
           }
@@ -54,6 +70,7 @@ export default function Editor({ chapterId, user, theme }) {
     };
   }, [chapterId, user]);
 
+  // Broadcast typing
   useEffect(() => {
     const channel = supabase.channel('notes-room');
     broadcastChannelRef.current = channel;
@@ -74,26 +91,61 @@ export default function Editor({ chapterId, user, theme }) {
     };
   }, [chapterId, user]);
 
-  const handleSave = useCallback(
-    async (newContent) => {
-      setSaving(true);
-      try {
-        const updated = await saveChapter(chapterId, newContent, user);
-        if (updated) {
-          setLastEditedBy(updated.last_edited_by);
-          setLastSaved(updated.updated_at);
-        }
-      } catch (err) {
-        console.error(err);
+  // Keyboard shortcuts: undo/redo + enter edit from preview
+  useEffect(() => {
+    const handler = (e) => {
+      // Ctrl/Cmd + Z = Undo
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        performUndo();
+        return;
       }
-      setSaving(false);
-    },
-    [chapterId, user]
-  );
+      // Ctrl/Cmd + Y  OR  Ctrl/Cmd + Shift + Z = Redo
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        performRedo();
+        return;
+      }
+      // Any printable key while in markdown preview -> enter edit mode
+      if (isMarkdownView && !isEditing && !e.ctrlKey && !e.metaKey && !e.altKey && e.key.length === 1) {
+        e.preventDefault();
+        setIsEditing(true);
+        // Insert the pressed character after focus
+        requestAnimationFrame(() => {
+          if (textareaRef.current) {
+            textareaRef.current.focus();
+            const start = textareaRef.current.selectionStart;
+            const end = textareaRef.current.selectionEnd;
+            const newText = content.slice(0, start) + e.key + content.slice(end);
+            updateContent(newText, true);
+            textareaRef.current.setSelectionRange(start + 1, start + 1);
+          }
+        });
+      }
+      // Escape exits edit mode in markdown view
+      if (e.key === 'Escape' && isMarkdownView && isEditing) {
+        setIsEditing(false);
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isMarkdownView, isEditing, content]);
 
-  const handleChange = (e) => {
-    const newContent = e.target.value;
+  const updateContent = (newContent, skipUndo = false) => {
     setContent(newContent);
+
+    if (!skipUndo && !isUndoing.current) {
+      // Push to undo stack if different from last
+      const last = undoStack.current[undoStack.current.length - 1];
+      if (last !== newContent) {
+        undoStack.current.push(newContent);
+        // Limit stack size
+        if (undoStack.current.length > 100) {
+          undoStack.current = undoStack.current.slice(-100);
+        }
+        redoStack.current = [];
+      }
+    }
 
     if (broadcastChannelRef.current) {
       broadcastChannelRef.current.send({
@@ -106,7 +158,54 @@ export default function Editor({ chapterId, user, theme }) {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       handleSave(newContent);
-    }, 1000);
+    }, 60000); // 1 minuto autosave
+  };
+
+  const handleSave = useCallback(
+    async (newContent) => {
+      setSaving(true);
+      try {
+        const updated = await saveChapter(chapterId, newContent, user);
+        if (updated) {
+          setLastEditedBy(updated.last_edited_by);
+          setLastSaved(updated.updated_at);
+          lastSavedContent.current = newContent;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      setSaving(false);
+    },
+    [chapterId, user]
+  );
+
+  const performUndo = () => {
+    if (undoStack.current.length <= 1) return;
+    const current = undoStack.current.pop();
+    redoStack.current.push(current);
+    const prev = undoStack.current[undoStack.current.length - 1];
+    isUndoing.current = true;
+    setContent(prev);
+    isUndoing.current = false;
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  };
+
+  const performRedo = () => {
+    if (redoStack.current.length === 0) return;
+    const next = redoStack.current.pop();
+    undoStack.current.push(next);
+    isUndoing.current = true;
+    setContent(next);
+    isUndoing.current = false;
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  };
+
+  const handleChange = (e) => {
+    updateContent(e.target.value);
   };
 
   const formatDate = (iso) => {
@@ -122,12 +221,6 @@ export default function Editor({ chapterId, user, theme }) {
         textareaRef.current.focus();
       }
     }, 0);
-  };
-
-  const handleTextareaBlur = () => {
-    if (isMarkdownView) {
-      setIsEditing(false);
-    }
   };
 
   return (
@@ -148,6 +241,36 @@ export default function Editor({ chapterId, user, theme }) {
           )}
         </div>
         <div className="flex items-center gap-2">
+          {/* Undo / Redo buttons */}
+          <button
+            onClick={performUndo}
+            disabled={undoStack.current.length <= 1}
+            className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition ${
+              undoStack.current.length <= 1
+                ? 'opacity-40 cursor-not-allowed'
+                : theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+                : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+            }`}
+            title="Annulla (Ctrl+Z)"
+          >
+            ↩ Annulla
+          </button>
+          <button
+            onClick={performRedo}
+            disabled={redoStack.current.length === 0}
+            className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition ${
+              redoStack.current.length === 0
+                ? 'opacity-40 cursor-not-allowed'
+                : theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+                : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+            }`}
+            title="Ripeti (Ctrl+Y / Ctrl+Shift+Z)"
+          >
+            ↪ Ripeti
+          </button>
+          <span className="w-px h-3 bg-gray-500/30 hidden sm:inline" />
           {/* Toggle Markdown */}
           <button
             onClick={() => {
@@ -202,19 +325,21 @@ export default function Editor({ chapterId, user, theme }) {
       {/* Editor / Preview */}
       {isMarkdownView && !isEditing ? (
         <div
+          ref={previewRef}
           onClick={handleMarkdownClick}
           className={`w-full min-h-[50vh] md:min-h-[calc(100vh-340px)] p-3 md:p-4 rounded-xl border cursor-text overflow-y-auto prose prose-sm max-w-none ${
             theme === 'dark'
               ? 'bg-gray-800 border-gray-700 prose-invert'
               : 'bg-white border-gray-300'
           }`}
+          tabIndex={0}
         >
           {content ? (
             <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
               {content}
             </ReactMarkdown>
           ) : (
-            <p className="opacity-50 italic">Clicca qui per iniziare a scrivere...</p>
+            <p className="opacity-50 italic">Clicca qui o premi un tasto per iniziare a scrivere...</p>
           )}
         </div>
       ) : (
@@ -222,7 +347,6 @@ export default function Editor({ chapterId, user, theme }) {
           ref={textareaRef}
           value={content}
           onChange={handleChange}
-          onBlur={handleTextareaBlur}
           className={`w-full min-h-[50vh] md:h-[calc(100vh-340px)] p-3 md:p-4 rounded-xl border resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm md:text-base leading-relaxed ${
             theme === 'dark'
               ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500'

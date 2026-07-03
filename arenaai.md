@@ -28,6 +28,22 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.4.4] — Fix markdown editing, undo/redo, autosave 1min, limite 1MB
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Sistema Undo/Redo con stack custom (max 100 stati): pulsanti ↩ Annulla / ↪ Ripeti nella status bar.
+- Scorciatoie da tastiera: `Ctrl+Z` (annulla), `Ctrl+Y` / `Ctrl+Shift+Z` (ripeti).
+- Listener keydown globale: premendo un tasto in modalità anteprima Markdown si entra automaticamente in edit e il carattere viene inserito.
+- `Escape` per tornare all'anteprima Markdown dall'editor.
+
+#### Modifiche
+- Fix modalità Markdown: rimosso `onBlur` automatico che chiudeva inaspettatamente l'editor. Ora l'utente controlla esplicitamente quando uscire (toggle o Escape).
+- Autosave aumentato da 1 secondo a **60 secondi** (1 minuto).
+- Limite upload immagini ridotto da 1.5 MB a **1 MB**.
+- Aggiornata versione ovunque a **0.4.4**.
+
 ### [0.4.3] — Menu Info, limite immagini 1.5MB, mobile UI overhaul
 - **Autore:** PiBOH
 - **Data:** 2026-07-03
