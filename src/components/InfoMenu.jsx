@@ -6,11 +6,10 @@ const DOCS = [
   { label: '📋 LIMITATIONS.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/LIMITATIONS.md' },
   { label: '📋 CODE OF CONDUCT.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/CODE%20OF%20CONDUCT.md' },
   { label: '📜 CHANGELOG.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/CHANGELOG.md' },
-  { label: '📘 GUIDA SUPABASE', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/GUIDA-SUPABASE.md' },
   { label: '📄 LICENSE', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/LICENSE' },
 ];
 
-const FEEDBACK = { label: '🐛 Segnala un bug / Richiedi una funzionalità', url: 'https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose' };
+const FEEDBACK = { label: '🐛 Segnala un bug / Richiedi una funzionalità (GitHub)', url: 'https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose' };
 
 export default function InfoMenu({ theme }) {
   const [open, setOpen] = useState(false);
@@ -51,7 +50,7 @@ export default function InfoMenu({ theme }) {
         >
           <div className="p-3 border-b border-gray-700/30">
             <div className="font-bold text-sm">📚 tcr-notes</div>
-            <div className="text-xs opacity-70 mt-0.5">Versione 0.4.7</div>
+            <div className="text-xs opacity-70 mt-0.5">Versione 0.4.8</div>
             <div className="text-xs opacity-70">Autore: PiBOH</div>
           </div>
           <div className="p-2">

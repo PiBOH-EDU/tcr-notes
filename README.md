@@ -8,7 +8,6 @@
 Questa è ancora una release di anteprima, solo pochi sono autorizzati ad utilizzare il sito.
 ```
 
-
 # 📚 tcr-notes
 
 Appunti collaborativi in tempo reale per la classe **1FT** dell'ITT "Barsanti" (A.S. 2025/2026).
@@ -38,60 +37,18 @@ Appunti collaborativi in tempo reale per la classe **1FT** dell'ITT "Barsanti" (
 
 ---
 
-## 🔧 Configurazione Supabase (passo-passo)
+## 🔧 Configurazione
 
-### 1. Crea un progetto Supabase
+Per la configurazione completa di Supabase (tabelle, Realtime, credenziali, `.env`), consulta la [**GUIDA-SUPABASE.md**](./GUIDA-SUPABASE.md).
 
-1. Vai su [supabase.com](https://supabase.com) e registrati/accedi
-2. Clicca **"New Project"**
-3. Scegli un nome (es. `tcr-notes`) e una password per il database
-4. Attendi la fine del provisioning (circa 1-2 minuti)
-
-### 2. Crea le tabelle
-
-1. Dal menu laterale, vai su **SQL Editor** → **New query**
-2. Incolla il contenuto del file [`supabase-setup.sql`](./supabase-setup.sql) presente in questo repository
-3. Clicca **Run** — le tabelle `titles`, `chapters` e `history` verranno create automaticamente
-
-### 3. Verifica il Realtime
-
-1. Vai su **Database** → **Replication**
-2. Assicurati che la tabella `titles` e `chapters` siano abilitate per il Realtime
-3. Se non lo sono, vai in **SQL Editor** ed esegui:
-
-```sql
-ALTER PUBLICATION supabase_realtime ADD TABLE public.titles;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.chapters;
-```
-
-### 4. Ottieni le credenziali API
-
-1. Vai su **Project Settings** (icona ingranaggio in basso a sinistra)
-2. Seleziona **API**
-3. Copia questi due valori:
-   - **Project URL** (es. `https://abcdefgh12345678.supabase.co`)
-   - **anon public** API Key (es. `eyJhbGciOiJIUzI1NiIs...`)
-
-### 5. Configura il file `.env`
-
-Nella root del progetto, crea un file chiamato `.env`:
-
-```env
-VITE_SUPABASE_URL=https://TUO-PROJECT.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
-```
-
-> ⚠️ **Non committare mai il file `.env` su GitHub!** È già incluso nel `.gitignore`.
+> ⚠️ Prima di iniziare, leggi anche [**docs/LIMITATIONS.md**](./docs/LIMITATIONS.md) per conoscere i vincoli del piano gratuito.
 
 ---
 
 ## 🖥️ Avvio in locale
 
 ```bash
-# Installa le dipendenze
 npm install
-
-# Avvia il server di sviluppo
 npm run dev
 ```
 
@@ -115,120 +72,58 @@ I file statici verranno generati nella cartella `dist/`.
 2. Vai su [vercel.com](https://vercel.com) → **Add New Project**
 3. Importa il repository `tcr-notes`
 4. In **Environment Variables**, aggiungi:
-   - `VITE_SUPABASE_URL` → il tuo Project URL
-   - `VITE_SUPABASE_ANON_KEY` → la tua anon key
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
 5. Clicca **Deploy**
 
 ---
 
-## 👥 Gestione utenti autorizzati e bannati
+## 👥 Gestione utenti
 
-### Aggiungere un utente autorizzato
+Gli utenti si gestiscono nei file:
 
-Apri il file [`src/data/authorized.js`](./src/data/authorized.js) e aggiungi l'identificativo nel formato:
+- [`src/data/authorized.js`](./src/data/authorized.js) — lista degli autorizzati
+- [`src/data/banned.js`](./src/data/banned.js) — lista dei bannati
 
-```javascript
-export const AUTHORIZED = [
-  "rossi.mario",
-  "bianchi.lucia",
-  "verdi.antonio",
-];
-```
-
-**Regole del formato:**
-- Tutto in **minuscolo**
-- **Cognome** seguito da **punto** seguito da **nome** (o nomi attaccati)
-- **Nessuno spazio**, **nessun accento**
-
-**Esempi pratici:**
+**Formato:** `cognome.nome` (tutto minuscolo, senza spazi).
 
 | Nome reale | Identificativo |
 |------------|----------------|
 | Rossi Mario | `rossi.mario` |
-| Bianchi Lucia | `bianchi.lucia` |
-| Verdi Antonio | `verdi.antonio` |
 | Bianchi Ginevra Anna | `bianchi.ginevraanna` |
-| De Luca Marco Giuseppe | `deluca.marcogiuseppe` |
 
-> **Nota:** se lasci `AUTHORIZED = []` (vuoto), **chiunque** con la password di classe potrà accedere.
-
-### Bannare un utente
-
-Apri il file [`src/data/banned.js`](./src/data/banned.js) e aggiungi allo stesso modo:
-
-```javascript
-export const BANNED = [
-  "neri.giovanni",
-];
-```
-
-Un utente bannato è **bloccato sempre**, anche se inserito in `authorized.js` o se conosce la password.
-
----
-
-## 📂 Struttura del database
-
-```
-titles
-├── id (UUID)
-├── name (TEXT, unico)
-└── created_at
-
-chapters
-├── id (UUID)
-├── title_id (UUID → titles)
-├── name (TEXT)
-├── content (TEXT)
-├── last_edited_by (TEXT)
-├── updated_at
-└── created_at
-
-history
-├── id (UUID)
-├── chapter_id (UUID → chapters)
-├── content (TEXT)
-├── edited_by (TEXT)
-└── created_at
-```
+> Se `AUTHORIZED` è vuoto (`[]`), chiunque con la password può accedere.
 
 ---
 
 ## 🛠️ Troubleshooting
 
-### L'app rimane bianca / non carica
-- **Se hai appena creato o modificato il file `.env`, riavvia il server** (`Ctrl+C` poi `npm run dev`). Vite legge le variabili d'ambiente solo all'avvio: modificare il `.env` a server già attivo non ha effetto, e pulire cache/cronologia del browser non risolve, perché non è un problema del browser.
-- Verifica che il file si chiami esattamente `.env` (su Windows l'estensione potrebbe essere nascosta e diventare `.env.txt`) e sia nella root del progetto, allo stesso livello di `package.json`.
-- Verifica che contenga esattamente `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`, senza virgolette o spazi finali.
-- Se il deploy è su Vercel, le stesse variabili vanno impostate anche lì (Project Settings → Environment Variables) seguite da un nuovo deploy.
-- Controlla la console del browser (F12): dalla v0.2.4.1 un messaggio d'errore chiaro compare invece della pagina bianca se la configurazione Supabase non è valida.
+Problemi comuni:
 
-### "Failed to fetch" o errori Supabase
-- Verifica che le tabelle siano state create correttamente (SQL Editor)
-- Controlla che le credenziali nel `.env` siano corrette
+- **Schermata bianca** → riavvia il server dopo aver creato/modificato `.env` (`npm run dev`). Vite legge le variabili solo all'avvio.
+- **Errori Supabase** → verifica tabelle e credenziali nella [GUIDA-SUPABASE.md](./GUIDA-SUPABASE.md).
+- **Realtime non funziona** → controlla che tutti usino lo stesso progetto Supabase.
 
-### Non vedo le modifiche in tempo reale degli altri
-- Verifica che il Realtime sia abilitato per le tabelle `titles` e `chapters`
-- Controlla che tutti gli utenti usino lo stesso progetto Supabase
-
-### Errore "utente non autorizzato" nonostante il nome sia corretto
-- Controlla che nel file `authorized.js` il nome sia scritto esattamente come viene generato dal login (`cognome.nome`, tutto minuscolo, senza spazi)
+Per la risoluzione dettagliata, vedi la [GUIDA-SUPABASE.md](./GUIDA-SUPABASE.md).
 
 ---
 
 ## 📄 Documentazione
 
-- [`GUIDA-SUPABASE.md`](./GUIDA-SUPABASE.md) — Configurazione passo-passo del backend
-- [`docs/SECURITY.md`](./docs/SECURITY.md) — Policy di sicurezza
-- [`docs/DISCLAIMER.md`](./docs/DISCLAIMER.md) — Avvertenza legale
-- [`docs/LIMITATIONS.md`](./docs/LIMITATIONS.md) — Limitazioni dei servizi esterni
-- [`CHANGELOG.md`](./CHANGELOG.md) — Storia delle versioni
+| File | Contenuto |
+|------|-----------|
+| [`GUIDA-SUPABASE.md`](./GUIDA-SUPABASE.md) | Configurazione passo-passo del backend |
+| [`docs/SECURITY.md`](./docs/SECURITY.md) | Policy di sicurezza |
+| [`docs/DISCLAIMER.md`](./docs/DISCLAIMER.md) | Avvertenza legale |
+| [`docs/LIMITATIONS.md`](./docs/LIMITATIONS.md) | Limitazioni dei servizi esterni |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Storia delle versioni |
 
 ---
 
 ## 📄 Licenza
 
-Vedi il file LICENSE [qui](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/refs/heads/main/LICENSE)
+Vedi il file [LICENSE](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/refs/heads/main/LICENSE).
 
 ---
 
-**Versione 0.3.1** — autore PiBOH
+**Versione 0.4.7** — autore PiBOH

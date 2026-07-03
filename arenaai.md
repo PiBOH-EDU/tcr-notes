@@ -28,6 +28,33 @@
   - Sincronizzato `src/data/banned.js` dal repository remoto.
   - Build di produzione eseguito per verificare integrità post-sincronizzazione.
 
+### [0.4.8] — Salvataggio manuale, menu info aggiornato
+- **Autore:** PiBOH
+- **Data:** 2026-07-03
+
+#### Aggiunte
+- Pulsante **💾 Salva** nella status bar dell'editor per salvataggio manuale immediato (azzera il debounce e chiama `triggerSave`).
+- Scorciatoia da tastiera `Ctrl+S` / `Cmd+S` per salvare manualmente (previene il download della pagina).
+
+#### Modifiche
+- Menu Info: rimosso link a "GUIDA SUPABASE", aggiunto "(GitHub)" alla voce "Segnala un bug / Richiedi una funzionalità".
+- Aggiornata versione ovunque a **0.4.8**.
+
+### [0.4.7-sync2] — README snellito, rimosse ripetizioni
+- **Data:** 2026-07-03
+- **Modifiche:**
+  - Riscritto `README.md` rimuovendo la sezione "Configurazione Supabase (passo-passo)" (già in `GUIDA-SUPABASE.md`), la sezione "Struttura del database" e il troubleshooting dettagliato (già nella guida).
+  - Aggiunta tabella riassuntiva della documentazione.
+  - Sezione "Gestione utenti" ridotta ai soli riferimenti ai file e al formato.
+  - Versione nel README aggiornata a 0.4.7.
+
+### [0.4.7-sync] — Sincronizzazione liste utenti dal repository remoto
+- **Data:** 2026-07-03
+- **Modifiche:**
+  - Sincronizzato `src/data/authorized.js` dal repository GitHub `PiBOH-EDU/tcr-notes` (branch main).
+  - Sincronizzato `src/data/banned.js` dal repository remoto.
+  - Build di produzione eseguito per verificare integrità post-sincronizzazione.
+
 ### [0.4.7] — Fix stati salvataggio, click preview → testo piano, link markdown, limite 500KB
 - **Autore:** PiBOH
 - **Data:** 2026-07-03

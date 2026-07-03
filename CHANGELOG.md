@@ -7,6 +7,15 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.4.8] - 2026-07-03
+
+### Aggiunto
+- Pulsante **💾 Salva** nella status bar dell'editor per salvataggio manuale immediato.
+- Scorciatoia da tastiera `Ctrl+S` (o `Cmd+S`) per salvare manualmente.
+
+### Modificato
+- Menu Info: rimosso link a "GUIDA SUPABASE", aggiunto "(GitHub)" alla voce di feedback.
+
 ## [0.4.7] - 2026-07-03
 
 ### Aggiunto

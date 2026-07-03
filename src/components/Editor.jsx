@@ -109,6 +109,12 @@ export default function Editor({ chapterId, user, theme }) {
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e) => {
+      // Ctrl/Cmd + S = Salva manuale
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleManualSave();
+        return;
+      }
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
         performUndo();
@@ -212,6 +218,11 @@ export default function Editor({ chapterId, user, theme }) {
     if (textareaRef.current) textareaRef.current.focus();
   };
 
+  const handleManualSave = () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    triggerSave(content);
+  };
+
   const handleChange = (e) => {
     updateContent(e.target.value);
   };
@@ -259,7 +270,7 @@ export default function Editor({ chapterId, user, theme }) {
           {saveStateUI()}
         </div>
         <div className="flex items-center gap-2">
-          {/* Undo / Redo */}
+          {/* Undo / Redo / Save */}
           <button
             onClick={performUndo}
             disabled={undoStack.current.length <= 1}
@@ -287,6 +298,20 @@ export default function Editor({ chapterId, user, theme }) {
             title="Ripeti (Ctrl+Y / Ctrl+Shift+Z)"
           >
             ↪ Ripeti
+          </button>
+          <button
+            onClick={handleManualSave}
+            disabled={saveState === 'saving'}
+            className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition font-semibold ${
+              saveState === 'saving'
+                ? 'opacity-40 cursor-not-allowed'
+                : theme === 'dark'
+                ? 'bg-blue-700 border-blue-600 hover:bg-blue-600 text-white'
+                : 'bg-blue-600 border-blue-500 hover:bg-blue-500 text-white'
+            }`}
+            title="Salva ora (Ctrl+S)"
+          >
+            💾 Salva
           </button>
           <span className="w-px h-3 bg-gray-500/30 hidden sm:inline" />
           {/* Toggle Markdown */}
