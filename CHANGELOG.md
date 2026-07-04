@@ -32,7 +32,7 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 ## [0.6.3] - 2026-07-04
 
 ### Sicurezza
-- Rimossa password reale `Barsanti1FT` da `docs/MANUAL.md` — sostituita con placeholder.
+- Rimossa password reale `` da `docs/MANUAL.md` — sostituita con placeholder.
 
 ### Aggiunto
 - `public/state.json`: campi `_readme` e `_comment_*` con spiegazione dei campi e degli stati disponibili.
