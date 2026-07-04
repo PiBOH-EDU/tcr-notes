@@ -47,7 +47,7 @@ export const AUTHORIZED = [
   { name: "mardarie.denisandreiflorin", role: "editor" },
   { name: "mollo.michele", role: "editor" },
   { name: "cecchetto.jacopo", role: "editor" },
-  { name: "pitzalis.vera", role: "viewer" },
+  { name: "pitzalis.vera", role: "editor" },
   { name: "berton.alexgiulio", role: "editor" },
   { name: "cauduro.elia", role: "editor" },
 ];
