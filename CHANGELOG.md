@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-07-04
+
+### Modificato
+- `Footer.jsx`: layout su una sola riga a 3 colonne (sinistra: copyright, centro: versione, destra: avviso dati personali).
+- `index.html`: aggiunta favicon 📚 (libro) visibile nella scheda del browser.
+
 ## [0.6.3] - 2026-07-04
 
 ### Sicurezza

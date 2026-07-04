@@ -258,6 +258,20 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.4] — Footer su una riga + Favicon browser
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Modifiche
+- `Footer.jsx`: layout su **una sola riga** a 3 colonne:
+  - Sinistra: "Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)"
+  - Centro: "v0.6.4 · PiBOH"
+  - Destra: "⚠️ Non inserire dati personali negli appunti"
+  - Responsive: su schermi stretti i testi si riducono e vanno a capo se necessario.
+- `index.html`: aggiunta favicon 📚 (libro) come SVG inline, visibile nella scheda del browser.
+- Aggiornata versione ovunque a **0.6.4**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.3] — Fix password in MANUAL, state.json commentato, img 5MB, highlight codice, selezione testo preview, toggle immagini, fix menu online, footer compatto, uniforma font code/liste, fix liste numerate
 - **Autore:** PiBOH
 - **Data:** 2026-07-04
