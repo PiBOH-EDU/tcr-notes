@@ -258,6 +258,17 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.5] — Fix stile codice nel rendering Markdown
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Modifiche
+- `Editor.jsx`: aggiunto componente custom `code` per ReactMarkdown che distingue codice inline (`<code>`) da blocchi di codice (`<pre><code>`).
+  - Inline: sfondo semi-trasparente (`bg-gray-500/20`), bordi arrotondati, font monospace, padding.
+  - Blocco: sfondo pieno (`bg-gray-900` dark / `bg-gray-100` light), bordi arrotondati, padding maggiore, scroll orizzontale.
+- Aggiornata versione ovunque a **0.6.5**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.4] — Footer su una riga + Favicon browser
 - **Autore:** PiBOH
 - **Data:** 2026-07-04

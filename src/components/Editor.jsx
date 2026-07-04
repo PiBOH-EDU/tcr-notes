@@ -38,6 +38,41 @@ function MarkdownImage({ src, alt, showImages, theme }) {
   return <img src={src} alt={alt} className="max-w-full rounded-lg" />;
 }
 
+function MarkdownCode({ inline, className, children, theme }) {
+  if (inline) {
+    return (
+      <code
+        className={`rounded px-1.5 py-0.5 text-sm font-mono ${
+          theme === 'dark'
+            ? 'bg-gray-700/60 text-gray-200'
+            : 'bg-gray-200/70 text-gray-800'
+        }`}
+      >
+        {children}
+      </code>
+    );
+  }
+  return (
+    <code className={`text-sm font-mono ${className || ''}`}>
+      {children}
+    </code>
+  );
+}
+
+function MarkdownPre({ children, theme }) {
+  return (
+    <pre
+      className={`rounded-lg p-4 overflow-x-auto my-3 ${
+        theme === 'dark'
+          ? 'bg-gray-900 text-gray-200'
+          : 'bg-gray-100 text-gray-800'
+      }`}
+    >
+      {children}
+    </pre>
+  );
+}
+
 export default function Editor({ chapterId, user, theme }) {
   const [content, setContent] = useState('');
   const [lastEditedBy, setLastEditedBy] = useState(null);
@@ -456,6 +491,8 @@ export default function Editor({ chapterId, user, theme }) {
               components={{
                 a: MarkdownLink,
                 img: (props) => <MarkdownImage {...props} showImages={showImages} theme={theme} />,
+                code: (props) => <MarkdownCode {...props} theme={theme} />,
+                pre: (props) => <MarkdownPre {...props} theme={theme} />,
               }}
             >
               {content}

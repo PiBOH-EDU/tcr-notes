@@ -7,6 +7,13 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.5] - 2026-07-04
+
+### Modificato
+- `Editor.jsx`: aggiunti componenti custom `code` e `pre` per ReactMarkdown.
+  - Codice inline (`<code>`): sfondo semi-trasparente, bordi arrotondati, font monospace.
+  - Blocchi di codice (`<pre>`): sfondo pieno (grigio scuro in dark / grigio chiaro in light), padding, scroll orizzontale.
+
 ## [0.6.4] - 2026-07-04
 
 ### Modificato
