@@ -7,6 +7,15 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.6] - 2026-07-04
+
+### Modificato
+- `HighlightTextarea.jsx`: rimosse tutte le classi `opacity-*` (penombra). Ora si usano colori grigio diretti più scuri:
+  - Commenti: `text-gray-400 italic`
+  - Delimitatori `**` / `~~` / `` ` ``: `text-gray-500`
+  - Barrato: solo `line-through` (stesso colore del testo, più leggibile)
+  - Codice inline: sfondo `bg-gray-500/15` tenue invece di penombra.
+
 ## [0.6.5] - 2026-07-04
 
 ### Modificato

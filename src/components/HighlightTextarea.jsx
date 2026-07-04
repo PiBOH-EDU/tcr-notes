@@ -9,25 +9,25 @@ function escapeHtml(text) {
 
 function highlight(text) {
   let html = escapeHtml(text);
-  // Commenti HTML (multilinea) — delimitatori visibili ma attenuati
+  // Commenti HTML (multilinea) — grigio scuro, corsivo, senza opacity
   html = html.replace(
     /(&lt;!--)([\s\S]*?)(--&gt;)/g,
-    '<span class="text-gray-400 opacity-50">$1</span><span class="opacity-30 italic">$2</span><span class="text-gray-400 opacity-50">$3</span>'
+    '<span class="text-gray-500">$1</span><span class="text-gray-400 italic">$2</span><span class="text-gray-500">$3</span>'
   );
-  // Grassetto — asterischi visibili
+  // Grassetto — delimitatori grigio scuro, contenuto in grassetto
   html = html.replace(
     /(\*\*)(.+?)(\*\*)/g,
-    '<span class="text-gray-400 opacity-60">$1</span><span class="font-bold">$2</span><span class="text-gray-400 opacity-60">$3</span>'
+    '<span class="text-gray-500">$1</span><span class="font-bold">$2</span><span class="text-gray-500">$3</span>'
   );
-  // Barrato — tilde visibili
+  // Barrato — delimitatori grigio scuro, contenuto barrato (stesso colore testo)
   html = html.replace(
     /(~~)(.+?)(~~)/g,
-    '<span class="text-gray-400 opacity-60">$1</span><span class="line-through opacity-60">$2</span><span class="text-gray-400 opacity-60">$3</span>'
+    '<span class="text-gray-500">$1</span><span class="line-through">$2</span><span class="text-gray-500">$3</span>'
   );
-  // Codice inline — backtick visibili
+  // Codice inline — delimitatori grigio scuro, contenuto con sfondo tenue
   html = html.replace(
     /(`)([^`]+)(`)/g,
-    '<span class="text-gray-400 opacity-60">$1</span><span class="bg-gray-500/20 rounded px-1 py-0.5 font-mono text-sm">$2</span><span class="text-gray-400 opacity-60">$3</span>'
+    '<span class="text-gray-500">$1</span><span class="bg-gray-500/15 rounded px-1 py-0.5 font-mono text-sm">$2</span><span class="text-gray-500">$3</span>'
   );
   return html;
 }

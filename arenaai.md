@@ -258,6 +258,19 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.6] — Highlight testo piano: rimossa penombra, colori più scuri
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Modifiche
+- `HighlightTextarea.jsx`: rimosse tutte le classi `opacity-*` (penombra). Ora i delimitatori e il testo evidenziato usano colori grigio diretti più scuri/marcato:
+  - Commenti `<!-- -->`: `text-gray-400 italic` (senza opacity)
+  - Delimitatori `**`, `~~`, `` ` ``: `text-gray-500` (senza opacity)
+  - Barrato: solo `line-through` (stesso colore del testo, più leggibile)
+  - Codice inline: `bg-gray-500/15` + bordi arrotondati (sfondo tenue invece di penombra)
+- Aggiornata versione ovunque a **0.6.6**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.5] — Fix stile codice nel rendering Markdown
 - **Autore:** PiBOH
 - **Data:** 2026-07-04
