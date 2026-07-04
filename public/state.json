@@ -7,5 +7,5 @@
   "status": "testing",
   "message": "Questo sito è nella fase di test prima di venire aperto a tutti i membri della classe. per favore se rilevi dei bug segnalali",
   "banner": true,
-  "bannerType": "info"
+  "bannerType": "warning"
 }
