@@ -69,20 +69,20 @@ Se i tuoi dati sono corretti e sei nella lista degli autorizzati, entrerai nella
 Una volta dentro, vedrai questa struttura:
 
 ```
-┌─────────────────────────────────────────────┐
+┌───────────────────────────────────────────────┐
 │  🍔  tcr-notes    👤 rossi.mario   ℹ️ Info  │  ← Header
-├──────────┬──────────────────────────────────┤
-│ TITOLI   │  Titolo > Capitolo selezionato   │
-│          │                                  │
-│ + Nuovo  │  [Editor o anteprima]            │
-│          │                                  │
+├────────────┬──────────────────────────────────┤
+│ TITOLI     │  Titolo > Capitolo selezionato   │
+│            │                                  │
+│ + Nuovo    │  [Editor o anteprima]            │
+│            │                                  │
 │ 📁 Analisi│  Status: ✅ Salvato              │
 │   📄 Cap.1│                                  │
 │   📄 Cap.2│                                  │
-│ 📁 Temi  │                                  │
+│ 📁 Temi   │                                  │
 │   📄 Cap.1│                                  │
-│          │                                  │
-└──────────┴──────────────────────────────────┘
+│            │                                  │
+└────────────┴──────────────────────────────────┘
 ```
 
 ### Sidebar (a sinistra)
