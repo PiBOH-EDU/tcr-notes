@@ -1,6 +1,6 @@
 {
   "status": "online",
   "message": "",
-  "banner": false,
-  "bannerType": "testing"
+  "banner": true,
+  "bannerType": "maintenance"
 }
