@@ -48,7 +48,7 @@ Nella schermata di login vedrai tre campi:
 |-------|---------------|---------|
 | **Nome/i** | Il tuo nome (o nomi, se ne hai più di uno). Tutto attaccato, minuscolo, senza accenti. | `mario`, `paologiuseppe` |
 | **Cognome** | Il tuo cognome. Tutto attaccato, minuscolo, senza accenti. | `rossi` |
-| **Password** | La password di classe (te la dirà il professore). | `Barsanti1FT` |
+| **Password** | La password di classe (te la dirà il professore). | `esempiopassword` |
 
 > 💡 **Formato nome utente**: `cognome.nome` (es. `rossi.mario`). L'app lo crea automaticamente.
 
@@ -60,7 +60,7 @@ Se i tuoi dati sono corretti e sei nella lista degli autorizzati, entrerai nella
 
 > ⚠️ **Problemi comuni**:
 > - "Utente non autorizzato" → controlla di aver scritto nome e cognome correttamente (tutto minuscolo, senza spazi).
-> - "Password errata" → la password è `Barsanti1FT` (attenzione alle maiuscole).
+> - "Password errata" → la password è `esempiopassword` (attenzione alle maiuscole).
 
 ---
 
