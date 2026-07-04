@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.8] - 2026-07-04
+
+### Modificato
+- Sincronizzato `authorized.js` dal repository remoto.
+- `Dashboard.jsx`: aggiunto badge ruolo accanto al nome utente (`👁️ Viewer` / `✏️ Editor`).
+
 ## [0.6.7] - 2026-07-04
 
 ### Sicurezza

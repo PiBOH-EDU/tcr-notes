@@ -258,6 +258,18 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.8] — Sincronizzazione authorized.js + badge ruolo utente nell'header
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Modifiche
+- Sincronizzato `src/data/authorized.js` dal repository GitHub `PiBOH-EDU/tcr-notes` (branch main).
+- `Dashboard.jsx`: aggiunto badge ruolo accanto al nome utente nell'header:
+  - `👁️ Viewer` (giallo) per utenti con permesso di sola lettura
+  - `✏️ Editor` (verde) per utenti con permesso di modifica
+- Aggiornata versione ovunque a **0.6.8**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.7-sync] — Sincronizzazione state.json e authorized.js dal repository remoto
 - **Data:** 2026-07-04
 - **Modifiche:**

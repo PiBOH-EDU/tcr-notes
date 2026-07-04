@@ -335,6 +335,19 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
           >
             {user}
           </span>
+          <span
+            className={`hidden sm:inline text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
+              role === 'viewer'
+                ? theme === 'dark'
+                  ? 'bg-yellow-700/40 text-yellow-300'
+                  : 'bg-yellow-100 text-yellow-700'
+                : theme === 'dark'
+                ? 'bg-green-700/40 text-green-300'
+                : 'bg-green-100 text-green-700'
+            }`}
+          >
+            {role === 'viewer' ? '👁️ Viewer' : '✏️ Editor'}
+          </span>
         </div>
 
         <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
