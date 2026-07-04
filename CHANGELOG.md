@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.9] - 2026-07-04
+
+### Aggiunto
+- `.github/workflows/keepalive.yml`: workflow GitHub Actions per evitare la pausa di Supabase dopo 7 giorni. Esegue una query giornaliera al database.
+- Usa i secret `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (nomi uniformi con il `.env`).
+
 ## [0.6.8] - 2026-07-04
 
 ### Modificato

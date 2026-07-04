@@ -258,6 +258,16 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.9] — GitHub Actions keepalive per Supabase
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Aggiunte
+- `.github/workflows/keepalive.yml`: workflow GitHub Actions che ogni giorno a mezzanotte UTC esegue una query `SELECT id FROM titles LIMIT 1` a Supabase per evitare la pausa dopo 7 giorni di inattività.
+- Il workflow usa i secret `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (nomi uniformi con il `.env`).
+- Aggiornata versione ovunque a **0.6.9**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.8] — Sincronizzazione authorized.js + badge ruolo utente nell'header
 - **Autore:** PiBOH
 - **Data:** 2026-07-04
