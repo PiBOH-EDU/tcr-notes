@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import {
   getTitles,
@@ -32,6 +32,8 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [showOnlineList, setShowOnlineList] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const onlineListRef = useRef(null);
+  const onlineMobileRef = useRef(null);
   const [editingTitleId, setEditingTitleId] = useState(null);
   const [editingChapterId, setEditingChapterId] = useState(null);
   const [editTitleValue, setEditTitleValue] = useState('');
@@ -121,6 +123,22 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
       setChapters([]);
     }
   }, [selectedTitle, refreshChapters]);
+
+  // Chiudi menu online cliccando fuori
+  useEffect(() => {
+    const handle = (e) => {
+      if (
+        onlineListRef.current &&
+        !onlineListRef.current.contains(e.target) &&
+        onlineMobileRef.current &&
+        !onlineMobileRef.current.contains(e.target)
+      ) {
+        setShowOnlineList(false);
+      }
+    };
+    document.addEventListener('mousedown', handle);
+    return () => document.removeEventListener('mousedown', handle);
+  }, []);
 
   const handleCreateTitle = async () => {
     try {
@@ -280,7 +298,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
 
         <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
           {/* Online desktop */}
-          <div className="hidden md:flex items-center gap-2 relative">
+          <div ref={onlineListRef} className="hidden md:flex items-center gap-2 relative">
             <button
               onClick={() => setShowOnlineList((s) => !s)}
               className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs border transition ${
@@ -309,6 +327,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
 
           {/* Online mobile - solo pallino */}
           <button
+            ref={onlineMobileRef}
             onClick={() => setShowOnlineList((s) => !s)}
             className="md:hidden relative p-1.5"
             title="Utenti online"

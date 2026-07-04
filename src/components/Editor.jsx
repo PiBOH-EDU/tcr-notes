@@ -21,6 +21,23 @@ function MarkdownLink({ node, href, children, ...props }) {
   );
 }
 
+function MarkdownImage({ src, alt, showImages, theme }) {
+  if (!showImages) {
+    return (
+      <span
+        className={`inline-block px-2 py-1 rounded border text-xs italic ${
+          theme === 'dark'
+            ? 'border-gray-600 text-gray-400 bg-gray-700/50'
+            : 'border-gray-300 text-gray-500 bg-gray-100'
+        }`}
+      >
+        🖼 Immagine nascosta
+      </span>
+    );
+  }
+  return <img src={src} alt={alt} className="max-w-full rounded-lg" />;
+}
+
 export default function Editor({ chapterId, user, theme }) {
   const [content, setContent] = useState('');
   const [lastEditedBy, setLastEditedBy] = useState(null);
@@ -29,6 +46,7 @@ export default function Editor({ chapterId, user, theme }) {
   const [saveState, setSaveState] = useState('saved');
   const [isMarkdownView, setIsMarkdownView] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [showImages, setShowImages] = useState(true);
   const broadcastChannelRef = useRef(null);
   const debounceRef = useRef(null);
   const textareaRef = useRef(null);
@@ -256,6 +274,10 @@ export default function Editor({ chapterId, user, theme }) {
     // Se clicca su un link, lascia che il link funzioni normalmente
     if (e.target.closest('a')) return;
 
+    // Se l'utente ha selezionato del testo, non switchare in edit mode
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) return;
+
     let range = null;
     if (document.caretPositionFromPoint) {
       const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
@@ -375,6 +397,22 @@ export default function Editor({ chapterId, user, theme }) {
           <span className="text-[10px] md:text-xs opacity-70">
             {isMarkdownView ? 'Rendering Markdown' : 'Testo piano'}
           </span>
+          <span className="w-px h-3 bg-gray-500/30 hidden sm:inline" />
+          <button
+            onClick={() => setShowImages((s) => !s)}
+            className={`text-[10px] md:text-xs px-1.5 py-0.5 rounded border transition ${
+              showImages
+                ? theme === 'dark'
+                  ? 'bg-green-700/30 border-green-600/50 text-green-300'
+                  : 'bg-green-100 border-green-300 text-green-700'
+                : theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 text-gray-400 opacity-60'
+                : 'bg-gray-100 border-gray-300 text-gray-500 opacity-60'
+            }`}
+            title={showImages ? 'Nascondi immagini nella preview' : 'Mostra immagini nella preview'}
+          >
+            🖼 {showImages ? 'On' : 'Off'}
+          </button>
         </div>
         <div className="truncate">
           {typingUser ? (
@@ -404,7 +442,7 @@ export default function Editor({ chapterId, user, theme }) {
       {isMarkdownView ? (
         <div
           onClick={handleMarkdownClick}
-          className={`w-full min-h-[50vh] md:min-h-[calc(100vh-340px)] p-3 md:p-4 rounded-xl border cursor-text overflow-y-auto prose prose-sm max-w-none ${
+          className={`w-full min-h-[50vh] md:min-h-[calc(100vh-340px)] p-3 md:p-4 rounded-xl border cursor-text overflow-y-auto prose prose-sm max-w-none prose-pre:text-base prose-li:text-base prose-ol:text-base prose-ul:text-base prose-ol:list-decimal ${
             theme === 'dark'
               ? 'bg-gray-800 border-gray-700 prose-invert'
               : 'bg-white border-gray-300'
@@ -415,7 +453,10 @@ export default function Editor({ chapterId, user, theme }) {
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw]}
-              components={{ a: MarkdownLink }}
+              components={{
+                a: MarkdownLink,
+                img: (props) => <MarkdownImage {...props} showImages={showImages} theme={theme} />,
+              }}
             >
               {content}
             </ReactMarkdown>

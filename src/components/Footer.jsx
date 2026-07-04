@@ -1,22 +1,19 @@
 export default function Footer({ theme }) {
   return (
     <footer
-      className={`px-6 py-4 text-xs text-center border-t ${
+      className={`px-4 py-2 text-[11px] text-center border-t leading-tight ${
         theme === 'dark'
           ? 'bg-gray-900 border-gray-800 text-gray-400'
           : 'bg-gray-100 border-gray-200 text-gray-500'
       }`}
     >
-      <p>
-        Materiale privato protetto da copyright. Accesso e modifica riservati
-        esclusivamente ai soggetti autorizzati della classe 1FT (A.S. 2025/2026)
-        indicati nel file AUTORIZZATI.md. La visualizzazione non autorizzata è
-        vietata.
+      <p className="opacity-80">
+        Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)
       </p>
-      <p className={`mt-1 text-[11px] ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
-        ⚠️ Non inserire dati personali, numeri di telefono o informazioni sensibili negli appunti.
+      <p className={`mt-0.5 ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
+        ⚠️ Non inserire dati personali negli appunti
       </p>
-      <p className="mt-1 opacity-70">Versione 0.6.2 autore PiBOH</p>
+      <p className="mt-0.5 opacity-60">v0.6.3 · PiBOH</p>
     </footer>
   );
 }

@@ -24,6 +24,11 @@ function highlight(text) {
     /(~~)(.+?)(~~)/g,
     '<span class="text-gray-400 opacity-60">$1</span><span class="line-through opacity-60">$2</span><span class="text-gray-400 opacity-60">$3</span>'
   );
+  // Codice inline — backtick visibili
+  html = html.replace(
+    /(`)([^`]+)(`)/g,
+    '<span class="text-gray-400 opacity-60">$1</span><span class="bg-gray-500/20 rounded px-1 py-0.5 font-mono text-sm">$2</span><span class="text-gray-400 opacity-60">$3</span>'
+  );
   return html;
 }
 

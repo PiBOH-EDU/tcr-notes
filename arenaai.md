@@ -258,6 +258,29 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.3] — Fix password in MANUAL, state.json commentato, img 5MB, highlight codice, selezione testo preview, toggle immagini, fix menu online, footer compatto, uniforma font code/liste, fix liste numerate
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Sicurezza
+- `docs/MANUAL.md`: rimossa password reale `Barsanti1FT`. Sostituita con placeholder `[password-fornita-dal-professore]`.
+
+#### Aggiunte
+- `public/state.json`: aggiunto campo `_readme` con spiegazione dei campi e degli stati disponibili.
+- `HighlightTextarea.jsx`: evidenziazione per codice inline (`` `codice` ``) con sfondo semi-trasparente e bordi arrotondati, simile a GitHub.
+- `Editor.jsx`: 
+  - Possibilità di **selezionare il testo** nella preview Markdown senza switchare in edit mode (se c'è una selezione attiva, il click viene ignorato).
+  - Toggle **"Mostra immagini"** nella status bar (default: attivo). Quando disattivato, le immagini nella preview vengono sostituite da un placeholder testuale `[Immagine nascosta]`.
+- `Dashboard.jsx`: il menu utenti online ora si chiude cliccando fuori (come il menu Info).
+
+#### Modifiche
+- `MarkdownToolbar.jsx`: limite upload immagini aumentato da **500 KB a 5 MB**.
+- `Footer.jsx`: altezza ridotta — padding diminuiti, testi più compatti.
+- `Editor.jsx`: uniformata la dimensione del testo per blocchi di codice (`prose-pre:text-base`) e liste (`prose-li:text-base`, `prose-ol:text-base`) alla dimensione del testo normale.
+- `Editor.jsx`: fix rendering liste numerate — aggiunte classi CSS esplicite `list-decimal` per garantire la numerazione corretta in sequenza.
+- Aggiornata versione ovunque a **0.6.3**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.2] — Sistema di stato app visibile nel login
 - **Autore:** PiBOH
 - **Data:** 2026-07-04

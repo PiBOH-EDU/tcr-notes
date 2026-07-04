@@ -1,6 +1,11 @@
 {
+  "_readme": "Questo file controlla lo stato visibile nella schermata di login. Modificabile senza rebuild.",
+  "_comment_status": "Stati disponibili: online (normale), maintenance (manutenzione), testing (test), issue (problema noto), offline (chiuso)",
+  "_comment_message": "Messaggio personalizzato mostrato nel banner. Lascia vuoto per usare il testo predefinito.",
+  "_comment_banner": "Forza la visibilità del banner anche se status e' online. true/false.",
+  "_comment_bannerType": "Colore banner: info (blu), warning (giallo/arancione), error (rosso)",
   "status": "online",
-  "message": "Manutenzione in corso, consigliamo di salvare frequentemente il lavoro per evitarene la perdita",
-  "banner": true,
-  "bannerType": "maintenance"
+  "message": "",
+  "banner": false,
+  "bannerType": "info"
 }

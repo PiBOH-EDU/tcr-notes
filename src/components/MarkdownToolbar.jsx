@@ -43,9 +43,9 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
       const file = e.target.files[0];
       if (!file) return;
 
-      const MAX_SIZE = 0.5 * 1024 * 1024; // 500 KB
+      const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
       if (file.size > MAX_SIZE) {
-        alert(`File troppo grande! Dimensione massima: 500 KB. Il tuo file è ${(file.size / 1024).toFixed(1)} KB.`);
+        alert(`File troppo grande! Dimensione massima: 5 MB. Il tuo file è ${(file.size / (1024 * 1024)).toFixed(2)} MB.`);
         return;
       }
 
@@ -132,7 +132,7 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
         onClick={insertImage}
         disabled={isUploading}
         className={`${btnClass} ${isUploading ? 'opacity-60 cursor-wait' : ''}`}
-        title={isUploading ? 'Caricamento in corso...' : 'Carica immagine su imgBB (max 500KB)'}
+        title={isUploading ? 'Caricamento in corso...' : 'Carica immagine su imgBB (max 5MB)'}
       >
         {isUploading ? '⏳ Caricamento...' : '🖼 Img'}
       </button>
