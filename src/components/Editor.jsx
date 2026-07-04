@@ -444,9 +444,9 @@ export default function Editor({ chapterId, user, theme }) {
                 ? 'bg-gray-700 border-gray-600 text-gray-400 opacity-60'
                 : 'bg-gray-100 border-gray-300 text-gray-500 opacity-60'
             }`}
-            title={showImages ? 'Nascondi immagini nella preview' : 'Mostra immagini nella preview'}
+            title={showImages ? 'Clicca qui e Nascondi immagini nella preview' : 'Clicca qui e Mostra immagini nella preview'}
           >
-            🖼 {showImages ? 'On' : 'Off'}
+            🌄 {showImages ? 'On' : 'Off'}
           </button>
         </div>
         <div className="truncate">
