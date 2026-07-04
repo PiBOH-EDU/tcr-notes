@@ -41,12 +41,13 @@
    ============================================================ */
 
 export const AUTHORIZED = [
-  "bonaldo.pietro",
-  "aluisio.gabriele",
-  "bianco.nicola",
-  "mardarie.denisandreiflorin",
-  "mollo.michele",
-  "cecchetto.jacopo",
+  { name: "bonaldo.pietro", role: "editor" },
+  { name: "aluisio.gabriele", role: "editor" },
+  { name: "bianco.nicola", role: "editor" },
+  { name: "mardarie.denisandreiflorin", role: "editor" },
+  { name: "mollo.michele", role: "editor" },
+  { name: "cecchetto.jacopo", role: "editor" },
   { name: "pitzalis.vera", role: "viewer" },
-  "berton.alexgiulio",
+  { name: "berton.alexgiulio", role: "editor" },
+  { name: "cauduro.elia", role: "editor" },
 ];
