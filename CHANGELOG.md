@@ -7,6 +7,14 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-07-04
+
+### Aggiunto
+- `public/state.json`: file di configurazione per lo stato dell'app (online, maintenance, testing, issue, offline). Modificabile senza rebuild.
+- Banner di stato visibile nella schermata di login con icona, titolo e messaggio personalizzato.
+- Se lo stato è `offline`, il form di login viene disabilitato e mostra "App temporaneamente offline".
+- Colori del banner adattivi al tema (dark/light) e al tipo (info, warning, error).
+
 ## [0.6.1] - 2026-07-04
 
 ### Aggiunto

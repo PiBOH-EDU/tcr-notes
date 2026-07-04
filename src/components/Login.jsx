@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AUTHORIZED } from '../data/authorized';
 import { BANNED } from '../data/banned';
 
@@ -18,6 +18,16 @@ export default function Login({ onLogin, theme }) {
     return localStorage.getItem('tcr-docs-accepted') === 'true';
   });
   const [error, setError] = useState('');
+
+  // Stato app (manutenzione, test, ecc.)
+  const [appState, setAppState] = useState(null);
+
+  useEffect(() => {
+    fetch('/state.json')
+      .then((res) => res.json())
+      .then((data) => setAppState(data))
+      .catch(() => setAppState({ status: 'online', message: '', banner: false, bannerType: 'info' }));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,6 +79,40 @@ export default function Login({ onLogin, theme }) {
     localStorage.setItem('tcr-docs-accepted', checked ? 'true' : 'false');
   };
 
+  // Determina se mostrare il banner
+  const showBanner = appState && (
+    appState.status !== 'online' || appState.banner === true
+  );
+
+  const isOffline = appState?.status === 'offline';
+
+  const bannerColors = () => {
+    const type = appState?.bannerType || 'info';
+    if (theme === 'dark') {
+      switch (type) {
+        case 'warning': return 'bg-amber-900/30 border-amber-700/50 text-amber-200';
+        case 'error': return 'bg-red-900/30 border-red-700/50 text-red-200';
+        case 'info': default: return 'bg-blue-900/30 border-blue-700/50 text-blue-200';
+      }
+    } else {
+      switch (type) {
+        case 'warning': return 'bg-amber-50 border-amber-300 text-amber-800';
+        case 'error': return 'bg-red-50 border-red-300 text-red-800';
+        case 'info': default: return 'bg-blue-50 border-blue-300 text-blue-800';
+      }
+    }
+  };
+
+  const statusIcon = () => {
+    switch (appState?.status) {
+      case 'maintenance': return '🔧';
+      case 'testing': return '🧪';
+      case 'issue': return '⚠️';
+      case 'offline': return '🚫';
+      default: return 'ℹ️';
+    }
+  };
+
   return (
     <div className="w-full max-w-md px-4">
       <div
@@ -78,6 +122,27 @@ export default function Login({ onLogin, theme }) {
             : 'bg-white border-gray-200'
         }`}
       >
+        {/* Banner stato app */}
+        {showBanner && (
+          <div className={`mb-4 p-3 rounded-lg text-sm border ${bannerColors()}`}>
+            <div className="flex items-start gap-2">
+              <span className="text-lg shrink-0">{statusIcon()}</span>
+              <div>
+                <strong className="block">
+                  {appState.status === 'maintenance' && 'Manutenzione in corso'}
+                  {appState.status === 'testing' && 'Modalità test'}
+                  {appState.status === 'issue' && 'Problema noto'}
+                  {appState.status === 'offline' && 'App temporaneamente offline'}
+                  {appState.status === 'online' && 'Avviso'}
+                </strong>
+                {appState.message && (
+                  <span className="opacity-90">{appState.message}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         <h1 className="text-2xl font-bold mb-2 text-center">📚 tcr-notes</h1>
         <p className="text-sm text-center mb-6 opacity-80">
           Una classe, Tanti appunti, Un unico diario
@@ -91,7 +156,7 @@ export default function Login({ onLogin, theme }) {
           ⚠️ <strong>Attenzione:</strong> non inserire dati personali, numeri di telefono, indirizzi o informazioni sensibili negli appunti. Il contenuto è condiviso con tutta la classe.
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className={`space-y-4 ${isOffline ? 'opacity-50 pointer-events-none' : ''}`}>
           {/* NOME/I */}
           <div>
             <label className="block text-sm font-medium mb-1">Nome (o nomi)</label>

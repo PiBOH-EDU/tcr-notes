@@ -258,6 +258,25 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.2] — Sistema di stato app visibile nel login
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Aggiunte
+- `public/state.json`: file di configurazione per lo stato dell'app. Modificabile senza rebuild (servito staticamente).
+  - `status`: `online` | `maintenance` | `testing` | `issue` | `offline`
+  - `message`: testo personalizzato da mostrare nel banner
+  - `banner`: booleano per forzare la visibilità
+  - `bannerType`: `info` | `warning` | `error` per il colore del banner
+- `Login.jsx`: fetch di `/state.json` al mount. Mostra banner colorato in base allo stato:
+  - `online` → nessun banner (a meno che `banner: true`)
+  - `maintenance` → banner giallo/arancione
+  - `testing` → banner blu
+  - `issue` → banner rosso
+  - `offline` → banner rosso scuro + form di login disabilitato
+- Aggiornata versione ovunque a **0.6.2**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.1] — Integrazione imgBB nei documenti + Manuale utente
 - **Autore:** PiBOH
 - **Data:** 2026-07-04
