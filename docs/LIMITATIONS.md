@@ -10,8 +10,9 @@
 2. [Vercel (Hosting)](#2-vercel-hosting)
 3. [Browser / Client](#3-browser--client)
 4. [Limitazioni di sicurezza](#4-limitazioni-di-sicurezza)
-5. [Cosa NON è garantito](#5-cosa-non-è-garantito)
-6. [Raccomandazioni](#6-raccomandazioni)
+5. [imgBB (Hosting immagini)](#5-imgbb-hosting-immagini)
+6. [Cosa NON è garantito](#6-cosa-non-è-garantito)
+7. [Raccomandazioni](#7-raccomandazioni)
 
 ---
 
@@ -83,7 +84,29 @@ Se l'app è deployata su Vercel (piano gratuito):
 
 ---
 
-## 5. Cosa NON è garantito
+## 5. imgBB (Hosting immagini)
+
+L'upload delle immagini avviene tramite il servizio gratuito **imgBB**:
+
+| Limite | Valore | Nota |
+|--------|--------|------|
+| **Dimensione max** | 32 MB per immagine | L'app limita a 500 KB per sicurezza |
+| **Formati supportati** | JPG, PNG, GIF, BMP, TIFF, WEBP | |
+| **Durata immagini** | Non scadono (teoricamente) | imgBB si riserva di rimuovere immagini inattive da molto tempo |
+| **Privacy** | Immagini pubbliche | Chiunque abbia il link può visualizzarle |
+| **Account richiesto** | Sì | Serve una API key gratuita |
+
+### Attenzione
+
+- **Non caricare dati sensibili**: le immagini su imgBB sono accessibili pubblicamente tramite URL.
+- **Nessuna garanzia di persistenza**: imgBB è un servizio gratuito di terze parti e potrebbe rimuovere le immagini senza preavviso.
+- **Perdita del link**: se un'immagine viene cancellata da imgBB, il link nell'appunto smetterà di funzionare (icona rotta).
+
+Per la configurazione, vedi [`GUIDA-IMGBB.md`](./GUIDA-IMGBB.md).
+
+---
+
+## 6. Cosa NON è garantito
 
 ❌ **Persistenza dei dati a tempo indeterminato** — Supabase o Vercel possono chiudere il servizio, cancellare il progetto inattivo, o modificare i termini del piano gratuito.
 
@@ -101,7 +124,7 @@ Se l'app è deployata su Vercel (piano gratuito):
 
 ---
 
-## 6. Raccomandazioni
+## 7. Raccomandazioni
 
 - ✅ **Esporta regolarmente** i dati in JSON dalla dashboard.
 - ✅ **Non caricare immagini troppo grandi** — preferisci link esterni (Imgur, ecc.) se possibile.
@@ -111,4 +134,4 @@ Se l'app è deployata su Vercel (piano gratuito):
 
 ---
 
-**tcr-notes** — autore PiBOH
+**tcr-notes v0.6.1** — autore PiBOH

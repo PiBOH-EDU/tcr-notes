@@ -246,7 +246,31 @@
 - Aggiornati commenti in `authorized.js` e `banned.js`.
 - Aggiornata versione ovunque a **0.0.2.3**.
 
-### v0.0.2.2 — Ripristino Supabase + struttura gerarchica realtime
+### [0.6.1-sync] — Sincronizzazione completa con repository remoto + imgBB integration
+- **Data:** 2026-07-04
+- **Modifiche:**
+  - Sincronizzati tutti i file dal repository GitHub `PiBOH-EDU/tcr-notes` (branch main), inclusi root e sottocartelle.
+  - Integrato **imgBB** come servizio di hosting immagini al posto dell'upload base64 inline su Supabase.
+  - Creato `src/lib/imgbb.js` con funzione `uploadImageToImgBB(base64Image, apiKey)`.
+  - Modificato `MarkdownToolbar.jsx`: upload immagini ora invia a imgBB e inserisce URL pubblico in markdown `![nome](url)`.
+  - Aggiornato `.env.example` con `VITE_IMGBB_API_KEY`.
+  - Creato `docs/GUIDA-IMGBB.md` con guida passo-passo per principianti.
+  - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
+  - Build di produzione eseguito per verificare integrità post-modifica.
+
+### [0.6.1] — Integrazione imgBB nei documenti + Manuale utente
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Aggiunte
+- `docs/MANUAL.md`: manuale utente completo per principianti. Copre login, dashboard, editor (testo piano / rendering markdown), toolbar, salvataggio, undo/redo, export/import, cronologia, impostazioni, FAQ.
+- `docs/SECURITY.md`: aggiunta sezione "API Key imgBB" — ricorda di non committare la chiave, trattarla come password, e nota che le immagini su imgBB sono pubbliche.
+- `docs/DISCLAIMER.md`: aggiunto **imgBB** all'elenco dei servizi di terze parti.
+- `docs/LIMITATIONS.md`: aggiunta sezione **5. imgBB (Hosting immagini)** con limiti del piano gratuito, privacy delle immagini pubbliche, durata, e raccomandazioni.
+
+#### Modifiche
+- Aggiornati i riferimenti alla versione nei documenti (dove presenti) a **0.6.1**.
+- Build di produzione eseguito per verificare integrità.
 - **Autore:** PiBOH
 - **Data:** 2026-07-02
 

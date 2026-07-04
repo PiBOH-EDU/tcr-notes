@@ -26,10 +26,18 @@ Se scopri una vulnerabilità di sicurezza all'interno di **tcr-notes**, ti pregh
 - Aggiornamenti sullo stato della segnalazione
 - Riconoscimento pubblico (se desiderato) dopo la risoluzione
 
+## API Key imgBB
+
+L'upload delle immagini utilizza il servizio **imgBB** tramite una API key personale:
+
+- **Non committare mai `VITE_IMGBB_API_KEY`** nel codice sorgente. Usa sempre il file `.env` (già protetto da `.gitignore`).
+- **Tratta la API key come una password**: chiunque la possiede può caricare immagini sul tuo account imgBB.
+- **Le immagini caricate su imgBB sono pubbliche**: chiunque abbia il link può visualizzarle. Non caricare foto personali, documenti sensibili o materiale coperto da copyright.
+
 ## Buone pratiche per gli utenti
 
 - **Non condividere la password di classe** con soggetti esterni alla classe 1FT
-- **Non committare mai il file `.env`** contenente le chiavi Supabase
+- **Non committare mai il file `.env`** contenente le chiavi Supabase e imgBB
 - **Aggiornare regolarmente** la lista degli utenti autorizzati e bannati
 - **Effettuare backup periodici** dei dati tramite la funzione Export JSON
 
@@ -43,4 +51,4 @@ Per i dettagli tecnici completi, vedi [`docs/LIMITATIONS.md`](./LIMITATIONS.md).
 
 ---
 
-**tcr-notes v0.2.4.1** — autore PiBOH
+**tcr-notes v0.6.1** — autore PiBOH

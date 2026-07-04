@@ -7,6 +7,15 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-07-04
+
+### Aggiunto
+- `docs/MANUAL.md`: manuale utente completo per principianti con guida all'uso di tutte le funzionalità (login, dashboard, editor, toolbar, salvataggio, undo/redo, immagini, export/import, cronologia, FAQ).
+- `docs/SECURITY.md`: aggiunta sezione "API Key imgBB" con raccomandazioni sulla chiave e sulla natura pubblica delle immagini caricate.
+- `docs/DISCLAIMER.md`: aggiunto imgBB all'elenco dei servizi di terze parti.
+- `docs/LIMITATIONS.md`: aggiunta sezione "imgBB (Hosting immagini)" con limiti del piano gratuito, privacy e raccomandazioni.
+- `InfoMenu.jsx`: aggiunto link al manuale utente nel dropdown.
+
 ## [0.6.0] - 2026-07-03
 
 ### Aggiunto

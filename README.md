@@ -39,7 +39,9 @@ Appunti collaborativi in tempo reale per la classe **1FT** dell'ITT "Barsanti" (
 
 ## 🔧 Configurazione
 
-Per la configurazione completa di Supabase (tabelle, Realtime, credenziali, `.env`), consulta la [**GUIDA-SUPABASE.md**](./GUIDA-SUPABASE.md).
+Per la configurazione completa di Supabase (tabelle, Realtime, credenziali, `.env`), consulta la [**GUIDA-SUPABASE.md**](./docs/GUIDA-SUPABASE.md).
+
+Per configurare l'upload delle immagini via imgBB, consulta la [**GUIDA-IMGBB.md**](./docs/GUIDA-IMGBB.md).
 
 > ⚠️ Prima di iniziare, leggi anche [**docs/LIMITATIONS.md**](./docs/LIMITATIONS.md) per conoscere i vincoli del piano gratuito.
 
@@ -101,7 +103,8 @@ Gli utenti si gestiscono nei file:
 Problemi comuni:
 
 - **Schermata bianca** → riavvia il server dopo aver creato/modificato `.env` (`npm run dev`). Vite legge le variabili solo all'avvio.
-- **Errori Supabase** → verifica tabelle e credenziali nella [GUIDA-SUPABASE.md](./GUIDA-SUPABASE.md).
+- **Errori Supabase** → verifica tabelle e credenziali nella [GUIDA-SUPABASE.md](./docs/GUIDA-SUPABASE.md).
+- **Upload immagini non funziona** → controlla la [GUIDA-IMGBB.md](./docs/GUIDA-IMGBB.md).
 - **Realtime non funziona** → controlla che tutti usino lo stesso progetto Supabase.
 
 Per la risoluzione dettagliata, vedi la [GUIDA-SUPABASE.md](./GUIDA-SUPABASE.md).
@@ -112,7 +115,9 @@ Per la risoluzione dettagliata, vedi la [GUIDA-SUPABASE.md](./GUIDA-SUPABASE.md)
 
 | File | Contenuto |
 |------|-----------|
-| [`GUIDA-SUPABASE.md`](./GUIDA-SUPABASE.md) | Configurazione passo-passo del backend |
+| [`docs/MANUAL.md`](./docs/MANUAL.md) | Manuale utente completo |
+| [`docs/GUIDA-SUPABASE.md`](./docs/GUIDA-SUPABASE.md) | Configurazione passo-passo del backend |
+| [`docs/GUIDA-IMGBB.md`](./docs/GUIDA-IMGBB.md) | Configurazione upload immagini su imgBB |
 | [`docs/SECURITY.md`](./docs/SECURITY.md) | Policy di sicurezza |
 | [`docs/DISCLAIMER.md`](./docs/DISCLAIMER.md) | Avvertenza legale |
 | [`docs/LIMITATIONS.md`](./docs/LIMITATIONS.md) | Limitazioni dei servizi esterni |
@@ -126,4 +131,4 @@ Vedi il file [LICENSE](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/ref
 
 ---
 
-**Versione 0.4.7** — autore PiBOH
+**Versione 0.6.1** — autore PiBOH

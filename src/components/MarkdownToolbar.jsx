@@ -1,4 +1,9 @@
+import { useState } from 'react';
+import { uploadImageToImgBB } from '../lib/imgbb';
+
 export default function MarkdownToolbar({ textareaRef, theme }) {
+  const [isUploading, setIsUploading] = useState(false);
+
   const insert = (before, after = '') => {
     const ta = textareaRef.current;
     if (!ta) return;
@@ -37,15 +42,37 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
+
       const MAX_SIZE = 0.5 * 1024 * 1024; // 500 KB
       if (file.size > MAX_SIZE) {
         alert(`File troppo grande! Dimensione massima: 500 KB. Il tuo file è ${(file.size / 1024).toFixed(1)} KB.`);
         return;
       }
+
+      const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
+      if (!apiKey || apiKey === 'your-imgbb-api-key') {
+        alert(
+          '⚠️ Chiave API imgBB mancante!\n\n' +
+          '1. Vai su https://api.imgbb.com/ e ottieni una API key gratuita\n' +
+          '2. Aggiungi VITE_IMGBB_API_KEY=la_tua_chiave nel file .env\n' +
+          '3. Riavvia il server (npm run dev)\n\n' +
+          'Vedi docs/GUIDA-IMGBB.md per la guida completa.'
+        );
+        return;
+      }
+
+      setIsUploading(true);
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        const dataUrl = ev.target.result;
-        insert(`![${file.name}](${dataUrl})`, '');
+      reader.onload = async (ev) => {
+        try {
+          const dataUrl = ev.target.result;
+          const imageUrl = await uploadImageToImgBB(dataUrl, apiKey);
+          insert(`![${file.name}](${imageUrl})`, '');
+        } catch (err) {
+          alert('❌ Errore upload imgBB: ' + err.message);
+        } finally {
+          setIsUploading(false);
+        }
       };
       reader.readAsDataURL(file);
     };
@@ -100,8 +127,14 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
       <button type="button" onClick={() => insertWithPlaceholder('[', 'testo del link', '](https://esempio.it)')} className={btnClass} title="Link">
         Link
       </button>
-      <button type="button" onClick={insertImage} className={btnClass} title="Carica immagine (max 500KB)">
-        🖼 Img
+      <button
+        type="button"
+        onClick={insertImage}
+        disabled={isUploading}
+        className={`${btnClass} ${isUploading ? 'opacity-60 cursor-wait' : ''}`}
+        title={isUploading ? 'Caricamento in corso...' : 'Carica immagine su imgBB (max 500KB)'}
+      >
+        {isUploading ? '⏳ Caricamento...' : '🖼 Img'}
       </button>
       <span className="w-px h-4 bg-gray-500/30 mx-0.5 hidden sm:inline" />
       <button type="button" onClick={() => insertWithPlaceholder('<div align="left">\n', 'Testo a sinistra', '\n</div>')} className={btnClass} title="Allinea a sinistra">
