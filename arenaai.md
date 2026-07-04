@@ -258,6 +258,34 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.7-fix] — Fix sicurezza: password rimossa da .env.example e CHANGELOG
+- **Data:** 2026-07-04
+- **Modifiche:**
+  - `.env.example`: sostituita password reale con placeholder `your-class-password`.
+  - `CHANGELOG.md`: rimosso riferimento specifico alla password.
+  - Build di produzione eseguito per verificare integrità.
+
+### [0.6.7] — Icona immagini 🌄, permessi utente (viewer/editor), posizione online, cursore remoto, rimosso avviso login
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Modifiche
+- `Editor.jsx` / `MarkdownToolbar.jsx` / `MANUAL.md`: icona immagini cambiata da 🖼 a 🌄. Tooltip toggle: "Clicca qui e Nascondi/Mostra immagini nella preview".
+- `Login.jsx`: rimosso banner avviso dati personali (già presente nel footer).
+- `authorized.js`: supporto per permessi utente. Ogni voce può essere:
+  - Stringa `'rossi.mario'` → default `editor` (retrocompatibilità)
+  - Oggetto `{ name: 'rossi.mario', role: 'viewer' }` → solo lettura
+  - Oggetto `{ name: 'rossi.mario', role: 'editor' }` → lettura e scrittura
+- `Login.jsx`: estrae il ruolo dall'utente autorizzato e lo passa a `onLogin(name, role)`.
+- `App.jsx`: passa `role` a `Dashboard`.
+- `Dashboard.jsx`: se `role === 'viewer'`, nasconde i pulsanti "+ Nuovo" (titoli/capitoli), "Esporta", "Importa", e disabilita elimina/rinomina.
+- `Editor.jsx`: se `role === 'viewer'`, la textarea è `readOnly`, toolbar nascosta, pulsante Salva nascosto, stato mostrato come "🔒 Solo lettura".
+- `Dashboard.jsx` / `Editor.jsx`: broadcast "typing" esteso con `titleId`, `chapterId`, `cursorPosition`. La lista utenti online mostra dove si trova ogni persona (`Homepage`, `Titolo > Capitolo`, o `Titolo` se nessun capitolo selezionato).
+- `Editor.jsx`: nella status bar, quando un utente sta scrivendo, mostra anche la posizione del cursore (carattere N).
+- `HighlightTextarea.jsx`: aggiunto overlay cursore remoto — un piccolo elemento posizionato assolutamente che mostra il nome dell'utente e una linea verticale colorata dove sta scrivendo.
+- Aggiornata versione ovunque a **0.6.7**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.6] — Highlight testo piano: rimossa penombra, colori più scuri
 - **Autore:** PiBOH
 - **Data:** 2026-07-04

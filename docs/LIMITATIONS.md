@@ -79,7 +79,7 @@ Se l'app è deployata su Vercel (piano gratuito):
 
 - **Nessuna crittografia end-to-end**: i dati viaggiano in chiaro tra client e Supabase (HTTPS sì, ma il contenuto è leggibile da Supabase).
 - **Nessun audit log**: non è tracciato chi ha fatto cosa e quando in modo dettagliato.
-- **Password di classe condivisa**: chiunque conosca `Barsanti1FT` può tentare l'accesso (se non bannato e se la whitelist è vuota).
+- **Password di classe condivisa**: chiunque conosca la password di classe può tentare l'accesso (se non bannato e se la whitelist è vuota).
 - **Client-side validation**: i controlli su `authorized.js` e `banned.js` sono nel codice frontend — un utente esperto potrebbe bypassarli (la vera sicurezza è la password + whitelist).
 
 ---

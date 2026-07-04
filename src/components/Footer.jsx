@@ -12,7 +12,7 @@ export default function Footer({ theme }) {
           Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)
         </span>
         <span className="opacity-60 shrink-0">
-          v0.6.6 · PiBOH
+          v0.6.7 · PiBOH
         </span>
         <span className={`shrink-0 ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
           ⚠️ Non inserire dati personali negli appunti

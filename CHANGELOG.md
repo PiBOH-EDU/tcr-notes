@@ -7,6 +7,25 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.7] - 2026-07-04
+
+### Sicurezza
+- Rimossa password reale da tutti i file visibili (CHANGELOG.md, LIMITATIONS.md, MANUAL.md).
+- Password spostata in variabile d'ambiente `VITE_CLASS_PASSWORD` (vedi `.env.example` per il formato).
+
+### Aggiunto
+- `authorized.js`: supporto permessi `viewer` (solo lettura) / `editor` (lettura+scrittura).
+- `Login.jsx` / `App.jsx` / `Dashboard.jsx` / `Editor.jsx`: sistema ruoli completo.
+- Posizione utenti online: la lista mostra dove si trova ogni persona (Homepage / Titolo / Titolo > Capitolo).
+- Cursore remoto in testo piano: badge "✍️ [nome] al carattere N" in alto a destra della textarea.
+- `Editor.jsx`: status bar mostra posizione cursore dell'utente che sta scrivendo.
+
+### Modificato
+- Icona immagini: 🖼 → 🌄 in tutta l'app.
+- Tooltip toggle immagini: "Clicca qui e Nascondi/Mostra immagini nella preview".
+- `Login.jsx`: rimosso banner avviso dati personali (già nel footer).
+- `HighlightTextarea.jsx` / `Editor.jsx`: rimossa penombra (opacity) dal codice inline, ora sfondo solido.
+
 ## [0.6.6] - 2026-07-04
 
 ### Modificato
@@ -32,7 +51,7 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 ## [0.6.3] - 2026-07-04
 
 ### Sicurezza
-- Rimossa password reale `` da `docs/MANUAL.md` — sostituita con placeholder.
+- Rimossa password reale da `docs/MANUAL.md` — sostituita con placeholder.
 
 ### Aggiunto
 - `public/state.json`: campi `_readme` e `_comment_*` con spiegazione dei campi e degli stati disponibili.
@@ -262,7 +281,7 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 ### Aggiunto
 - Creazione progetto React + Vite + Tailwind CSS.
 - Implementazione Dark/Light Mode con persistenza localStorage (default: dark).
-- Schermata di login doppia: Nome/i e Cognome + Password di classe ("Barsanti1FT").
+- Schermata di login doppia: Nome/i e Cognome + Password di classe.
 - Controllo accessi su liste `AUTORIZZATI.md` e `BANNATI.md`.
 - Dashboard con lista note e editor collaborativo.
 - Tracciamento "chi sta scrivendo" tramite Supabase Broadcast.

@@ -60,7 +60,7 @@ Se i tuoi dati sono corretti e sei nella lista degli autorizzati, entrerai nella
 
 > ⚠️ **Problemi comuni**:
 > - "Utente non autorizzato" → controlla di aver scritto nome e cognome correttamente (tutto minuscolo, senza spazi).
-> - "Password errata" → la password è `Barsanti1FT` (attenzione alle maiuscole).
+> - "Password errata" → controlla di aver inserito la password corretta (te la fornisce il professore).
 
 ---
 
@@ -148,7 +148,7 @@ Quando sei in **Testo piano**, sopra l'editor appare una barra di strumenti:
 | `</>` | Blocco codice | \`\`\`codice\`\`\` |
 | `code` | Codice inline | `` `codice` `` |
 | Link | Link ipertestuale | `[testo](https://...)` |
-| 🖼 Img | Carica immagine | `![nome](url)` |
+| 🌄 Img | Carica immagine | `![nome](url)` |
 | ⬅️ Sinistra | Allinea a sinistra | `<div align="left">...</div>` |
 | ⬜ Centro | Allinea al centro | `<div align="center">...</div>` |
 | ⬜ Destra | Allinea a destra | `<div align="right">...</div>` |
@@ -203,7 +203,7 @@ L'app ricorda fino a **100 azioni** (puoi tornare indietro di 100 passi).
 
 ## Caricare immagini
 
-1. Clicca il pulsante **🖼 Img** nella toolbar.
+1. Clicca il pulsante **🌄 Img** nella toolbar.
 2. Seleziona un'immagine dal tuo computer.
 3. L'immagine deve essere **massimo 500 KB**.
 4. L'app la carica su **imgBB** e inserisce automaticamente il link nell'appunto.

@@ -104,7 +104,7 @@ Il file `.env` contiene tutte le "chiavi segrete" dell'app. Si trova nella carte
    ```
 2. Accedi con le tue credenziali.
 3. Apri un qualsiasi capitolo.
-4. Clicca sul pulsante **"🖼 Img"** nella toolbar sopra l'editor.
+4. Clicca sul pulsante **"🌄 Img"** nella toolbar sopra l'editor.
 5. Seleziona un'immagine dal tuo computer (deve essere **massimo 500 KB**).
 6. Vedrai il pulsante cambiare in **"⏳ Caricamento..."** per qualche secondo.
 7. Se tutto va bene, nel testo apparirà automaticamente qualcosa del tipo:
@@ -117,7 +117,7 @@ Il file `.env` contiene tutte le "chiavi segrete" dell'app. Si trova nella carte
 
 ## Come funziona tecnicamente
 
-Per i più curiosi, ecco cosa succede "dietro le quinte" quando premi il pulsante 🖼 Img:
+Per i più curiosi, ecco cosa succede "dietro le quinte" quando premi il pulsante 🌄 Img:
 
 1. **Selezione**: il browser apre la finestra di selezione file.
 2. **Validazione**: l'app controlla che il file non superi i 500 KB.

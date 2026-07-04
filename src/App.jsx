@@ -14,6 +14,11 @@ function App() {
     return saved || null;
   });
 
+  const [role, setRole] = useState(() => {
+    const saved = localStorage.getItem('tcr-role');
+    return saved || 'editor';
+  });
+
   const [isAuth, setIsAuth] = useState(() => {
     return localStorage.getItem('tcr-auth') === 'true';
   });
@@ -26,17 +31,21 @@ function App() {
 
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
-  const handleLogin = (name) => {
+  const handleLogin = (name, userRole = 'editor') => {
     localStorage.setItem('tcr-user', name);
+    localStorage.setItem('tcr-role', userRole);
     localStorage.setItem('tcr-auth', 'true');
     setUser(name);
+    setRole(userRole);
     setIsAuth(true);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('tcr-user');
+    localStorage.removeItem('tcr-role');
     localStorage.removeItem('tcr-auth');
     setUser(null);
+    setRole('editor');
     setIsAuth(false);
   };
 
@@ -53,6 +62,7 @@ function App() {
       ) : (
         <Dashboard
           user={user}
+          role={role}
           theme={theme}
           toggleTheme={toggleTheme}
           onLogout={handleLogout}

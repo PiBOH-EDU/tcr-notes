@@ -134,7 +134,7 @@ export default function MarkdownToolbar({ textareaRef, theme }) {
         className={`${btnClass} ${isUploading ? 'opacity-60 cursor-wait' : ''}`}
         title={isUploading ? 'Caricamento in corso...' : 'Carica immagine su imgBB (max 5MB)'}
       >
-        {isUploading ? '⏳ Caricamento...' : '🖼 Img'}
+        {isUploading ? '⏳ Caricamento...' : '🌄 Img'}
       </button>
       <span className="w-px h-4 bg-gray-500/30 mx-0.5 hidden sm:inline" />
       <button type="button" onClick={() => insertWithPlaceholder('<div align="left">\n', 'Testo a sinistra', '\n</div>')} className={btnClass} title="Allinea a sinistra">

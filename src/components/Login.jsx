@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AUTHORIZED } from '../data/authorized';
 import { BANNED } from '../data/banned';
 
-const CLASS_PASSWORD = 'Barsanti1FT';
+const CLASS_PASSWORD = import.meta.env.VITE_CLASS_PASSWORD || '';
 
 function normalizeName(cognome, nome) {
   const c = cognome.trim().toLowerCase().replace(/\s+/g, '');
@@ -55,14 +55,22 @@ export default function Login({ onLogin, theme }) {
       return;
     }
 
-    // 2. Controllo lista autorizzati
-    const isInAuthorizedList = AUTHORIZED.some(
-      (a) => a.toLowerCase() === normalizedName
-    );
+    // 2. Controllo lista autorizzati + estrazione ruolo
+    let userRole = 'editor'; // default
+    const authEntry = AUTHORIZED.find((a) => {
+      if (typeof a === 'string') {
+        return a.toLowerCase() === normalizedName;
+      }
+      return a.name?.toLowerCase() === normalizedName;
+    });
 
-    if (AUTHORIZED.length > 0 && !isInAuthorizedList) {
+    if (AUTHORIZED.length > 0 && !authEntry) {
       setError('Accesso negato: non sei nella lista degli autorizzati. Controlla di aver inserito correttamente i dati utente.');
       return;
+    }
+
+    if (authEntry && typeof authEntry === 'object') {
+      userRole = authEntry.role || 'editor';
     }
 
     // 3. Controllo password
@@ -71,7 +79,7 @@ export default function Login({ onLogin, theme }) {
       return;
     }
 
-    onLogin(normalizedName);
+    onLogin(normalizedName, userRole);
   };
 
   const handleAcceptChange = (checked) => {
@@ -147,14 +155,6 @@ export default function Login({ onLogin, theme }) {
         <p className="text-sm text-center mb-6 opacity-80">
           Una classe, Tanti appunti, Un unico diario
         </p>
-
-        <div className={`mb-4 p-3 rounded-lg text-xs border ${
-          theme === 'dark'
-            ? 'bg-yellow-900/20 border-yellow-700/50 text-yellow-200'
-            : 'bg-yellow-50 border-yellow-300 text-yellow-800'
-        }`}>
-          ⚠️ <strong>Attenzione:</strong> non inserire dati personali, numeri di telefono, indirizzi o informazioni sensibili negli appunti. Il contenuto è condiviso con tutta la classe.
-        </div>
 
         <form onSubmit={handleSubmit} className={`space-y-4 ${isOffline ? 'opacity-50 pointer-events-none' : ''}`}>
           {/* NOME/I */}

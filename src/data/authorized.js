@@ -17,15 +17,25 @@
    3. Ogni elemento deve essere separato da una virgola
    4. L'ultimo elemento NON deve avere la virgola finale
 
-   ESEMPIO CORRETTO:
+   FORMATO SEMPLICE (stringa) = lettura e scrittura (editor):
      export const AUTHORIZED = [
        "rossi.mario",
        "bianchi.lucia",
-       "verdi.antonio",
      ];
 
+   FORMATO AVANZATO (oggetto) = permesso specifico:
+     export const AUTHORIZED = [
+       "rossi.mario",                          // default: editor
+       { name: "bianchi.lucia", role: "viewer" }, // solo lettura
+       { name: "verdi.antonio", role: "editor" }, // lettura+scrittura
+     ];
+
+   Ruoli disponibili:
+     - "editor"  -> può leggere, scrivere, creare, eliminare
+     - "viewer"  -> può solo leggere (nessuna modifica)
+
    NOTA: se lasci l'array vuoto ([]), TUTTI gli studenti con la
-   password corretta potranno accedere (modalità classe aperta).
+   password corretta potranno accedere come EDITOR (modalità classe aperta).
    Se inserisci anche un solo nome, SOLO quelli nella lista
    potranno accedere (modalità whitelist).
    ============================================================ */
@@ -37,6 +47,6 @@ export const AUTHORIZED = [
   "mardarie.denisandreiflorin",
   "mollo.michele",
   "cecchetto.jacopo",
-  "pitzalis.vera",
+  "pitzalis.vera", role: "viewer"
   "berton.alexgiulio",
 ];

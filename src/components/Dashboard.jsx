@@ -17,7 +17,7 @@ import InfoMenu from './InfoMenu';
 import Editor from './Editor';
 import HistoryViewer from './HistoryViewer';
 
-export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
+export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) {
   const [titles, setTitles] = useState([]);
   const [selectedTitle, setSelectedTitle] = useState(null);
   const [chapters, setChapters] = useState([]);
@@ -29,7 +29,7 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
   const [showNewChapter, setShowNewChapter] = useState(false);
   const [importError, setImportError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]); // array di oggetti { name, titleId, chapterId }
   const [showOnlineList, setShowOnlineList] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const onlineListRef = useRef(null);
@@ -66,8 +66,15 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
     presenceChannel
       .on('presence', { event: 'sync' }, () => {
         const state = presenceChannel.presenceState();
-        const users = Object.keys(state);
-        setOnlineUsers(users);
+        const users = Object.keys(state).map((name) => ({ name, chapterId: null, titleId: null, cursorPosition: null, lastSeen: Date.now() }));
+        setOnlineUsers((prev) => {
+          // Mantieni le posizioni già conosciute
+          const merged = users.map((u) => {
+            const existing = prev.find((p) => p.name === u.name);
+            return existing ? { ...u, ...existing } : u;
+          });
+          return merged;
+        });
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
@@ -123,6 +130,31 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
       setChapters([]);
     }
   }, [selectedTitle, refreshChapters]);
+
+  // Ricevi posizione utenti dal broadcast typing
+  useEffect(() => {
+    const channel = supabase.channel('notes-room');
+    channel
+      .on('broadcast', { event: 'typing' }, (payload) => {
+        const { user: typingName, chapterId: cid, titleId: tid, cursorPosition } = payload.payload;
+        if (typingName !== user) {
+          setOnlineUsers((prev) => {
+            const filtered = prev.filter((u) => u.name !== typingName);
+            return [...filtered, { name: typingName, chapterId: cid, titleId: tid, cursorPosition, lastSeen: Date.now() }];
+          });
+        }
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user]);
+
+  // Pulisci utenti inattivi (più di 30 secondi senza aggiornamento)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOnlineUsers((prev) => prev.filter((u) => Date.now() - u.lastSeen < 30000));
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Chiudi menu online cliccando fuori
   useEffect(() => {
@@ -260,6 +292,15 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
     setSidebarOpen(false);
   };
 
+  const getUserLocationLabel = (u) => {
+    if (!u.titleId && !u.chapterId) return 'Homepage';
+    const title = titles.find((t) => t.id === u.titleId);
+    const chapter = chapters.find((c) => c.id === u.chapterId);
+    if (title && chapter) return `${title.name} > ${chapter.name}`;
+    if (title) return title.name;
+    return 'Homepage';
+  };
+
   return (
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* HEADER */}
@@ -314,12 +355,16 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
               {onlineUsers.length} online
             </button>
             {showOnlineList && (
-              <div className={`absolute top-10 right-0 z-50 w-48 rounded-lg border shadow-lg p-2 text-xs ${
+              <div className={`absolute top-10 right-0 z-50 w-56 rounded-lg border shadow-lg p-2 text-xs ${
                 theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
               }`}>
                 <div className="font-semibold mb-1">Utenti online</div>
+                {onlineUsers.length === 0 && <div className="opacity-50">Nessuno online</div>}
                 {onlineUsers.map((u) => (
-                  <div key={u} className="truncate">{u}</div>
+                  <div key={u.name} className="py-0.5">
+                    <div className="truncate font-medium">{u.name}</div>
+                    <div className="truncate opacity-60 text-[10px]">{getUserLocationLabel(u)}</div>
+                  </div>
                 ))}
               </div>
             )}
@@ -337,38 +382,46 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
             </span>
             {showOnlineList && (
-              <div className={`absolute top-8 right-0 z-50 w-44 rounded-lg border shadow-lg p-2 text-xs ${
+              <div className={`absolute top-8 right-0 z-50 w-52 rounded-lg border shadow-lg p-2 text-xs ${
                 theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
               }`}>
                 <div className="font-semibold mb-1">Online ({onlineUsers.length})</div>
+                {onlineUsers.length === 0 && <div className="opacity-50">Nessuno online</div>}
                 {onlineUsers.map((u) => (
-                  <div key={u} className="truncate">{u}</div>
+                  <div key={u.name} className="py-0.5">
+                    <div className="truncate font-medium">{u.name}</div>
+                    <div className="truncate opacity-60 text-[10px]">{getUserLocationLabel(u)}</div>
+                  </div>
                 ))}
               </div>
             )}
           </button>
 
-          {/* Import/Export - desktop only */}
-          <button
-            onClick={exportAllData}
-            className={`hidden lg:inline-flex px-2.5 py-1.5 text-xs rounded-lg transition ${
-              theme === 'dark'
-                ? 'bg-green-700 hover:bg-green-600 text-white'
-                : 'bg-green-600 hover:bg-green-500 text-white'
-            }`}
-          >
-            Esporta
-          </button>
-          <label
-            className={`hidden lg:inline-flex px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition ${
-              theme === 'dark'
-                ? 'bg-purple-700 hover:bg-purple-600 text-white'
-                : 'bg-purple-600 hover:bg-purple-500 text-white'
-            }`}
-          >
-            Importa
-            <input type="file" accept=".json" className="hidden" onChange={handleImport} />
-          </label>
+          {/* Import/Export - desktop only, nascosto per viewer */}
+          {role !== 'viewer' && (
+            <>
+              <button
+                onClick={exportAllData}
+                className={`hidden lg:inline-flex px-2.5 py-1.5 text-xs rounded-lg transition ${
+                  theme === 'dark'
+                    ? 'bg-green-700 hover:bg-green-600 text-white'
+                    : 'bg-green-600 hover:bg-green-500 text-white'
+                }`}
+              >
+                Esporta
+              </button>
+              <label
+                className={`hidden lg:inline-flex px-2.5 py-1.5 text-xs rounded-lg cursor-pointer transition ${
+                  theme === 'dark'
+                    ? 'bg-purple-700 hover:bg-purple-600 text-white'
+                    : 'bg-purple-600 hover:bg-purple-500 text-white'
+                }`}
+              >
+                Importa
+                <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+              </label>
+            </>
+          )}
 
           <InfoMenu theme={theme} />
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
@@ -424,12 +477,14 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
               >
                 Titoli
               </h2>
-              <button
-                onClick={() => setShowNewTitle((s) => !s)}
-                className="text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white transition"
-              >
-                + Nuovo
-              </button>
+              {role !== 'viewer' && (
+                <button
+                  onClick={() => setShowNewTitle((s) => !s)}
+                  className="text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white transition"
+                >
+                  + Nuovo
+                </button>
+              )}
             </div>
 
             {showNewTitle && (
@@ -512,22 +567,24 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                       }`}
                     >
                       <span className="font-medium truncate">{t.name}</span>
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); startEditTitle(t); }}
-                          className="text-blue-400 hover:text-blue-300 text-xs"
-                          title="Rinomina"
-                        >
-                          ✏️
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleDeleteTitle(t.id, t.name); }}
-                          className="text-red-400 hover:text-red-300 text-xs"
-                          title="Elimina"
-                        >
-                          🗑
-                        </button>
-                      </div>
+                      {role !== 'viewer' && (
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); startEditTitle(t); }}
+                            className="text-blue-400 hover:text-blue-300 text-xs"
+                            title="Rinomina"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDeleteTitle(t.id, t.name); }}
+                            className="text-red-400 hover:text-red-300 text-xs"
+                            title="Elimina"
+                          >
+                            🗑
+                          </button>
+                        </div>
+                      )}
                     </button>
                   )}
                 </div>
@@ -549,12 +606,14 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                 >
                   Capitoli
                 </h2>
-                <button
-                  onClick={() => setShowNewChapter((s) => !s)}
-                  className="text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white transition"
-                >
-                  + Nuovo
-                </button>
+                {role !== 'viewer' && (
+                  <button
+                    onClick={() => setShowNewChapter((s) => !s)}
+                    className="text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white transition"
+                  >
+                    + Nuovo
+                  </button>
+                )}
               </div>
 
               {showNewChapter && (
@@ -637,22 +696,24 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
                         }`}
                       >
                         <span className="truncate">{c.name}</span>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            onClick={(e) => { e.stopPropagation(); startEditChapter(c); }}
-                            className="text-blue-400 hover:text-blue-300 text-xs"
-                            title="Rinomina"
-                          >
-                            ✏️
-                          </button>
-                          <button
-                            onClick={(e) => { e.stopPropagation(); handleDeleteChapter(c.id, c.name); }}
-                            className="text-red-400 hover:text-red-300 text-xs"
-                            title="Elimina"
-                          >
-                            🗑
-                          </button>
-                        </div>
+                        {role !== 'viewer' && (
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); startEditChapter(c); }}
+                              className="text-blue-400 hover:text-blue-300 text-xs"
+                              title="Rinomina"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDeleteChapter(c.id, c.name); }}
+                              className="text-red-400 hover:text-red-300 text-xs"
+                              title="Elimina"
+                            >
+                              🗑
+                            </button>
+                          </div>
+                        )}
                       </button>
                     )}
                   </div>
@@ -714,7 +775,9 @@ export default function Dashboard({ user, theme, toggleTheme, onLogout }) {
               {view === 'editor' ? (
                 <Editor
                   chapterId={selectedChapter}
+                  titleId={selectedTitle}
                   user={user}
+                  role={role}
                   theme={theme}
                 />
               ) : (

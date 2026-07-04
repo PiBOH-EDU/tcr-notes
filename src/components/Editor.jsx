@@ -31,7 +31,7 @@ function MarkdownImage({ src, alt, showImages, theme }) {
             : 'border-gray-300 text-gray-500 bg-gray-100'
         }`}
       >
-        🖼 Immagine nascosta
+        🌄 Immagine nascosta
       </span>
     );
   }
@@ -44,8 +44,8 @@ function MarkdownCode({ inline, className, children, theme }) {
       <code
         className={`rounded px-1.5 py-0.5 text-sm font-mono ${
           theme === 'dark'
-            ? 'bg-gray-700/60 text-gray-200'
-            : 'bg-gray-200/70 text-gray-800'
+            ? 'bg-gray-700 text-gray-200'
+            : 'bg-gray-200 text-gray-800'
         }`}
       >
         {children}
@@ -73,15 +73,17 @@ function MarkdownPre({ children, theme }) {
   );
 }
 
-export default function Editor({ chapterId, user, theme }) {
+export default function Editor({ chapterId, titleId, user, role, theme }) {
   const [content, setContent] = useState('');
   const [lastEditedBy, setLastEditedBy] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
-  const [typingUser, setTypingUser] = useState(null);
+  const [typingUser, setTypingUser] = useState(null); // { name, cursorPosition }
   const [saveState, setSaveState] = useState('saved');
   const [isMarkdownView, setIsMarkdownView] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [showImages, setShowImages] = useState(true);
+  const [remoteCursor, setRemoteCursor] = useState(null);
+  const isViewer = role === 'viewer';
   const broadcastChannelRef = useRef(null);
   const debounceRef = useRef(null);
   const textareaRef = useRef(null);
@@ -141,11 +143,15 @@ export default function Editor({ chapterId, user, theme }) {
 
     channel
       .on('broadcast', { event: 'typing' }, (payload) => {
-        const { user: typingName, chapterId: cid } = payload.payload;
+        const { user: typingName, chapterId: cid, cursorPosition } = payload.payload;
         if (typingName !== user && cid === chapterId) {
-          setTypingUser(typingName);
+          setTypingUser({ name: typingName, cursorPosition: cursorPosition || 0 });
+          setRemoteCursor({ name: typingName, position: cursorPosition || 0 });
           if (globalTypingTimeout) clearTimeout(globalTypingTimeout);
-          globalTypingTimeout = setTimeout(() => setTypingUser(null), 2000);
+          globalTypingTimeout = setTimeout(() => {
+            setTypingUser(null);
+            setRemoteCursor(null);
+          }, 2000);
         }
       })
       .subscribe();
@@ -239,10 +245,11 @@ export default function Editor({ chapterId, user, theme }) {
     }
 
     if (broadcastChannelRef.current) {
+      const cursorPos = textareaRef.current?.selectionStart || 0;
       broadcastChannelRef.current.send({
         type: 'broadcast',
         event: 'typing',
-        payload: { user, chapterId },
+        payload: { user, chapterId, titleId, cursorPosition: cursorPos },
       });
     }
 
@@ -306,9 +313,10 @@ export default function Editor({ chapterId, user, theme }) {
   };
 
   const handleMarkdownClick = (e) => {
+    // Viewer non può entrare in edit mode
+    if (isViewer) return;
     // Se clicca su un link, lascia che il link funzioni normalmente
     if (e.target.closest('a')) return;
-
     // Se l'utente ha selezionato del testo, non switchare in edit mode
     const selection = window.getSelection();
     if (selection && selection.toString().length > 0) return;
@@ -339,6 +347,9 @@ export default function Editor({ chapterId, user, theme }) {
   };
 
   const saveStateUI = () => {
+    if (isViewer) {
+      return <span className="text-blue-400">🔒 Solo lettura</span>;
+    }
     switch (saveState) {
       case 'saving':
         return <span className="text-yellow-400">⏳ Salvataggio...</span>;
@@ -364,48 +375,52 @@ export default function Editor({ chapterId, user, theme }) {
           {saveStateUI()}
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={performUndo}
-            disabled={undoStack.current.length <= 1}
-            className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition ${
-              undoStack.current.length <= 1
-                ? 'opacity-40 cursor-not-allowed'
-                : theme === 'dark'
-                ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
-                : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
-            }`}
-            title="Annulla (Ctrl+Z)"
-          >
-            ↩ Annulla
-          </button>
-          <button
-            onClick={performRedo}
-            disabled={redoStack.current.length === 0}
-            className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition ${
-              redoStack.current.length === 0
-                ? 'opacity-40 cursor-not-allowed'
-                : theme === 'dark'
-                ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
-                : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
-            }`}
-            title="Ripeti (Ctrl+Y / Ctrl+Shift+Z)"
-          >
-            ↪ Ripeti
-          </button>
-          <button
-            onClick={handleManualSave}
-            disabled={saveState === 'saving'}
-            className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition font-semibold ${
-              saveState === 'saving'
-                ? 'opacity-40 cursor-not-allowed'
-                : theme === 'dark'
-                ? 'bg-blue-700 border-blue-600 hover:bg-blue-600 text-white'
-                : 'bg-blue-600 border-blue-500 hover:bg-blue-500 text-white'
-            }`}
-            title="Salva ora (Ctrl+S)"
-          >
-            💾 Salva
-          </button>
+          {!isViewer && (
+            <>
+              <button
+                onClick={performUndo}
+                disabled={undoStack.current.length <= 1}
+                className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition ${
+                  undoStack.current.length <= 1
+                    ? 'opacity-40 cursor-not-allowed'
+                    : theme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+                    : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+                }`}
+                title="Annulla (Ctrl+Z)"
+              >
+                ↩ Annulla
+              </button>
+              <button
+                onClick={performRedo}
+                disabled={redoStack.current.length === 0}
+                className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition ${
+                  redoStack.current.length === 0
+                    ? 'opacity-40 cursor-not-allowed'
+                    : theme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 hover:bg-gray-600'
+                    : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+                }`}
+                title="Ripeti (Ctrl+Y / Ctrl+Shift+Z)"
+              >
+                ↪ Ripeti
+              </button>
+              <button
+                onClick={handleManualSave}
+                disabled={saveState === 'saving'}
+                className={`px-1.5 py-0.5 rounded text-[10px] md:text-xs border transition font-semibold ${
+                  saveState === 'saving'
+                    ? 'opacity-40 cursor-not-allowed'
+                    : theme === 'dark'
+                    ? 'bg-blue-700 border-blue-600 hover:bg-blue-600 text-white'
+                    : 'bg-blue-600 border-blue-500 hover:bg-blue-500 text-white'
+                }`}
+                title="Salva ora (Ctrl+S)"
+              >
+                💾 Salva
+              </button>
+            </>
+          )}
           <span className="w-px h-3 bg-gray-500/30 hidden sm:inline" />
           <button
             onClick={() => {
@@ -452,7 +467,7 @@ export default function Editor({ chapterId, user, theme }) {
         <div className="truncate">
           {typingUser ? (
             <span className="text-blue-400 font-medium animate-pulse">
-              ✍️ {typingUser} sta scrivendo...
+              ✍️ {typingUser.name} sta scrivendo{typingUser.cursorPosition ? ` (carattere ${typingUser.cursorPosition})` : ''}...
             </span>
           ) : lastEditedBy ? (
             <span className="opacity-70">
@@ -469,7 +484,7 @@ export default function Editor({ chapterId, user, theme }) {
       </div>
 
       {/* Toolbar */}
-      {(!isMarkdownView || isEditing) && (
+      {(!isMarkdownView || isEditing) && !isViewer && (
         <MarkdownToolbar textareaRef={textareaRef} theme={theme} />
       )}
 
@@ -507,8 +522,10 @@ export default function Editor({ chapterId, user, theme }) {
           value={content}
           onChange={handleChange}
           theme={theme}
-          placeholder="Inizia a scrivere gli appunti qui..."
+          placeholder={isViewer ? 'Modalità solo lettura — non puoi modificare questo capitolo' : 'Inizia a scrivere gli appunti qui...'}
           spellCheck={false}
+          readOnly={isViewer}
+          remoteCursor={remoteCursor}
         />
       )}
     </div>
