@@ -258,6 +258,13 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.6.7-sync] — Sincronizzazione state.json e authorized.js dal repository remoto
+- **Data:** 2026-07-04
+- **Modifiche:**
+  - Sincronizzato `public/state.json` dal repository GitHub `PiBOH-EDU/tcr-notes` (branch main).
+  - Sincronizzato `src/data/authorized.js` dal repository remoto.
+  - Build di produzione eseguito per verificare integrità post-sincronizzazione.
+
 ### [0.6.7-fix] — Fix sicurezza: password rimossa da .env.example e CHANGELOG
 - **Data:** 2026-07-04
 - **Modifiche:**

@@ -47,6 +47,6 @@ export const AUTHORIZED = [
   "mardarie.denisandreiflorin",
   "mollo.michele",
   "cecchetto.jacopo",
-  "pitzalis.vera", role: "viewer"
+  { name: "pitzalis.vera", role: "viewer" },
   "berton.alexgiulio",
 ];
