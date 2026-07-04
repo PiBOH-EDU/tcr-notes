@@ -7,6 +7,24 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-07-04
+
+### Sicurezza
+- Rimossa password reale `Barsanti1FT` da `docs/MANUAL.md` — sostituita con placeholder.
+
+### Aggiunto
+- `public/state.json`: campi `_readme` e `_comment_*` con spiegazione dei campi e degli stati disponibili.
+- `HighlightTextarea.jsx`: evidenziazione per codice inline (`` `codice` ``) con sfondo semi-trasparente, simile a GitHub.
+- `Editor.jsx`: possibilità di **selezionare il testo** nella preview Markdown senza switchare in edit mode.
+- `Editor.jsx`: toggle **"Mostra immagini"** (`🖼 On/Off`) nella status bar, default attivo.
+- `Dashboard.jsx`: il menu utenti online si chiude cliccando fuori (come InfoMenu).
+
+### Modificato
+- `MarkdownToolbar.jsx`: limite upload immagini da **500 KB a 5 MB**.
+- `Editor.jsx`: uniformata dimensione testo per blocchi di codice e liste alla dimensione normale.
+- `Editor.jsx`: fix numerazione liste ordinate (`prose-ol:list-decimal`).
+- `Footer.jsx`: altezza ridotta, testi più compatti.
+
 ## [0.6.2] - 2026-07-04
 
 ### Aggiunto
