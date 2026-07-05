@@ -131,4 +131,4 @@ Vedi il file [LICENSE](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/ref
 
 ---
 
-**Versione 0.6.9** — autore PiBOH
+**Versione 0.7.1** — autore PiBOH

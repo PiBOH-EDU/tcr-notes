@@ -7,6 +7,25 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-07-04
+
+### Modificato
+- Routing admin: da `/#/admin` a `/admin` grazie a `vercel.json` (rewrite SPA).
+- `App.jsx` e `Admin.jsx`: usano `window.location.pathname` invece di `window.location.hash`.
+
+## [0.7.0] - 2026-07-04
+
+### Aggiunto
+- `src/components/Admin.jsx`: dashboard admin segreta accessibile via `/#/admin`.
+  - Protezione con password `VITE_ADMIN_PASSWORD`.
+  - Card KPI: stato Supabase, utenti online, utenti autorizzati, modifiche recenti.
+  - Tabella utenti online con nome, posizione (Homepage/Titolo/Capitolo), ruolo.
+  - Tabella utenti autorizzati con ruolo (viewer/editor).
+  - Tabella log modifiche recenti (ultime 20 revisioni).
+- `src/lib/storage.js`: funzione `getRecentHistory()` per recuperare log globali.
+- `src/App.jsx`: routing via hash per accedere a `/admin`.
+- Nessun link visibile all'admin — l'URL è segreto.
+
 ## [0.6.9] - 2026-07-04
 
 ### Aggiunto

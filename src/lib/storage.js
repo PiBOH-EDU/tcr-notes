@@ -166,7 +166,17 @@ export async function restoreHistory(chapterId, historyId, editedBy) {
   return data;
 }
 
-/* ===================== EXPORT / IMPORT ===================== */
+/* ===================== ADMIN ===================== */
+
+export async function getRecentHistory(limit = 20) {
+  const { data, error } = await supabase
+    .from('history')
+    .select('id, chapter_id, edited_by, created_at')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data || [];
+}
 
 export async function exportAllData() {
   const [{ data: titles }, { data: chapters }, { data: history }] = await Promise.all([

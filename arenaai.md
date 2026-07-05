@@ -258,6 +258,36 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.7.1] — Fix routing admin: da /#/admin a /admin
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Modifiche
+- Creato `vercel.json`: rewrite SPA — tutte le route vengono servite da `index.html`, quindi `/admin` funziona correttamente su Vercel.
+- `App.jsx`: routing cambiato da `window.location.hash` a `window.location.pathname`.
+- `Admin.jsx`: pulsante "Torna all'app" usa `window.location.pathname = '/'` invece del hash.
+- Aggiornata versione a **0.7.1**.
+- Build di produzione eseguito per verificare integrità.
+
+### [0.7.0] — Pagina Admin segreta (/admin)
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Aggiunte
+- `src/components/Admin.jsx`: dashboard admin segreta accessibile via `/#/admin`.
+  - Protezione con password `VITE_ADMIN_PASSWORD` (da `.env`).
+  - Sezione **Stato Supabase**: card con stato online/offline e ultimo check.
+  - Sezione **Utenti Online**: tabella con nome, posizione (Homepage / Titolo / Capitolo), ruolo, ultima attività.
+  - Sezione **Utenti Autorizzati**: tabella con nome e ruolo (editor/viewer).
+  - Sezione **Log Modifiche Recenti**: ultime 20 revisioni dalla tabella `history` con utente, capitolo e data.
+  - Layout responsive a griglia con card colorate per tipo.
+- `src/lib/storage.js`: funzione `getRecentHistory(limit = 20)` per recuperare le ultime modifiche globali.
+- `src/App.jsx`: routing via `window.location.hash` — se l'hash è `#/admin` e l'utente è autenticato, mostra `Admin` invece di `Dashboard`.
+- `.env.example`: aggiunta `VITE_ADMIN_PASSWORD=your-admin-password`.
+- Nessun link visibile all'admin nell'interfaccia utente — l'URL è conosciuto solo dall'amministratore.
+- Aggiornata versione a **0.7.0** (nuova feature significativa).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.6.9] — GitHub Actions keepalive per Supabase
 - **Autore:** PiBOH
 - **Data:** 2026-07-04

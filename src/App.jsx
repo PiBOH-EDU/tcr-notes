@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import Admin from './components/Admin';
 import Footer from './components/Footer';
 
 function App() {
@@ -23,11 +24,23 @@ function App() {
     return localStorage.getItem('tcr-auth') === 'true';
   });
 
+  const [isAdminRoute, setIsAdminRoute] = useState(false);
+
   useEffect(() => {
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(theme);
     localStorage.setItem('tcr-theme', theme);
   }, [theme]);
+
+  // Rileva route admin via pathname
+  useEffect(() => {
+    const checkPath = () => {
+      setIsAdminRoute(window.location.pathname === '/admin');
+    };
+    checkPath();
+    window.addEventListener('popstate', checkPath);
+    return () => window.removeEventListener('popstate', checkPath);
+  }, []);
 
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
@@ -59,6 +72,8 @@ function App() {
         <div className="flex-1 flex items-center justify-center">
           <Login onLogin={handleLogin} theme={theme} />
         </div>
+      ) : isAdminRoute ? (
+        <Admin theme={theme} user={user} />
       ) : (
         <Dashboard
           user={user}
@@ -68,7 +83,7 @@ function App() {
           onLogout={handleLogout}
         />
       )}
-      <Footer theme={theme} />
+      {!isAdminRoute && <Footer theme={theme} />}
     </div>
   );
 }
