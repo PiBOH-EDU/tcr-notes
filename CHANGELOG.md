@@ -7,6 +7,15 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-07-05
+
+### Modificato
+- `Login.jsx`: unite le due checkbox (documenti legali + Privacy) in **una sola checkbox obbligatoria**.
+  - Nuova chiave `localStorage`: `tcr-all-legal-accepted` (obbliga tutti a rifare il consenso).
+  - Testo unico che elenca `SECURITY.md`, `DISCLAIMER.md`, `CODE OF CONDUCT.md` e `PRIVACY.md`.
+  - Rimosso stato `acceptedPrivacy` separato.
+- Bump versione a **0.9.1** in `package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`.
+
 ## [0.9.0] - 2026-07-05
 
 ### Aggiunto

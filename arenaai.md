@@ -258,6 +258,19 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.9.1] — Checkbox unica login per documenti legali + Privacy Policy
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Modifiche
+- `Login.jsx`: unite le due checkbox (documenti legali + Privacy) in **una sola checkbox obbligatoria**.
+  - Nuova chiave `localStorage`: `tcr-all-legal-accepted` (obbliga tutti a rifare il consenso, più sicuro per GDPR).
+  - Testo unico che elenca `SECURITY.md`, `DISCLAIMER.md`, `CODE OF CONDUCT.md` e `PRIVACY.md`.
+  - Rimosso stato `acceptedPrivacy` separato e relativa chiave `tcr-privacy-accepted`.
+  - Messaggio di errore aggiornato.
+- Bump versione schematica a **0.9.1** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.9.0] — Privacy Policy, guida utenti Supabase, check GDPR esteso
 - **Autore:** PiBOH
 - **Data:** 2026-07-05
