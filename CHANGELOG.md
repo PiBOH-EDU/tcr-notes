@@ -7,6 +7,21 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-07-04
+
+### Sicurezza
+- Rimossi `src/data/authorized.js` e `src/data/banned.js` — nessun dato personale su GitHub.
+- Tabella `utenti_autorizzati` su Supabase con funzioni RPC `check_user_access()` e `list_users_for_admin()`.
+- RLS abilitata: nessun accesso diretto anon alla tabella, solo via RPC.
+
+### Aggiunto
+- `src/lib/auth.js`: `checkUserAccess()`, `listAuthorizedUsers()`, `getUserRoleFromList()`.
+- `supabase-users.sql`: script SQL completo per setup tabella + funzioni RPC.
+
+### Modificato
+- `Login.jsx`: login asincrono via Supabase RPC invece di array locali.
+- `Admin.jsx`: carica utenti autorizzati da Supabase, rimosso import `AUTHORIZED`.
+
 ## [0.7.1] - 2026-07-04
 
 ### Modificato

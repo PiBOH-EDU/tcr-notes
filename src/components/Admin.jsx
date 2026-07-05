@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { getRecentHistory } from '../lib/storage';
-import { AUTHORIZED } from '../data/authorized';
+import { listAuthorizedUsers, getUserRoleFromList } from '../lib/auth';
 
 export default function Admin({ theme, user }) {
   const [password, setPassword] = useState('');
@@ -13,6 +13,7 @@ export default function Admin({ theme, user }) {
   const [recentHistory, setRecentHistory] = useState([]);
   const [titles, setTitles] = useState([]);
   const [chapters, setChapters] = useState([]);
+  const [authorizedList, setAuthorizedList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || '';
@@ -48,6 +49,14 @@ export default function Admin({ theme, user }) {
       const { data: cData } = await supabase.from('chapters').select('*');
       setTitles(tData || []);
       setChapters(cData || []);
+
+      // Lista utenti autorizzati (da Supabase, GDPR-safe)
+      try {
+        const users = await listAuthorizedUsers();
+        setAuthorizedList(users);
+      } catch {
+        setAuthorizedList([]);
+      }
 
       // Log recenti
       try {
@@ -140,15 +149,7 @@ export default function Admin({ theme, user }) {
     return 'Homepage';
   };
 
-  const getUserRole = (name) => {
-    const entry = AUTHORIZED.find((a) => {
-      if (typeof a === 'string') return a.toLowerCase() === name.toLowerCase();
-      return a.name?.toLowerCase() === name.toLowerCase();
-    });
-    if (!entry) return 'editor';
-    if (typeof entry === 'string') return 'editor';
-    return entry.role || 'editor';
-  };
+  const getUserRole = (name) => getUserRoleFromList(name, authorizedList);
 
   const getChapterName = (chapterId) => {
     const c = chapters.find((x) => x.id === chapterId);
@@ -249,7 +250,7 @@ export default function Admin({ theme, user }) {
 
             <div className={`${cardBase} border-l-4 border-l-purple-500`}>
               <div className="text-xs opacity-60 uppercase tracking-wider">Autorizzati</div>
-              <div className="text-lg font-bold mt-1 text-purple-400">{AUTHORIZED.length}</div>
+              <div className="text-lg font-bold mt-1 text-purple-400">{authorizedList.length}</div>
               <div className="text-[10px] opacity-50 mt-1">Viewer + Editor</div>
             </div>
 
@@ -311,7 +312,7 @@ export default function Admin({ theme, user }) {
             <div className={cardBase}>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-sm font-bold">📋 Utenti Autorizzati</h2>
-                <span className="text-[10px] opacity-50">da authorized.js</span>
+                <span className="text-[10px] opacity-50">da Supabase (GDPR-safe)</span>
               </div>
               <div className="overflow-x-auto max-h-80 overflow-y-auto">
                 <table className="w-full text-left">
@@ -322,24 +323,20 @@ export default function Admin({ theme, user }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {AUTHORIZED.map((entry, idx) => {
-                      const name = typeof entry === 'string' ? entry : entry.name;
-                      const role = typeof entry === 'string' ? 'editor' : (entry.role || 'editor');
-                      return (
-                        <tr key={idx}>
-                          <td className={tableCell}>{name}</td>
-                          <td className={tableCell}>
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
-                              role === 'viewer'
-                                ? 'bg-yellow-500/20 text-yellow-400'
-                                : 'bg-green-500/20 text-green-400'
-                            }`}>
-                              {role === 'viewer' ? '👁️ Viewer' : '✏️ Editor'}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {authorizedList.map((entry, idx) => (
+                      <tr key={idx}>
+                        <td className={tableCell}>{entry.identificativo}</td>
+                        <td className={tableCell}>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                            entry.ruolo === 'viewer'
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'bg-green-500/20 text-green-400'
+                          }`}>
+                            {entry.ruolo === 'viewer' ? '👁️ Viewer' : '✏️ Editor'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

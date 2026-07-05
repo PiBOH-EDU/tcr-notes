@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AUTHORIZED } from '../data/authorized';
-import { BANNED } from '../data/banned';
+import { checkUserAccess } from '../lib/auth';
 
 const CLASS_PASSWORD = import.meta.env.VITE_CLASS_PASSWORD || '';
 
@@ -29,7 +28,7 @@ export default function Login({ onLogin, theme }) {
       .catch(() => setAppState({ status: 'online', message: '', banner: false, bannerType: 'info' }));
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -48,29 +47,23 @@ export default function Login({ onLogin, theme }) {
 
     const normalizedName = normalizeName(trimmedCognome, trimmedNome);
 
-    // 1. Controllo lista bannati (formato: cognome.nome)
-    const isBanned = BANNED.some((b) => b.toLowerCase() === normalizedName);
-    if (isBanned) {
-      setError('Accesso negato: utente bannato.');
+    // 1-2. Verifica accesso su Supabase (GDPR: nessun dato locale)
+    let result;
+    try {
+      result = await checkUserAccess(normalizedName);
+    } catch (err) {
+      setError('Errore di connessione al server. Riprova più tardi.');
       return;
     }
 
-    // 2. Controllo lista autorizzati + estrazione ruolo
-    let userRole = 'editor'; // default
-    const authEntry = AUTHORIZED.find((a) => {
-      if (typeof a === 'string') {
-        return a.toLowerCase() === normalizedName;
-      }
-      return a.name?.toLowerCase() === normalizedName;
-    });
-
-    if (AUTHORIZED.length > 0 && !authEntry) {
+    if (!result.trovato) {
       setError('Accesso negato: non sei nella lista degli autorizzati. Controlla di aver inserito correttamente i dati utente.');
       return;
     }
 
-    if (authEntry && typeof authEntry === 'object') {
-      userRole = authEntry.role || 'editor';
+    if (result.bannato) {
+      setError('Accesso negato: utente bannato.');
+      return;
     }
 
     // 3. Controllo password
@@ -79,7 +72,7 @@ export default function Login({ onLogin, theme }) {
       return;
     }
 
-    onLogin(normalizedName, userRole);
+    onLogin(normalizedName, result.ruolo);
   };
 
   const handleAcceptChange = (checked) => {

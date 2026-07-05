@@ -258,6 +258,27 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.8.0] — Migrazione utenti autorizzati/bannati da file locali a Supabase (GDPR)
+- **Autore:** PiBOH
+- **Data:** 2026-07-04
+
+#### Sicurezza / Privacy
+- Rimossi `src/data/authorized.js` e `src/data/banned.js` dal repository — nessun dato personale visibile su GitHub.
+- Creata tabella `utenti_autorizzati` su Supabase con campi: `identificativo`, `nome_reale`, `bannato`, `ruolo`.
+- Implementate funzioni RPC `check_user_access()` e `list_users_for_admin()` con `SECURITY DEFINER`:
+  - `check_user_access` restituisce solo `trovato/bannato/ruolo` per un singolo identificativo (nessuna esposizione di altri utenti).
+  - `list_users_for_admin` restituisce `identificativo/ruolo/bannato` (senza `nome_reale` per GDPR).
+- RLS abilitata sulla tabella: nessun accesso diretto `SELECT` per l'anon key, solo via RPC.
+
+#### Refactoring
+- `src/lib/auth.js` (nuovo): `checkUserAccess(identificativo)` e `listAuthorizedUsers()`.
+- `src/components/Login.jsx`: login ora chiama `checkUserAccess()` via Supabase RPC invece di leggere array locali.
+- `src/components/Dashboard.jsx`: carica lista autorizzati da Supabase all'avvio, rimosso import `AUTHORIZED`.
+- `src/components/Admin.jsx`: carica lista autorizzati da Supabase, rimosso import `AUTHORIZED`.
+- `supabase-users.sql` (nuovo): script SQL completo per setup tabella + funzioni RPC.
+- Aggiornata versione a **0.8.0**.
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.7.1] — Fix routing admin: da /#/admin a /admin
 - **Autore:** PiBOH
 - **Data:** 2026-07-04
