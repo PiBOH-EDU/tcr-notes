@@ -4,7 +4,7 @@
   "_comment_message": "Messaggio personalizzato mostrato nel banner. Lascia vuoto per usare il testo predefinito.",
   "_comment_banner": "Se impostato su true Forza la visibilità del banner anche se status e' online. true/false.",
   "_comment_bannerType": "Colore banner: info (blu), warning (giallo/arancione), error (rosso)",
-  "status": "issue",
+  "status": "Offline",
   "message": "Dal 05 luglio al 10 lugio il sito potrebbe impedirti l'accesso per cause tecniche (cifrare e/o cambiare il tuo username per una maggior sicurezza)",
   "banner": true,
   "bannerType": "error"
