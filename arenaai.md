@@ -258,6 +258,34 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.9.0] — Privacy Policy, guida utenti Supabase, check GDPR esteso
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Privacy / GDPR
+- Creato `docs/PRIVACY.md`: informativa privacy completa conforme al GDPR per l'uso didattico dell'app.
+  - Titolare del trattamento, dati raccolti, finalità, base giuridica, periodo di conservazione.
+  - Diritti degli interessati (accesso, rettifica, cancellazione, opposizione, portabilità).
+  - Elenco subfornitori (Supabase, Vercel, imgBB, GitHub) e trasferimenti dati.
+  - Cookie, localStorage e misure di sicurezza.
+- `Login.jsx`: aggiunta **seconda checkbox obbligatoria** per la Privacy Policy.
+  - Nuovo stato `acceptedPrivacy` con persistenza `localStorage` (`tcr-privacy-accepted`).
+  - Link a `PRIVACY.md` su GitHub accanto agli altri documenti legali.
+  - Messaggio di errore aggiornato per includere il mancato consenso privacy.
+- `InfoMenu.jsx`: aggiunto link a `PRIVACY.md` nella sezione Documentazione.
+
+#### Documentazione
+- Creato `docs/GUIDA-SUPABASE-USER.md`: guida passo-passo per l'amministratore su come aggiungere utenti autorizzati alla tabella `utenti_autorizzati` di Supabase.
+  - Accesso alla dashboard Supabase.
+  - Inserimento via Table Editor (modo facile) e via SQL Editor (modo avanzato/batch).
+  - Formato identificativo `cognome.nome`, ruoli `editor`/`viewer`, campo `bannato`.
+  - Esempi con nomi fittizi.
+  - Verifica inserimento e troubleshooting.
+
+#### Modifiche
+- Bump versione schematica a **0.9.0** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.8.0] — Migrazione utenti autorizzati/bannati da file locali a Supabase (GDPR)
 - **Autore:** PiBOH
 - **Data:** 2026-07-04

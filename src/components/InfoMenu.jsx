@@ -6,6 +6,7 @@ const DOCS = [
   { label: '⚠️ DISCLAIMER.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/DISCLAIMER.md' },
   { label: '📋 LIMITATIONS.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/LIMITATIONS.md' },
   { label: '📋 CODE OF CONDUCT.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/CODE%20OF%20CONDUCT.md' },
+  { label: '🛡️ PRIVACY.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/PRIVACY.md' },
   { label: '📜 CHANGELOG.md', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/CHANGELOG.md' },
   { label: '📄 LICENSE', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/LICENSE' },
 ];
@@ -51,7 +52,7 @@ export default function InfoMenu({ theme }) {
         >
           <div className="p-3 border-b border-gray-700/30">
             <div className="font-bold text-sm">📚 tcr-notes</div>
-            <div className="text-xs opacity-70 mt-0.5">Versione 0.8.0</div>
+            <div className="text-xs opacity-70 mt-0.5">Versione 0.9.0</div>
             <div className="text-xs opacity-70">Autore: PiBOH</div>
           </div>
           <div className="p-2">

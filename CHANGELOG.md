@@ -7,6 +7,17 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-07-05
+
+### Aggiunto
+- `docs/PRIVACY.md`: informativa sulla privacy completa conforme al GDPR, con titolare del trattamento, dati raccolti, finalità, base giuridica, periodo di conservazione, diritti degli interessati, elenco subfornitori (Supabase, Vercel, imgBB, GitHub) e cookie/localStorage.
+- `docs/GUIDA-SUPABASE-USER.md`: guida passo-passo per l'amministratore su come aggiungere utenti autorizzati nella tabella `utenti_autorizzati` di Supabase (Table Editor e SQL Editor).
+- `Login.jsx`: seconda checkbox obbligatoria per l'accettazione della Privacy Policy (`PRIVACY.md`), con persistenza in `localStorage` (`tcr-privacy-accepted`).
+- `InfoMenu.jsx`: aggiunto link a `PRIVACY.md` nella sezione Documentazione.
+
+### Modificato
+- Bump versione a **0.9.0** in `package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`.
+
 ## [0.8.0] - 2026-07-04
 
 ### Sicurezza

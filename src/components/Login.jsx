@@ -16,6 +16,9 @@ export default function Login({ onLogin, theme }) {
   const [acceptedDocs, setAcceptedDocs] = useState(() => {
     return localStorage.getItem('tcr-docs-accepted') === 'true';
   });
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(() => {
+    return localStorage.getItem('tcr-privacy-accepted') === 'true';
+  });
   const [error, setError] = useState('');
 
   // Stato app (manutenzione, test, ecc.)
@@ -42,6 +45,11 @@ export default function Login({ onLogin, theme }) {
 
     if (!acceptedDocs) {
       setError('Devi confermare di aver letto SECURITY.md, DISCLAIMER.md e CODE OF CONDUCT.md per proseguire.');
+      return;
+    }
+
+    if (!acceptedPrivacy) {
+      setError('Devi confermare di aver letto e accettato l\'Informativa sulla Privacy (PRIVACY.md) per proseguire.');
       return;
     }
 
@@ -78,6 +86,11 @@ export default function Login({ onLogin, theme }) {
   const handleAcceptChange = (checked) => {
     setAcceptedDocs(checked);
     localStorage.setItem('tcr-docs-accepted', checked ? 'true' : 'false');
+  };
+
+  const handlePrivacyChange = (checked) => {
+    setAcceptedPrivacy(checked);
+    localStorage.setItem('tcr-privacy-accepted', checked ? 'true' : 'false');
   };
 
   // Determina se mostrare il banner
@@ -201,7 +214,7 @@ export default function Login({ onLogin, theme }) {
             />
           </div>
 
-          {/* CHECKBOX OBBLIGATORIO */}
+          {/* CHECKBOX DOCUMENTI LEGALI */}
           <div className="flex items-start gap-2">
             <input
               id="accept-docs"
@@ -247,6 +260,35 @@ export default function Login({ onLogin, theme }) {
                 CODE OF CONDUCT.md
               </a>
               . *
+            </label>
+          </div>
+
+          {/* CHECKBOX PRIVACY POLICY */}
+          <div className="flex items-start gap-2">
+            <input
+              id="accept-privacy"
+              type="checkbox"
+              checked={acceptedPrivacy}
+              onChange={(e) => handlePrivacyChange(e.target.checked)}
+              className="mt-1 w-4 h-4 accent-blue-600 cursor-pointer"
+            />
+            <label
+              htmlFor="accept-privacy"
+              className={`text-sm cursor-pointer ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}
+            >
+              Dichiaro di aver letto e compreso l'{' '}
+              <a
+                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/PRIVACY.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Informativa sulla Privacy (PRIVACY.md)
+              </a>
+              {' '}e acconsento al trattamento dei miei dati personali per le finalità descritte. *
             </label>
           </div>
 
