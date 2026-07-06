@@ -130,7 +130,7 @@ cd android
 # ./gradlew assembleRelease
 ```
 
-> Nota: il file `capacitor.config.json` è già presente nel repository con la configurazione predefinita. Non è necessario eseguire `npx cap init`.
+> Nota: il file `capacitor.config.json` è già presente nel repository con la configurazione predefinita. Le icone dell'app (`android-assets/`) sono anch'esse pre-generate dal `logo.png`. Non è necessario eseguire `npx cap init` né generare le icone manualmente.
 
 L'APK si troverà in:
 ```

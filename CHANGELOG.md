@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.2] - 2026-07-05
+
+### Corretto
+- Icona APK Android: generata cartella `android-assets/` con icone in tutte le risoluzioni. Il workflow copia le icone nelle cartelle `mipmap-*` prima del build.
+- Bump versione a **0.11.2** ovunque.
+
 ## [0.11.1] - 2026-07-05
 
 ### Corretto

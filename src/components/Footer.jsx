@@ -54,7 +54,7 @@ export default function Footer({ theme }) {
           Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)
         </span>
         <span className="opacity-60 shrink-0">
-          v0.11.1 · PiBOH
+          v0.11.2 · PiBOH
         </span>
       </div>
       {/* Seconda riga: status + avviso */}

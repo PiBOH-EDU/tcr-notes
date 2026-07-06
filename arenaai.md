@@ -258,6 +258,17 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.11.2] — Fix icona APK Android (logo al posto di Capacitor)
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Corretto
+- Generata cartella `android-assets/` con icone Android in tutte le risoluzioni (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi) dal `logo.png`.
+- `.github/workflows/build-apk.yml`: dopo `npx cap add android`, le icone vengono copiate nelle cartelle `mipmap-*` prima del build.
+- `docs/GUIDA-APK.md`: aggiornata sezione icona.
+- Bump versione schematica a **0.11.2** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.11.1] — Fix APK cache, occhio password, refresh admin, logo sync, footer status
 - **Autore:** PiBOH
 - **Data:** 2026-07-05
