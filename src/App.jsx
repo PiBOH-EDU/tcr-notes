@@ -42,6 +42,17 @@ function App() {
     return () => window.removeEventListener('popstate', checkPath);
   }, []);
 
+  // Capacitor: ricarica quando l'app torna in foreground (evita cache WebView)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
+      import('@capacitor/app').then(({ App }) => {
+        App.addListener('appStateChange', ({ isActive }) => {
+          if (isActive) window.location.reload();
+        });
+      }).catch(() => {});
+    }
+  }, []);
+
   const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
 
   const handleLogin = (name, userRole = 'editor') => {

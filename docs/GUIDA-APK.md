@@ -95,42 +95,53 @@ Se preferisci compilare l'APK sul tuo computer:
 - Java JDK 17
 - Android Studio (per l'Android SDK)
 
-### Passaggi
+### Passaggi (Windows CMD)
 
-```bash
-# 1. Clona il repository
+> ⚠️ **Importante:** dopo ogni modifica a `capacitor.config.json`, `logo.png` o qualsiasi file di configurazione Capacitor, devi sempre eseguire **`npx cap sync`** prima di buildare. Altrimenti le modifiche non vengono copiate nel progetto Android.
+
+Apri **CMD** o **PowerShell** nella cartella del progetto:
+
+```cmd
+:: 1. Clona il repository
 git clone https://github.com/PiBOH-EDU/tcr-notes.git
 cd tcr-notes
 
-# 2. Installa dipendenze
+:: 2. Installa dipendenze
 npm install
 
-# 3. Build dell'app web
+:: 3. Build dell'app web
 npm run build
 
-# 4. Installa Capacitor
-npm install @capacitor/core @capacitor/android @capacitor/cli
+:: 4. Installa Capacitor e plugin
+npm install @capacitor/core @capacitor/android @capacitor/cli @capacitor/browser @capacitor/app
 
-# 5. Aggiungi la piattaforma Android
+:: 5. Aggiungi la piattaforma Android
 npx cap add android
 
-# 6. Sincronizza
+:: 6. Sincronizza (OBBLIGATORIO dopo ogni modifica al config)
 npx cap sync
 
-# 7. Apri in Android Studio (opzionale, per debug)
+:: 7. Apri in Android Studio (opzionale, per debug)
 npx cap open android
 
-# 8. Build da riga di comando
+:: 8. Build da riga di comando
 cd android
 
-# Se non hai un keystore, usa debug:
-./gradlew assembleDebug
+:: Se non hai un keystore, usa debug (consigliato):
+gradlew assembleDebug
 
-# Se hai un keystore e vuoi firmare l'APK:
-# ./gradlew assembleRelease
+:: Se hai un keystore e vuoi firmare l'APK:
+:: gradlew assembleRelease
 ```
 
 > Nota: il file `capacitor.config.json` è già presente nel repository con la configurazione predefinita. Le icone dell'app (`android-assets/`) sono anch'esse pre-generate dal `logo.png`. Non è necessario eseguire `npx cap init` né generare le icone manualmente.
+
+L'APK si troverà in:
+```
+android\app\build\outputs\apk\debug\app-debug.apk
+```
+
+> 💡 **Perché l'app carica sempre l'ultima versione:** il plugin `@capacitor/app` è configurato per ricaricare automaticamente la pagina quando l'app torna in primo piano (foreground). Inoltre, il `capacitor.config.json` punta direttamente al sito live `https://tcr-notes.vercel.app`.
 
 L'APK si troverà in:
 ```
@@ -192,67 +203,69 @@ Per aggiornare l'app stessa (es. nuova icona, nuove funzionalità native):
 
 Se il build fallisce con errori strani, file mancanti o comportamenti anomali, la causa più comune è la **cache corrotta** di npm o Gradle. Ecco come pulirla.
 
-### Pulizia cache npm
+### Pulizia cache npm (Windows)
 
-```bash
-# Pulisci la cache di npm
+```cmd
+:: Pulisci la cache di npm
 npm cache clean --force
 
-# Rimuovi node_modules e reinstalla tutto
-cd /percorso/del/progetto
-rm -rf node_modules package-lock.json
+:: Rimuovi node_modules e reinstalla tutto
+cd C:\percorso\del\progetto
+rmdir /s /q node_modules
+del package-lock.json
 npm install
 ```
 
-### Pulizia build Gradle
+### Pulizia build Gradle (Windows)
 
-```bash
-# Entra nella cartella Android
+```cmd
+:: Entra nella cartella Android
 cd android
 
-# Pulisci i file di build generati
-./gradlew clean
+:: Pulisci i file di build generati
+gradlew clean
 
-# (Opzionale) Rimuovi completamente la cartella build
-rm -rf app/build
+:: (Opzionale) Rimuovi completamente la cartella build
+rmdir /s /q app\build
 ```
 
-### Reset completo piattaforma Android
+### Reset completo piattaforma Android (Windows)
 
 Se i comandi sopra non bastano, puoi **rimuovere e ricreare** la piattaforma Android:
 
-```bash
-# Dalla root del progetto
+```cmd
+:: Dalla root del progetto
 npx cap rm android
 npx cap add android
 npx cap sync
 ```
 
-> ⚠️ Attenzione: questo elimina eventuali modifiche manuali fatte nella cartella `android/` (es. configurazioni custom nel `AndroidManifest.xml`). Usalo solo se strettamente necessario.
+> ⚠️ Attenzione: questo elimina eventuali modifiche manuali fatte nella cartella `android\` (es. configurazioni custom nel `AndroidManifest.xml`). Usalo solo se strettamente necessario.
 
-### Comando "nucleare" (tutto in uno)
+### Comando "nucleare" (tutto in uno, Windows)
 
 Se vuoi essere sicuro al 100% di partire da zero:
 
-```bash
-cd /percorso/del/progetto
+```cmd
+cd C:\percorso\del\progetto
 
-# 1. Pulizia npm
-rm -rf node_modules package-lock.json
+:: 1. Pulizia npm
+rmdir /s /q node_modules
+del package-lock.json
 npm cache clean --force
 npm install
 
-# 2. Build web
+:: 2. Build web
 npm run build
 
-# 3. Pulizia Android
+:: 3. Pulizia Android
 npx cap rm android
 npx cap add android
 npx cap sync
 
-# 4. Build APK
+:: 4. Build APK
 cd android
-./gradlew assembleRelease
+gradlew assembleDebug
 ```
 
 ---

@@ -258,6 +258,20 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.11.3] — Fix APK cache (reload foreground), sidebar mobile auto-open, footer una riga, guida Windows
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Corretto
+- **APK cache**: aggiunto plugin `@capacitor/app` + listener `appStateChange` che ricarica la pagina quando l'app torna in foreground (evita cache WebView).
+- `index.html`: aggiunti meta tag `Cache-Control: no-cache` per prevenire cache del WebView.
+- **Sidebar mobile**: rimosso `setSidebarOpen(false)` da `selectTitle` — ora quando si seleziona un titolo su mobile, il drawer rimane aperto per mostrare i capitoli.
+- **Footer**: tutto su una sola riga — sinistra copyright, centro avviso dati personali (o status badge se presente), destra versione.
+- `docs/GUIDA-APK.md`: aggiornata con comandi Windows CMD, avviso `npx cap sync` obbligatorio, e nota sul plugin `@capacitor/app`.
+- `.github/workflows/build-apk.yml`: aggiunto `@capacitor/app` all'installazione.
+- Bump versione schematica a **0.11.3** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.11.2] — Fix icona APK Android (logo al posto di Capacitor)
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

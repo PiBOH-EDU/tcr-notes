@@ -7,6 +7,15 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.3] - 2026-07-05
+
+### Corretto
+- APK cache: plugin `@capacitor/app` ricarica l'app in foreground + meta no-cache.
+- Sidebar mobile: rimane aperta quando si seleziona un titolo (mostra capitoli).
+- Footer: tutto su una sola riga (copyright / avviso / versione).
+- Guida APK: comandi Windows CMD, avviso `npx cap sync` obbligatorio.
+- Bump versione a **0.11.3** ovunque.
+
 ## [0.11.2] - 2026-07-05
 
 ### Corretto

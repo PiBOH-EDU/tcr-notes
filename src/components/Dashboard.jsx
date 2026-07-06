@@ -288,7 +288,7 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
     setSelectedTitle(id);
     setSelectedChapter(null);
     setView('editor');
-    setSidebarOpen(false);
+    // Su mobile il drawer rimane aperto per mostrare i capitoli
   };
 
   const selectChapter = (id) => {
