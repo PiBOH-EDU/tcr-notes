@@ -54,15 +54,15 @@ export default function Footer({ theme }) {
           Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)
         </span>
         <span className="opacity-60 shrink-0">
-          v0.11.0 · PiBOH
+          v0.11.1 · PiBOH
         </span>
-        {showStatus ? (
-          statusBadge()
-        ) : (
-          <span className={`shrink-0 ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
-            ⚠️ Non inserire dati personali negli appunti
-          </span>
-        )}
+      </div>
+      {/* Seconda riga: status + avviso */}
+      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 max-w-7xl mx-auto mt-0.5">
+        {showStatus && statusBadge()}
+        <span className={`shrink-0 ${theme === 'dark' ? 'text-yellow-500/70' : 'text-yellow-700/70'}`}>
+          ⚠️ Non inserire dati personali negli appunti
+        </span>
       </div>
     </footer>
   );

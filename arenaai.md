@@ -258,6 +258,20 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.11.1] — Fix APK cache, occhio password, refresh admin, logo sync, footer status
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Corretto
+- `capacitor.config.json`: aggiunto `server.url: "https://tcr-notes.vercel.app"` — l'APK ora carica SEMPRE la versione live del sito, non quella statica al momento del build.
+- `Login.jsx`: rimosso banner stato app dalla schermata di login (ora mostrato solo nel footer).
+- `Login.jsx`: aggiunto toggle "👁️ Mostra/Nascondi password" nell'input password.
+- `Footer.jsx`: ripristinata scritta "⚠️ Non inserire dati personali negli appunti" — ora visibile sempre, insieme allo status badge quando presente.
+- `Admin.jsx`: aggiunto pulsante "🔄 Aggiorna" nell'header per ricaricare i dati manualmente.
+- Logo sincronizzato dal repository remoto (`logo.png` in root e `public/`).
+- Bump versione schematica a **0.11.1** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.11.0] — Logo app, link browser esterno, sidebar auto-close, APK in menu, status footer, cursore preciso, testo realtime
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

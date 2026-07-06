@@ -3,6 +3,8 @@
   "appName": "tcr-notes",
   "webDir": "dist",
   "server": {
+    "url": "https://tcr-notes.vercel.app",
+    "cleartext": false,
     "androidScheme": "https"
   }
 }

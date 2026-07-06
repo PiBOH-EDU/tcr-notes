@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { getRecentHistory } from '../lib/storage';
 import { listAuthorizedUsers, getUserRoleFromList } from '../lib/auth';
@@ -38,6 +38,14 @@ export default function Admin({ theme }) {
     setAuthenticated(false);
     setPassword('');
   };
+
+  const handleRefresh = () => {
+    if (!authenticated) return;
+    setLoading(true);
+    loadDataRef.current();
+  };
+
+  const loadDataRef = useRef(null);
 
   // Carica dati dashboard
   useEffect(() => {
@@ -95,6 +103,7 @@ export default function Admin({ theme }) {
       setLoading(false);
     };
 
+    loadDataRef.current = loadData;
     loadData();
 
     // Check Supabase ogni 30 secondi
@@ -218,6 +227,13 @@ export default function Admin({ theme }) {
           <p className="text-xs opacity-60 mt-0.5">Panoramica completa sistema tcr-notes</p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={handleRefresh}
+            className="text-xs px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white transition"
+            title="Aggiorna dati"
+          >
+            🔄 Aggiorna
+          </button>
           <button
             onClick={() => { window.location.pathname = '/'; }}
             className="text-xs px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"

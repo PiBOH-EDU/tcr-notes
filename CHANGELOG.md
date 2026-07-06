@@ -7,6 +7,17 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-07-05
+
+### Corretto
+- APK: `server.url` in `capacitor.config.json` — l'app carica sempre la versione live del sito.
+- Login: rimosso banner stato (ora solo nel footer).
+- Login: aggiunto toggle "👁️ Mostra/Nascondi password".
+- Footer: ripristinata scritta "⚠️ Non inserire dati personali".
+- Admin: aggiunto pulsante "🔄 Aggiorna".
+- Logo sincronizzato dal repository remoto.
+- Bump versione a **0.11.1** ovunque.
+
 ## [0.11.0] - 2026-07-05
 
 ### Aggiunto
