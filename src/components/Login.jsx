@@ -115,162 +115,206 @@ export default function Login({ onLogin, theme }) {
   };
 
   return (
-    <div className="w-full max-w-md md:max-w-xl px-4">
+    <div className="w-full min-h-screen flex flex-col md:flex-row">
+      {/* Colonna sinistra — Branding (solo desktop) */}
       <div
-        className={`w-full p-8 md:p-10 rounded-2xl shadow-2xl border ${
+        className={`hidden md:flex md:w-1/2 relative overflow-hidden items-center justify-center ${
           theme === 'dark'
-            ? 'bg-gray-800 border-gray-700'
-            : 'bg-white border-gray-200'
+            ? 'bg-gradient-to-br from-blue-900 via-gray-900 to-gray-800'
+            : 'bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600'
         }`}
       >
-        {/* Banner stato app */}
-        {showBanner && (
-          <div className={`mb-4 md:mb-6 p-3 rounded-lg text-sm md:text-base border ${bannerColors()}`}>
-            <div className="flex items-start gap-2">
-              <span className="text-lg md:text-xl shrink-0">{statusIcon()}</span>
-              <div>
-                <strong className="block">
-                  {appState.status === 'maintenance' && 'Manutenzione in corso'}
-                  {appState.status === 'testing' && 'Modalità test'}
-                  {appState.status === 'issue' && 'Problema noto'}
-                  {appState.status === 'offline' && 'App temporaneamente offline'}
-                  {appState.status === 'online' && 'Avviso'}
-                </strong>
-                {appState.message && (
-                  <span className="opacity-90">{appState.message}</span>
-                )}
-              </div>
-            </div>
+        {/* Forme decorative */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/10 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 w-48 h-48 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl" />
+
+        {/* Contenuto branding */}
+        <div className="relative z-10 text-center text-white px-12">
+          <div className="text-8xl mb-6">📚</div>
+          <h1 className="text-4xl font-bold mb-3">tcr-notes</h1>
+          <p className="text-lg opacity-90 mb-2">Una classe, Tanti appunti</p>
+          <p className="text-lg opacity-90 mb-8">Un unico diario</p>
+          <div className="flex items-center justify-center gap-3 text-sm opacity-70">
+            <span>🎓 Classe 1FT</span>
+            <span>·</span>
+            <span>ITT "Barsanti"</span>
+            <span>·</span>
+            <span>A.S. 2025/2026</span>
           </div>
-        )}
+        </div>
+      </div>
 
-        <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-3 text-center">📚 tcr-notes</h1>
-        <p className="text-sm md:text-base text-center mb-6 md:mb-8 opacity-80">
-          Una classe, Tanti appunti, Un unico diario
-        </p>
-
-        <form onSubmit={handleSubmit} className={`space-y-4 md:space-y-5 ${isOffline ? 'opacity-50 pointer-events-none' : ''}`}>
-          {/* NOME/I */}
-          <div>
-            <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Nome (o nomi)</label>
-            <input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
-                theme === 'dark'
-                  ? 'bg-gray-700 border-gray-600 text-white'
-                  : 'bg-gray-50 border-gray-300 text-gray-900'
-              }`}
-              placeholder="Mario"
-            />
-            <p className={`text-xs md:text-sm mt-1 md:mt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-              Se hai più nomi, scrivili tutti attaccati (es. "AnnaMaria" o "PaoloGiuseppe")
-            </p>
-          </div>
-
-          {/* COGNOME */}
-          <div>
-            <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Cognome</label>
-            <input
-              type="text"
-              value={cognome}
-              onChange={(e) => setCognome(e.target.value)}
-              className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
-                theme === 'dark'
-                  ? 'bg-gray-700 border-gray-600 text-white'
-                  : 'bg-gray-50 border-gray-300 text-gray-900'
-              }`}
-              placeholder="Rossi"
-            />
-          </div>
-
-          {/* PASSWORD */}
-          <div>
-            <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Password di classe</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
-                theme === 'dark'
-                  ? 'bg-gray-700 border-gray-600 text-white'
-                  : 'bg-gray-50 border-gray-300 text-gray-900'
-              }`}
-              placeholder="••••••••"
-            />
-          </div>
-
-          {/* CHECKBOX DOCUMENTI LEGALI E PRIVACY */}
-          <div className="flex items-start gap-2">
-            <input
-              id="accept-docs"
-              type="checkbox"
-              checked={acceptedDocs}
-              onChange={(e) => handleAcceptChange(e.target.checked)}
-              className="mt-1 w-4 h-4 md:w-5 md:h-5 accent-blue-600 cursor-pointer"
-            />
-            <label
-              htmlFor="accept-docs"
-              className={`text-sm md:text-base cursor-pointer ${
-                theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-              }`}
-            >
-              Dichiaro di aver letto e compreso i file{' '}
-              <a
-                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/SECURITY.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                SECURITY.md
-              </a>
-              ,{' '}
-              <a
-                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/DISCLAIMER.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                DISCLAIMER.md
-              </a>
-              ,{' '}
-              <a
-                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/CODE%20OF%20CONDUCT.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                CODE OF CONDUCT.md
-              </a>
-              {' '}e l'{' '}
-              <a
-                href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/PRIVACY.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Informativa sulla Privacy (PRIVACY.md)
-              </a>
-              . Acconsento al trattamento dei miei dati personali per le finalità descritte. *
-            </label>
-          </div>
-
-          {error && (
-            <div className="text-red-500 text-sm md:text-base text-center font-medium">{error}</div>
-          )}
-
-          <button
-            type="submit"
-            className="w-full py-2.5 md:py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition text-sm md:text-base"
+      {/* Colonna destra — Form di login */}
+      <div className={`w-full md:w-1/2 flex items-center justify-center px-4 py-8 md:px-8 ${
+        theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
+        <div className="w-full max-w-md">
+          <div
+            className={`w-full p-8 md:p-10 rounded-2xl shadow-2xl border ${
+              theme === 'dark'
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-white border-gray-200'
+            }`}
           >
-            Accedi
-          </button>
-        </form>
+            {/* Banner stato app */}
+            {showBanner && (
+              <div className={`mb-4 md:mb-6 p-3 rounded-lg text-sm md:text-base border ${bannerColors()}`}>
+                <div className="flex items-start gap-2">
+                  <span className="text-lg md:text-xl shrink-0">{statusIcon()}</span>
+                  <div>
+                    <strong className="block">
+                      {appState.status === 'maintenance' && 'Manutenzione in corso'}
+                      {appState.status === 'testing' && 'Modalità test'}
+                      {appState.status === 'issue' && 'Problema noto'}
+                      {appState.status === 'offline' && 'App temporaneamente offline'}
+                      {appState.status === 'online' && 'Avviso'}
+                    </strong>
+                    {appState.message && (
+                      <span className="opacity-90">{appState.message}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Header mobile (nascosto su desktop) */}
+            <div className="md:hidden text-center mb-6">
+              <div className="text-5xl mb-2">📚</div>
+              <h1 className="text-2xl font-bold mb-1">tcr-notes</h1>
+              <p className="text-sm opacity-70">Una classe, Tanti appunti, Un unico diario</p>
+            </div>
+
+            {/* Header desktop */}
+            <div className="hidden md:block mb-6">
+              <h2 className="text-2xl font-bold">Benvenuto</h2>
+              <p className="text-sm opacity-70 mt-1">Accedi con le tue credenziali</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className={`space-y-4 md:space-y-5 ${isOffline ? 'opacity-50 pointer-events-none' : ''}`}>
+              {/* NOME/I */}
+              <div>
+                <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Nome (o nomi)</label>
+                <input
+                  type="text"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}
+                  placeholder="Mario"
+                />
+                <p className={`text-xs md:text-sm mt-1 md:mt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Se hai più nomi, scrivili tutti attaccati (es. "AnnaMaria" o "PaoloGiuseppe")
+                </p>
+              </div>
+
+              {/* COGNOME */}
+              <div>
+                <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Cognome</label>
+                <input
+                  type="text"
+                  value={cognome}
+                  onChange={(e) => setCognome(e.target.value)}
+                  className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}
+                  placeholder="Rossi"
+                />
+              </div>
+
+              {/* PASSWORD */}
+              <div>
+                <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Password di classe</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white'
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  }`}
+                  placeholder="••••••••"
+                />
+              </div>
+
+              {/* CHECKBOX DOCUMENTI LEGALI E PRIVACY */}
+              <div className="flex items-start gap-2">
+                <input
+                  id="accept-docs"
+                  type="checkbox"
+                  checked={acceptedDocs}
+                  onChange={(e) => handleAcceptChange(e.target.checked)}
+                  className="mt-1 w-4 h-4 md:w-5 md:h-5 accent-blue-600 cursor-pointer"
+                />
+                <label
+                  htmlFor="accept-docs"
+                  className={`text-sm md:text-base cursor-pointer ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                >
+                  Dichiaro di aver letto e compreso i file{' '}
+                  <a
+                    href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/SECURITY.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    SECURITY.md
+                  </a>
+                  ,{' '}
+                  <a
+                    href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/DISCLAIMER.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    DISCLAIMER.md
+                  </a>
+                  ,{' '}
+                  <a
+                    href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/CODE%20OF%20CONDUCT.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    CODE OF CONDUCT.md
+                  </a>
+                  {' '}e l'{' '}
+                  <a
+                    href="https://github.com/PiBOH-EDU/tcr-notes/blob/main/docs/PRIVACY.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Informativa sulla Privacy (PRIVACY.md)
+                  </a>
+                  . Acconsento al trattamento dei miei dati personali per le finalità descritte. *
+                </label>
+              </div>
+
+              {error && (
+                <div className="text-red-500 text-sm md:text-base text-center font-medium">{error}</div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-2.5 md:py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition text-sm md:text-base"
+              >
+                Accedi
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
