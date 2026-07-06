@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -36,7 +36,7 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
-      - name: Copy custom app icons
+      - name: Copy custom app icons (overwrite all Capacitor defaults)
         run: cp -r android-assets/* android/app/src/main/res/
 
       - name: Sync Capacitor

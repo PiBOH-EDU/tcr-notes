@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.4] - 2026-07-05
+
+### Corretto
+- Icone APK complete: generate icone per tutte le densità (mipmap + drawable + drawable-land) sovrascrivendo tutte le icone di default di Capacitor.
+- Bump versione a **0.11.4** ovunque.
+
 ## [0.11.3] - 2026-07-05
 
 ### Corretto
