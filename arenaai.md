@@ -258,6 +258,39 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.10.1] — Fix package ID APK Android
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Modifiche
+- `.github/workflows/build-apk.yml`: package ID cambiato da `com.piboh.tcrnotes` a `com.tcrnotes.app`.
+- `docs/GUIDA-APK.md`: aggiornati tutti i riferimenti al package ID.
+- Bump versione schematica a **0.10.1** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
+### [0.10.0] — Login desktop, PR template, ordinamento capitoli, TWA Android, fix realtime, fix admin, fix Supabase status
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Aggiunto
+- **Login responsive desktop**: interfaccia login separata per desktop (`md:` breakpoint) — card più larga, spaziature maggiori, layout più imponente. Mobile rimane invariato.
+- **`.github/PULL_REQUEST_TEMPLATE/pull_request_template.md`**: template custom per le pull request.
+- **Ordinamento capitoli** (issue #2): dropdown con 3 opzioni — Alfabetico, Più vecchi prima, Più recenti prima. Default: **Più recenti prima**.
+- **APK Android** (issue #1): workflow GitHub Actions `build-apk.yml` con Capacitor per generare APK. Guida dedicata `docs/GUIDA-APK.md`.
+- **Favicon PNG**: `public/favicon.png` generata da `favicon.svg`.
+- **Admin — stato workflow GitHub**: sezione nell'admin dashboard che mostra lo stato degli ultimi workflow run via API GitHub.
+- **Admin — bannati visibili**: colonna `bannato` nella tabella utenti autorizzati dell'admin.
+
+#### Modificato
+- **Admin — accesso diretto e login semplificato**: l'admin accede a `/admin` direttamente con solo password `VITE_ADMIN_PASSWORD`, senza passare dal login studente e senza inserire nome/cognome.
+- **Admin — persistenza auth**: fix del bug per cui ricaricando `/admin` richiedeva il login. Ora l'admin rimane autenticato tramite `localStorage` (`tcr-admin-auth`).
+- **Supabase status check**: fix del controllo stato — ora usa `Promise.race` con `fetch` diretto e `AbortController` (timeout 3s) per rilevare correttamente la connessione assente.
+- **Realtime posizione utenti**: fix del bug che mostrava sempre "Homepage" — ora il broadcast `typing` include anche `titleName` e `chapterName`, così il ricevente mostra la posizione corretta senza dipendere dalla lista capitoli caricata.
+- **Cursore remoto**: fix del bug per cui il cursore remoto non appariva visivamente nel testo — ora mostra una linea verticale colorata posizionata alla riga approssimativa del cursore.
+- Sincronizzati `README.md` (ASCII art aggiornata) e `public/state.json` dal repository remoto.
+- Bump versione schematica a **0.10.0** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.9.1] — Checkbox unica login per documenti legali + Privacy Policy
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

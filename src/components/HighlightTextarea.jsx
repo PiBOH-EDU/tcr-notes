@@ -42,7 +42,23 @@ const HighlightTextarea = forwardRef(function HighlightTextarea(
       pre.scrollTop = e.target.scrollTop;
       pre.scrollLeft = e.target.scrollLeft;
     }
+    // Sincronizza anche il cursore remoto
+    const cursorOverlay = e.target.parentElement.querySelector('.remote-cursor-overlay');
+    if (cursorOverlay) {
+      cursorOverlay.scrollTop = e.target.scrollTop;
+      cursorOverlay.scrollLeft = e.target.scrollLeft;
+    }
   };
+
+  // Calcola la riga del cursore remoto
+  const getRemoteCursorRow = () => {
+    if (!remoteCursor || remoteCursor.position == null) return 0;
+    const textBeforeCursor = value.slice(0, remoteCursor.position);
+    return (textBeforeCursor.match(/\n/g) || []).length;
+  };
+
+  const remoteRow = getRemoteCursorRow();
+  const lineHeightEm = 1.625; // leading-relaxed
 
   return (
     <div
@@ -59,10 +75,23 @@ const HighlightTextarea = forwardRef(function HighlightTextarea(
         }`}
         dangerouslySetInnerHTML={{ __html: highlight(value) + '<br>' }}
       />
-      {/* Indicatore cursore remoto */}
+
+      {/* Overlay cursore remoto (sincronizzato con scroll) */}
       {remoteCursor && (
-        <div className="absolute top-2 right-2 z-10 px-2 py-1 rounded-full text-[10px] font-medium bg-blue-600/80 text-white backdrop-blur-sm animate-pulse">
-          ✍️ {remoteCursor.name} al carattere {remoteCursor.position}
+        <div
+          className="remote-cursor-overlay absolute inset-0 overflow-hidden m-0 pointer-events-none select-none"
+          style={{ padding: 'inherit' }}
+        >
+          {/* Linea verticale alla riga del cursore */}
+          <div
+            className="absolute left-0 right-0 flex items-center"
+            style={{ top: `${remoteRow * lineHeightEm}em`, height: `${lineHeightEm}em` }}
+          >
+            <div className="w-0.5 h-full bg-blue-500 animate-pulse" />
+            <div className="ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-600 text-white whitespace-nowrap">
+              ✍️ {remoteCursor.name}
+            </div>
+          </div>
         </div>
       )}
 

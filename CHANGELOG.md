@@ -7,6 +7,32 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-07-05
+
+### Modificato
+- Package ID APK Android cambiato in `com.tcrnotes.app` (workflow + guida).
+- Bump versione a **0.10.1** ovunque.
+
+## [0.10.0] - 2026-07-05
+
+### Aggiunto
+- **Login desktop**: card più larga e spaziature maggiori su schermi `md:`+. Mobile invariato.
+- **`.github/PULL_REQUEST_TEMPLATE/pull_request_template.md`**: template custom per le pull request.
+- **Ordinamento capitoli** (issue #2): dropdown con Alfabetico / Più vecchi / Più recenti. Default: **Più recenti prima**.
+- **APK Android** (issue #1): workflow `.github/workflows/build-apk.yml` con Capacitor. Guida `docs/GUIDA-APK.md`.
+- **Favicon PNG**: `public/favicon.png` generata da `favicon.svg`.
+- **Admin — workflow GitHub**: sezione che mostra lo stato degli ultimi workflow run via API GitHub.
+- **Admin — bannati visibili**: colonna stato (Attivo/Bannato) nella tabella utenti autorizzati.
+
+### Modificato
+- **Admin — accesso diretto**: `/admin` accessibile direttamente con solo password, senza login studente.
+- **Admin — persistenza auth**: `localStorage` (`tcr-admin-auth`) mantiene la sessione admin anche dopo refresh.
+- **Supabase status check**: `Promise.race` con timeout 3s rileva correttamente l'offline.
+- **Realtime posizione**: il broadcast include `titleName` e `chapterName`, risolvendo il bug "sempre Homepage".
+- **Cursore remoto**: linea verticale colorata posizionata alla riga del cursore remoto.
+- Sincronizzati `README.md` (ASCII art) e `public/state.json` dal repo remoto.
+- Bump versione a **0.10.0** ovunque.
+
 ## [0.9.1] - 2026-07-05
 
 ### Modificato

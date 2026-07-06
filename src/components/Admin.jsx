@@ -3,9 +3,11 @@ import { supabase } from '../lib/supabase';
 import { getRecentHistory } from '../lib/storage';
 import { listAuthorizedUsers, getUserRoleFromList } from '../lib/auth';
 
-export default function Admin({ theme, user }) {
+export default function Admin({ theme }) {
   const [password, setPassword] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(() => {
+    return localStorage.getItem('tcr-admin-auth') === 'true';
+  });
   const [authError, setAuthError] = useState('');
 
   const [supabaseStatus, setSupabaseStatus] = useState('checking');
@@ -14,6 +16,7 @@ export default function Admin({ theme, user }) {
   const [titles, setTitles] = useState([]);
   const [chapters, setChapters] = useState([]);
   const [authorizedList, setAuthorizedList] = useState([]);
+  const [workflowRuns, setWorkflowRuns] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || '';
@@ -23,10 +26,17 @@ export default function Admin({ theme, user }) {
     e.preventDefault();
     if (ADMIN_PASSWORD && password === ADMIN_PASSWORD) {
       setAuthenticated(true);
+      localStorage.setItem('tcr-admin-auth', 'true');
       setAuthError('');
     } else {
       setAuthError('Password admin errata o non configurata.');
     }
+  };
+
+  const handleAdminLogout = () => {
+    localStorage.removeItem('tcr-admin-auth');
+    setAuthenticated(false);
+    setPassword('');
   };
 
   // Carica dati dashboard
@@ -38,7 +48,12 @@ export default function Admin({ theme, user }) {
 
       // Stato Supabase
       try {
-        await supabase.from('titles').select('id', { head: true, count: 'exact' });
+        const timeout = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('timeout')), 3000)
+        );
+        const check = supabase.from('titles').select('id', { head: true, count: 'exact' });
+        const { error } = await Promise.race([check, timeout]);
+        if (error) throw error;
         setSupabaseStatus('online');
       } catch {
         setSupabaseStatus('offline');
@@ -66,6 +81,17 @@ export default function Admin({ theme, user }) {
         setRecentHistory([]);
       }
 
+      // Workflow GitHub Actions
+      try {
+        const res = await fetch('https://api.github.com/repos/PiBOH-EDU/tcr-notes/actions/runs?per_page=5');
+        if (res.ok) {
+          const data = await res.json();
+          setWorkflowRuns(data.workflow_runs || []);
+        }
+      } catch {
+        setWorkflowRuns([]);
+      }
+
       setLoading(false);
     };
 
@@ -74,7 +100,12 @@ export default function Admin({ theme, user }) {
     // Check Supabase ogni 30 secondi
     const interval = setInterval(async () => {
       try {
-        await supabase.from('titles').select('id', { head: true, count: 'exact' });
+        const timeout = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('timeout')), 3000)
+        );
+        const check = supabase.from('titles').select('id', { head: true, count: 'exact' });
+        const { error } = await Promise.race([check, timeout]);
+        if (error) throw error;
         setSupabaseStatus('online');
       } catch {
         setSupabaseStatus('offline');
@@ -84,52 +115,21 @@ export default function Admin({ theme, user }) {
     return () => clearInterval(interval);
   }, [authenticated]);
 
-  // Presence utenti online
-  useEffect(() => {
-    if (!authenticated) return;
-
-    const presenceChannel = supabase.channel('online-users', {
-      config: { presence: { key: user } },
-    });
-
-    presenceChannel
-      .on('presence', { event: 'sync' }, () => {
-        const state = presenceChannel.presenceState();
-        const users = Object.keys(state).map((name) => ({
-          name,
-          lastSeen: Date.now(),
-        }));
-        setOnlineUsers(users);
-      })
-      .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          await presenceChannel.track({ user, online_at: new Date().toISOString() });
-        }
-      });
-
-    return () => {
-      presenceChannel.untrack();
-      supabase.removeChannel(presenceChannel);
-    };
-  }, [authenticated, user]);
-
   // Ricevi posizione utenti dal broadcast typing
   useEffect(() => {
     if (!authenticated) return;
     const channel = supabase.channel('notes-room');
     channel
       .on('broadcast', { event: 'typing' }, (payload) => {
-        const { user: typingName, titleId, chapterId } = payload.payload;
-        if (typingName !== user) {
-          setOnlineUsers((prev) => {
-            const filtered = prev.filter((u) => u.name !== typingName);
-            return [...filtered, { name: typingName, titleId, chapterId, lastSeen: Date.now() }];
-          });
-        }
+        const { user: typingName, titleId, chapterId, titleName, chapterName } = payload.payload;
+        setOnlineUsers((prev) => {
+          const filtered = prev.filter((u) => u.name !== typingName);
+          return [...filtered, { name: typingName, titleId, chapterId, titleName, chapterName, lastSeen: Date.now() }];
+        });
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [authenticated, user]);
+  }, [authenticated]);
 
   // Pulisci utenti inattivi
   useEffect(() => {
@@ -141,6 +141,8 @@ export default function Admin({ theme, user }) {
   }, [authenticated]);
 
   const getUserLocation = (u) => {
+    if (u.titleName && u.chapterName) return `${u.titleName} > ${u.chapterName}`;
+    if (u.titleName) return u.titleName;
     if (!u.titleId && !u.chapterId) return 'Homepage';
     const title = titles.find((t) => t.id === u.titleId);
     const chapter = chapters.find((c) => c.id === u.chapterId);
@@ -216,14 +218,17 @@ export default function Admin({ theme, user }) {
           <p className="text-xs opacity-60 mt-0.5">Panoramica completa sistema tcr-notes</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-xs px-2 py-1 rounded-full ${theme === 'dark' ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
-            👤 {user}
-          </span>
           <button
             onClick={() => { window.location.pathname = '/'; }}
             className="text-xs px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
           >
             ← Torna all'app
+          </button>
+          <button
+            onClick={handleAdminLogout}
+            className="text-xs px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white transition"
+          >
+            Esci
           </button>
         </div>
       </div>
@@ -320,6 +325,7 @@ export default function Admin({ theme, user }) {
                     <tr>
                       <th className={tableHeader}>Nome</th>
                       <th className={tableHeader}>Ruolo</th>
+                      <th className={tableHeader}>Stato</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -335,11 +341,74 @@ export default function Admin({ theme, user }) {
                             {entry.ruolo === 'viewer' ? '👁️ Viewer' : '✏️ Editor'}
                           </span>
                         </td>
+                        <td className={tableCell}>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                            entry.bannato
+                              ? 'bg-red-500/20 text-red-400'
+                              : 'bg-green-500/20 text-green-400'
+                          }`}>
+                            {entry.bannato ? '🚫 Bannato' : '✅ Attivo'}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* Workflow GitHub Actions */}
+            <div className={cardBase}>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-sm font-bold">🔄 Workflow GitHub</h2>
+                <span className="text-[10px] opacity-50">ultimi 5 run</span>
+              </div>
+              {workflowRuns.length === 0 ? (
+                <div className="text-sm opacity-50 py-4 text-center">Nessun workflow trovato</div>
+              ) : (
+                <div className="overflow-x-auto max-h-80 overflow-y-auto">
+                  <table className="w-full text-left">
+                    <thead className="sticky top-0 bg-inherit">
+                      <tr>
+                        <th className={tableHeader}>Workflow</th>
+                        <th className={tableHeader}>Stato</th>
+                        <th className={tableHeader}>Data</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {workflowRuns.map((run) => (
+                        <tr key={run.id}>
+                          <td className={tableCell}>
+                            <a
+                              href={run.html_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:underline"
+                            >
+                              {run.name}
+                            </a>
+                          </td>
+                          <td className={tableCell}>
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                              run.conclusion === 'success'
+                                ? 'bg-green-500/20 text-green-400'
+                                : run.conclusion === 'failure'
+                                ? 'bg-red-500/20 text-red-400'
+                                : 'bg-yellow-500/20 text-yellow-400'
+                            }`}>
+                              {run.conclusion === 'success' ? '✅ Successo'
+                                : run.conclusion === 'failure' ? '❌ Fallito'
+                                : run.status === 'in_progress' ? '⏳ In corso'
+                                : run.status}
+                            </span>
+                          </td>
+                          <td className={`${tableCell} text-xs opacity-70`}>{formatDate(run.created_at)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* Log Modifiche Recenti */}

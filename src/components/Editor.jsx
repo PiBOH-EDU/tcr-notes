@@ -73,7 +73,7 @@ function MarkdownPre({ children, theme }) {
   );
 }
 
-export default function Editor({ chapterId, titleId, user, role, theme }) {
+export default function Editor({ chapterId, titleId, titleName, chapterName, user, role, theme }) {
   const [content, setContent] = useState('');
   const [lastEditedBy, setLastEditedBy] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
@@ -249,7 +249,7 @@ export default function Editor({ chapterId, titleId, user, role, theme }) {
       broadcastChannelRef.current.send({
         type: 'broadcast',
         event: 'typing',
-        payload: { user, chapterId, titleId, cursorPosition: cursorPos },
+        payload: { user, chapterId, titleId, titleName, chapterName, cursorPosition: cursorPos },
       });
     }
 

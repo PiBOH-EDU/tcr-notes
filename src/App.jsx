@@ -68,12 +68,12 @@ function App() {
         theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'
       }`}
     >
-      {!isAuth ? (
+      {isAdminRoute ? (
+        <Admin theme={theme} />
+      ) : !isAuth ? (
         <div className="flex-1 flex items-center justify-center">
           <Login onLogin={handleLogin} theme={theme} />
         </div>
-      ) : isAdminRoute ? (
-        <Admin theme={theme} user={user} />
       ) : (
         <Dashboard
           user={user}

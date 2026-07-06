@@ -38,6 +38,7 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
   const [editingChapterId, setEditingChapterId] = useState(null);
   const [editTitleValue, setEditTitleValue] = useState('');
   const [editChapterValue, setEditChapterValue] = useState('');
+  const [chapterSort, setChapterSort] = useState('recent-desc'); // 'alphabetical' | 'recent-asc' | 'recent-desc'
 
   const [supabaseStatus, setSupabaseStatus] = useState('checking'); // 'online' | 'offline' | 'checking'
 
@@ -45,7 +46,11 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        const { error } = await supabase.from('titles').select('id', { head: true, count: 'exact' });
+        const timeout = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('timeout')), 3000)
+        );
+        const check = supabase.from('titles').select('id', { head: true, count: 'exact' });
+        const { error } = await Promise.race([check, timeout]);
         if (error) throw error;
         setSupabaseStatus('online');
       } catch {
@@ -292,7 +297,26 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
     setSidebarOpen(false);
   };
 
+  const getSortedChapters = () => {
+    const sorted = [...chapters];
+    switch (chapterSort) {
+      case 'alphabetical':
+        sorted.sort((a, b) => a.name.localeCompare(b.name, 'it'));
+        break;
+      case 'recent-asc':
+        sorted.sort((a, b) => new Date(a.updated_at || 0) - new Date(b.updated_at || 0));
+        break;
+      case 'recent-desc':
+      default:
+        sorted.sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
+        break;
+    }
+    return sorted;
+  };
+
   const getUserLocationLabel = (u) => {
+    if (u.titleName && u.chapterName) return `${u.titleName} > ${u.chapterName}`;
+    if (u.titleName) return u.titleName;
     if (!u.titleId && !u.chapterId) return 'Homepage';
     const title = titles.find((t) => t.id === u.titleId);
     const chapter = chapters.find((c) => c.id === u.chapterId);
@@ -611,7 +635,7 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
           {/* Capitoli */}
           {selectedTitle && (
             <div className="p-3 border-t border-gray-700/30">
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-2">
                 <h2
                   className={`text-xs font-bold uppercase tracking-wider opacity-60 ${
                     theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
@@ -627,6 +651,23 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
                     + Nuovo
                   </button>
                 )}
+              </div>
+
+              {/* Ordinamento capitoli */}
+              <div className="mb-2">
+                <select
+                  value={chapterSort}
+                  onChange={(e) => setChapterSort(e.target.value)}
+                  className={`w-full text-xs rounded border px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                    theme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-gray-200'
+                      : 'bg-white border-gray-300 text-gray-700'
+                  }`}
+                >
+                  <option value="recent-desc">📅 Più recenti prima</option>
+                  <option value="recent-asc">📅 Più vecchi prima</option>
+                  <option value="alphabetical">🔤 Alfabetico (A-Z)</option>
+                </select>
               </div>
 
               {showNewChapter && (
@@ -661,7 +702,7 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
               )}
 
               <div className="space-y-1">
-                {chapters.map((c) => (
+                {getSortedChapters().map((c) => (
                   <div key={c.id}>
                     {editingChapterId === c.id ? (
                       <div className="flex items-center gap-1 px-2 py-1.5">
@@ -789,6 +830,8 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
                 <Editor
                   chapterId={selectedChapter}
                   titleId={selectedTitle}
+                  titleName={titles.find((t) => t.id === selectedTitle)?.name || ''}
+                  chapterName={chapters.find((c) => c.id === selectedChapter)?.name || ''}
                   user={user}
                   role={role}
                   theme={theme}

@@ -115,9 +115,9 @@ export default function Login({ onLogin, theme }) {
   };
 
   return (
-    <div className="w-full max-w-md px-4">
+    <div className="w-full max-w-md md:max-w-xl px-4">
       <div
-        className={`w-full p-8 rounded-2xl shadow-2xl border ${
+        className={`w-full p-8 md:p-10 rounded-2xl shadow-2xl border ${
           theme === 'dark'
             ? 'bg-gray-800 border-gray-700'
             : 'bg-white border-gray-200'
@@ -125,9 +125,9 @@ export default function Login({ onLogin, theme }) {
       >
         {/* Banner stato app */}
         {showBanner && (
-          <div className={`mb-4 p-3 rounded-lg text-sm border ${bannerColors()}`}>
+          <div className={`mb-4 md:mb-6 p-3 rounded-lg text-sm md:text-base border ${bannerColors()}`}>
             <div className="flex items-start gap-2">
-              <span className="text-lg shrink-0">{statusIcon()}</span>
+              <span className="text-lg md:text-xl shrink-0">{statusIcon()}</span>
               <div>
                 <strong className="block">
                   {appState.status === 'maintenance' && 'Manutenzione in corso'}
@@ -144,39 +144,39 @@ export default function Login({ onLogin, theme }) {
           </div>
         )}
 
-        <h1 className="text-2xl font-bold mb-2 text-center">📚 tcr-notes</h1>
-        <p className="text-sm text-center mb-6 opacity-80">
+        <h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-3 text-center">📚 tcr-notes</h1>
+        <p className="text-sm md:text-base text-center mb-6 md:mb-8 opacity-80">
           Una classe, Tanti appunti, Un unico diario
         </p>
 
-        <form onSubmit={handleSubmit} className={`space-y-4 ${isOffline ? 'opacity-50 pointer-events-none' : ''}`}>
+        <form onSubmit={handleSubmit} className={`space-y-4 md:space-y-5 ${isOffline ? 'opacity-50 pointer-events-none' : ''}`}>
           {/* NOME/I */}
           <div>
-            <label className="block text-sm font-medium mb-1">Nome (o nomi)</label>
+            <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Nome (o nomi)</label>
             <input
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
                 theme === 'dark'
                   ? 'bg-gray-700 border-gray-600 text-white'
                   : 'bg-gray-50 border-gray-300 text-gray-900'
               }`}
               placeholder="Mario"
             />
-            <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className={`text-xs md:text-sm mt-1 md:mt-1.5 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               Se hai più nomi, scrivili tutti attaccati (es. "AnnaMaria" o "PaoloGiuseppe")
             </p>
           </div>
 
           {/* COGNOME */}
           <div>
-            <label className="block text-sm font-medium mb-1">Cognome</label>
+            <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Cognome</label>
             <input
               type="text"
               value={cognome}
               onChange={(e) => setCognome(e.target.value)}
-              className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
                 theme === 'dark'
                   ? 'bg-gray-700 border-gray-600 text-white'
                   : 'bg-gray-50 border-gray-300 text-gray-900'
@@ -187,12 +187,12 @@ export default function Login({ onLogin, theme }) {
 
           {/* PASSWORD */}
           <div>
-            <label className="block text-sm font-medium mb-1">Password di classe</label>
+            <label className="block text-sm md:text-base font-medium mb-1 md:mb-1.5">Password di classe</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full px-4 md:px-5 py-2 md:py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base ${
                 theme === 'dark'
                   ? 'bg-gray-700 border-gray-600 text-white'
                   : 'bg-gray-50 border-gray-300 text-gray-900'
@@ -208,11 +208,11 @@ export default function Login({ onLogin, theme }) {
               type="checkbox"
               checked={acceptedDocs}
               onChange={(e) => handleAcceptChange(e.target.checked)}
-              className="mt-1 w-4 h-4 accent-blue-600 cursor-pointer"
+              className="mt-1 w-4 h-4 md:w-5 md:h-5 accent-blue-600 cursor-pointer"
             />
             <label
               htmlFor="accept-docs"
-              className={`text-sm cursor-pointer ${
+              className={`text-sm md:text-base cursor-pointer ${
                 theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
               }`}
             >
@@ -261,12 +261,12 @@ export default function Login({ onLogin, theme }) {
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center font-medium">{error}</div>
+            <div className="text-red-500 text-sm md:text-base text-center font-medium">{error}</div>
           )}
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
+            className="w-full py-2.5 md:py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition text-sm md:text-base"
           >
             Accedi
           </button>
