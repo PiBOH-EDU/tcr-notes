@@ -258,6 +258,18 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.10.3] — Login desktop a due colonne (layout moderno)
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Modifiche
+- `Login.jsx`: su desktop (`md:`+) il layout è ora a **due colonne**:
+  - Sinistra: area branding con icona 📚, titolo, slogan e decorazione grafica (gradiente + forme astratte)
+  - Destra: card del form di login più spaziosa e centrata verticalmente
+  - Mobile: rimane layout a colonna singola come prima
+- Bump versione schematica a **0.10.3** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.10.2] — Fix workflow APK Android (capacitor.config.json)
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

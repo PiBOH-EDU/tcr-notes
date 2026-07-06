@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.10.3] - 2026-07-05
+
+### Modificato
+- `Login.jsx`: su desktop layout a **due colonne** — sinistra branding con gradiente e decorazioni, destra form di login. Mobile rimane invariato.
+- Bump versione a **0.10.3** ovunque.
+
 ## [0.10.2] - 2026-07-05
 
 ### Corretto
