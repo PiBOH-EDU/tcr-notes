@@ -143,15 +143,23 @@ export default function Editor({ chapterId, titleId, titleName, chapterName, use
 
     channel
       .on('broadcast', { event: 'typing' }, (payload) => {
-        const { user: typingName, chapterId: cid, cursorPosition } = payload.payload;
+        const { user: typingName, chapterId: cid, cursorPosition, content: remoteContent } = payload.payload;
         if (typingName !== user && cid === chapterId) {
           setTypingUser({ name: typingName, cursorPosition: cursorPosition || 0 });
-          setRemoteCursor({ name: typingName, position: cursorPosition || 0 });
+          setRemoteCursor({ name: typingName, position: cursorPosition || 0, content: remoteContent });
+          // Aggiorna testo in tempo reale se non sto scrivendo attivamente
+          if (remoteContent !== undefined && !isEditing && saveState !== 'dirty' && document.activeElement !== textareaRef.current) {
+            setContent(remoteContent);
+            lastSavedContent.current = remoteContent;
+            undoStack.current = [remoteContent];
+            redoStack.current = [];
+            setSaveState('saved');
+          }
           if (globalTypingTimeout) clearTimeout(globalTypingTimeout);
           globalTypingTimeout = setTimeout(() => {
             setTypingUser(null);
             setRemoteCursor(null);
-          }, 2000);
+          }, 3000);
         }
       })
       .subscribe();
@@ -159,7 +167,7 @@ export default function Editor({ chapterId, titleId, titleName, chapterName, use
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [chapterId, user]);
+  }, [chapterId, user, isEditing, saveState]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -249,7 +257,7 @@ export default function Editor({ chapterId, titleId, titleName, chapterName, use
       broadcastChannelRef.current.send({
         type: 'broadcast',
         event: 'typing',
-        payload: { user, chapterId, titleId, titleName, chapterName, cursorPosition: cursorPos },
+        payload: { user, chapterId, titleId, titleName, chapterName, cursorPosition: cursorPos, content: newContent },
       });
     }
 

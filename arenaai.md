@@ -258,6 +258,38 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.11.0] — Logo app, link browser esterno, sidebar auto-close, APK in menu, status footer, cursore preciso, testo realtime
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Aggiunto
+- **Logo app**: scaricato `logo.png` dal repository remoto e integrato come icona ufficiale in `Login.jsx` (sostituisce 📚), `index.html` (favicon), e `public/logo.png`.
+- **Link si aprono nel browser esterno**: aggiunto plugin `@capacitor/browser` nel workflow APK. Su web i link esterni usano `window.open()` per forzare l'apertura in nuova scheda.
+- **Sidebar auto-close su mobile**: quando si seleziona un capitolo, il drawer mobile si chiude automaticamente (come già avveniva per i titoli).
+- **Menu Info — sezione Download APK**: aggiunta voce "📱 Scarica app Android" con link diretto all'APK.
+- **Status badge nel footer**: lo stato dell'app (online/manutenzione/test/issue/offline) letto da `state.json` ora appare nel footer su una riga dedicata, con colori adattivi al tema.
+- **Cursore remoto preciso**: calcola la posizione esatta del cursore (colonna e riga) invece della sola riga approssimativa.
+- **Testo in tempo reale**: il broadcast `typing` ora invia anche il contenuto parziale; il ricevente vede il testo che l'altro sta scrivendo in tempo reale (senza aspettare il salvataggio).
+
+#### Modificato
+- `docs/GUIDA-APK.md`: aggiunta nota su `assembleDebug` vs `assembleRelease` (se non c'è il keystore, usare debug).
+- Bump versione schematica a **0.11.0** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
+### [0.10.4] — Guida APK: aggiunta sezione pulizia cache npm/gradle
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Modifiche
+- `docs/GUIDA-APK.md`: aggiunta sezione **"Pulizia cache npm e Gradle"** con comandi per risolvere build falliti per problemi di cache.
+  - Pulizia cache npm (`npm cache clean --force`)
+  - Rimozione `node_modules` e reinstallazione
+  - Pulizia build Gradle (`./gradlew clean`)
+  - Rimozione cartella `android/app/build`
+  - Reset completo piattaforma Android (`npx cap rm android` + `npx cap add android`)
+- Bump versione schematica a **0.10.4** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.10.3] — Login desktop a due colonne (layout moderno)
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

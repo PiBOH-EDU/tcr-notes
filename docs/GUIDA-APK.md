@@ -39,11 +39,29 @@ Il repository contiene un workflow `.github/workflows/build-apk.yml` che compila
 3. Scorri in basso alla sezione **Artifacts**
 4. Scarica `tcr-notes-apk-unsigned`
 
-### Passo 3: Firma l'APK (opzionale ma consigliato)
+### Passo 3: Build debug o release
 
-L'APK generato è **non firmato** (unsigned). Per installarlo sui telefoni degli studenti senza warning di sicurezza, è consigliato firmarlo con un keystore.
+#### Se NON hai un keystore (build debug)
 
-#### Creare un keystore (una sola volta)
+Se non hai configurato un keystore per firmare l'APK, devi usare il target **debug** invece di release:
+
+```bash
+cd android
+./gradlew assembleDebug
+```
+
+L'APK si troverà in:
+```
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+> ⚠️ L'APK debug può mostrare un avviso di sicurezza all'installazione. È normale e si può ignorare.
+
+#### Se HAI un keystore (build release firmata)
+
+L'APK generato da `assembleRelease` è **non firmato** (unsigned). Per installarlo senza warning di sicurezza, firmalo con un keystore.
+
+##### Creare un keystore (una sola volta)
 
 ```bash
 keytool -genkey -v -keystore tcrnotes.keystore -alias tcrnotes \
@@ -52,7 +70,7 @@ keytool -genkey -v -keystore tcrnotes.keystore -alias tcrnotes \
 
 Salva il file `tcrnotes.keystore` e la password in un luogo sicuro.
 
-#### Firmare l'APK
+##### Firmare l'APK
 
 ```bash
 # Allinea l'APK (richiesto per Android 11+)
@@ -104,7 +122,12 @@ npx cap open android
 
 # 8. Build da riga di comando
 cd android
-./gradlew assembleRelease
+
+# Se non hai un keystore, usa debug:
+./gradlew assembleDebug
+
+# Se hai un keystore e vuoi firmare l'APK:
+# ./gradlew assembleRelease
 ```
 
 > Nota: il file `capacitor.config.json` è già presente nel repository con la configurazione predefinita. Non è necessario eseguire `npx cap init`.
@@ -162,6 +185,75 @@ Per aggiornare l'app stessa (es. nuova icona, nuove funzionalità native):
 1. Ricompila l'APK con il workflow
 2. Distribuisci il nuovo APK agli studenti
 3. Gli studenti devono reinstallare l'app
+
+---
+
+## Pulizia cache npm e Gradle
+
+Se il build fallisce con errori strani, file mancanti o comportamenti anomali, la causa più comune è la **cache corrotta** di npm o Gradle. Ecco come pulirla.
+
+### Pulizia cache npm
+
+```bash
+# Pulisci la cache di npm
+npm cache clean --force
+
+# Rimuovi node_modules e reinstalla tutto
+cd /percorso/del/progetto
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Pulizia build Gradle
+
+```bash
+# Entra nella cartella Android
+cd android
+
+# Pulisci i file di build generati
+./gradlew clean
+
+# (Opzionale) Rimuovi completamente la cartella build
+rm -rf app/build
+```
+
+### Reset completo piattaforma Android
+
+Se i comandi sopra non bastano, puoi **rimuovere e ricreare** la piattaforma Android:
+
+```bash
+# Dalla root del progetto
+npx cap rm android
+npx cap add android
+npx cap sync
+```
+
+> ⚠️ Attenzione: questo elimina eventuali modifiche manuali fatte nella cartella `android/` (es. configurazioni custom nel `AndroidManifest.xml`). Usalo solo se strettamente necessario.
+
+### Comando "nucleare" (tutto in uno)
+
+Se vuoi essere sicuro al 100% di partire da zero:
+
+```bash
+cd /percorso/del/progetto
+
+# 1. Pulizia npm
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# 2. Build web
+npm run build
+
+# 3. Pulizia Android
+npx cap rm android
+npx cap add android
+npx cap sync
+
+# 4. Build APK
+cd android
+./gradlew assembleRelease
+```
 
 ---
 

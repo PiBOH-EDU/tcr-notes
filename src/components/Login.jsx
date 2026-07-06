@@ -131,7 +131,7 @@ export default function Login({ onLogin, theme }) {
 
         {/* Contenuto branding */}
         <div className="relative z-10 text-center text-white px-12">
-          <div className="text-8xl mb-6">📚</div>
+          <img src="/logo.png" alt="tcr-notes logo" className="w-32 h-32 mx-auto mb-6 object-contain drop-shadow-lg" />
           <h1 className="text-4xl font-bold mb-3">tcr-notes</h1>
           <p className="text-lg opacity-90 mb-2">Una classe, Tanti appunti</p>
           <p className="text-lg opacity-90 mb-8">Un unico diario</p>
@@ -180,7 +180,7 @@ export default function Login({ onLogin, theme }) {
 
             {/* Header mobile (nascosto su desktop) */}
             <div className="md:hidden text-center mb-6">
-              <div className="text-5xl mb-2">📚</div>
+              <img src="/logo.png" alt="tcr-notes logo" className="w-16 h-16 mx-auto mb-2 object-contain" />
               <h1 className="text-2xl font-bold mb-1">tcr-notes</h1>
               <p className="text-sm opacity-70">Una classe, Tanti appunti, Un unico diario</p>
             </div>

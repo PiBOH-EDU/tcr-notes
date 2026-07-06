@@ -7,6 +7,28 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-07-05
+
+### Aggiunto
+- Logo ufficiale `logo.png` integrato in login (desktop + mobile), favicon, e menu info.
+- Link esterni si aprono nel browser esterno (plugin `@capacitor/browser` nell'APK).
+- Sidebar mobile si chiude automaticamente quando si seleziona un capitolo.
+- Menu Info — sezione "Download" con link diretto all'APK Android.
+- Footer — status badge da `state.json` (manutenzione/test/issue/offline) su riga dedicata.
+- Cursore remoto preciso: calcola riga e colonna esatta.
+- Testo in tempo reale: il contenuto si aggiorna dal broadcast typing se non si sta scrivendo.
+
+### Modificato
+- Workflow APK: usa `assembleDebug` (non richiede keystore).
+- `docs/GUIDA-APK.md`: aggiunta sezione debug vs release.
+- Bump versione a **0.11.0** ovunque.
+
+## [0.10.4] - 2026-07-05
+
+### Modificato
+- `docs/GUIDA-APK.md`: aggiunta sezione "Pulizia cache npm e Gradle" con comandi per risolvere build falliti.
+- Bump versione a **0.10.4** ovunque.
+
 ## [0.10.3] - 2026-07-05
 
 ### Modificato

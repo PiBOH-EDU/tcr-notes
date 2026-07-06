@@ -50,15 +50,20 @@ const HighlightTextarea = forwardRef(function HighlightTextarea(
     }
   };
 
-  // Calcola la riga del cursore remoto
-  const getRemoteCursorRow = () => {
-    if (!remoteCursor || remoteCursor.position == null) return 0;
-    const textBeforeCursor = value.slice(0, remoteCursor.position);
-    return (textBeforeCursor.match(/\n/g) || []).length;
+  // Calcola riga e colonna del cursore remoto
+  const getRemoteCursorPos = () => {
+    if (!remoteCursor || remoteCursor.position == null) return { row: 0, col: 0 };
+    const pos = remoteCursor.position;
+    const textBefore = value.slice(0, pos);
+    const row = (textBefore.match(/\n/g) || []).length;
+    const lastNewline = textBefore.lastIndexOf('\n');
+    const col = lastNewline === -1 ? pos : pos - lastNewline - 1;
+    return { row, col };
   };
 
-  const remoteRow = getRemoteCursorRow();
+  const { row: remoteRow, col: remoteCol } = getRemoteCursorPos();
   const lineHeightEm = 1.625; // leading-relaxed
+  const charWidthEm = 0.6; // approssimativo per font-mono
 
   return (
     <div
@@ -82,13 +87,17 @@ const HighlightTextarea = forwardRef(function HighlightTextarea(
           className="remote-cursor-overlay absolute inset-0 overflow-hidden m-0 pointer-events-none select-none"
           style={{ padding: 'inherit' }}
         >
-          {/* Linea verticale alla riga del cursore */}
+          {/* Linea verticale alla posizione esatta del cursore */}
           <div
-            className="absolute left-0 right-0 flex items-center"
-            style={{ top: `${remoteRow * lineHeightEm}em`, height: `${lineHeightEm}em` }}
+            className="absolute flex items-start"
+            style={{
+              top: `${remoteRow * lineHeightEm}em`,
+              left: `${remoteCol * charWidthEm}em`,
+              height: `${lineHeightEm}em`,
+            }}
           >
             <div className="w-0.5 h-full bg-blue-500 animate-pulse" />
-            <div className="ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-600 text-white whitespace-nowrap">
+            <div className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-600 text-white whitespace-nowrap">
               ✍️ {remoteCursor.name}
             </div>
           </div>

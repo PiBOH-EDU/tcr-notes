@@ -12,6 +12,8 @@ const DOCS = [
   { label: '📄 LICENSE', url: 'https://github.com/PiBOH-EDU/tcr-notes/blob/main/LICENSE' },
 ];
 
+const APK_DOWNLOAD = { label: '📱 Scarica app Android (APK)', url: 'https://github.com/PiBOH-EDU/tcr-notes/raw/refs/heads/main/.releases/APK/latest/tcr-notes.apk' };
+
 const FEEDBACK = { label: '🐛 Segnala un bug / Richiedi una funzionalità (GitHub)', url: 'https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose' };
 
 export default function InfoMenu({ theme }) {
@@ -53,7 +55,7 @@ export default function InfoMenu({ theme }) {
         >
           <div className="p-3 border-b border-gray-700/30">
             <div className="font-bold text-sm">📚 tcr-notes</div>
-            <div className="text-xs opacity-70 mt-0.5">Versione 0.10.3</div>
+            <div className="text-xs opacity-70 mt-0.5">Versione 0.11.0</div>
             <div className="text-xs opacity-70">Autore: PiBOH</div>
           </div>
           <div className="p-2">
@@ -75,6 +77,21 @@ export default function InfoMenu({ theme }) {
                 {d.label}
               </a>
             ))}
+            <div className="text-xs font-semibold uppercase tracking-wider opacity-50 px-2 py-1 mt-1">
+              Download
+            </div>
+            <a
+              href={APK_DOWNLOAD.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`block px-2 py-1.5 rounded text-sm transition ${
+                theme === 'dark'
+                  ? 'hover:bg-gray-700 text-gray-300'
+                  : 'hover:bg-gray-100 text-gray-700'
+              }`}
+            >
+              {APK_DOWNLOAD.label}
+            </a>
             <div className="text-xs font-semibold uppercase tracking-wider opacity-50 px-2 py-1 mt-1">
               Feedback
             </div>
