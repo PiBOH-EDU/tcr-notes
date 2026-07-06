@@ -258,6 +258,16 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.11.5] — Fix icone APK mancanti (drawable base + drawable-port-*)
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Corretto
+- Aggiunte cartelle icone mancanti: `drawable/` (base), `drawable-port-mdpi/hdpi/xhdpi/xxhdpi/xxxhdpi`.
+- Tutte le icone vengono copiate nel workflow sovrascrivendo quelle di default di Capacitor.
+- Bump versione schematica a **0.11.5** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.11.4] — Fix icone complete APK (launcher + splash + foreground)
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

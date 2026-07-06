@@ -5,14 +5,14 @@
 ██   ██    ██       ██    ██      ██  ██ ██  ███    ██ ██    ██ ██  ██ ██ ██         
 ██   ██    ██       ██    ███████ ██   ████ ███████ ██  ██████  ██   ████ ███████ ██ 
 
-Questa è ancora una release di anteprima, solo pochi sono autorizzati ad utilizzare il sito.
+Questa è ancora una release di anteprima, solo pochi sono stati autorizzati ad utilizzare il sito.
 ```
 
-# 📚 tcr-notes
+# 📚 [tcr-notes](https://tcr-notes.vercel.app/) ![Badge](https://hitscounter.dev/api/hit?url=https%3A%2F%2Ftcr-notes.vercel.app%2F&label=Total+Visitors&icon=globe-americas&color=%23198754&message=&style=flat&tz=UTC)
 
-Appunti collaborativi in tempo reale per la classe **1FT** dell'ITT "Barsanti" (A.S. 2025/2026).
+---
 
-> **The Catcher in the Rye** — gestione appunti scolastici con sincronizzazione istantanea tra tutti i membri della classe.
+> gestione appunti con sincronizzazione istantanea tra tutti i membri autorizzati.
 
 ---
 
@@ -131,4 +131,4 @@ Vedi il file [LICENSE](https://raw.githubusercontent.com/PiBOH-EDU/tcr-notes/ref
 
 ---
 
-**Versione 0.8.0** — autore PiBOH
+**Versione 0.11.5** — autore PiBOH

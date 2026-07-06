@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.5] - 2026-07-05
+
+### Corretto
+- Aggiunte icone mancanti: `drawable/` (base) e `drawable-port-mdpi/hdpi/xhdpi/xxhdpi/xxxhdpi`.
+- Bump versione a **0.11.5** ovunque.
+
 ## [0.11.4] - 2026-07-05
 
 ### Corretto

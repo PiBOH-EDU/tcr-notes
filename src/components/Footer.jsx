@@ -61,7 +61,7 @@ export default function Footer({ theme }) {
           </span>
         )}
         <span className="opacity-60 shrink-0">
-          v0.11.4 · PiBOH
+          v0.11.5 · PiBOH
         </span>
       </div>
     </footer>
