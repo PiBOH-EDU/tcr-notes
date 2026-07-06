@@ -1,0 +1,8 @@
+{
+  "appId": "com.tcrnotes.app",
+  "appName": "tcr-notes",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

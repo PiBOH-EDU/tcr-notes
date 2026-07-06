@@ -7,6 +7,15 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-07-05
+
+### Corretto
+- Workflow APK Android: rimosso flag `--no-interactive` inesistente in `@capacitor/cli`.
+- Aggiunto `capacitor.config.json` nella root del repository.
+- Workflow semplificato: build web → install Capacitor → add android → sync → build APK.
+- Aggiornata `docs/GUIDA-APK.md` per riflettere il nuovo flusso.
+- Bump versione a **0.10.2** ovunque.
+
 ## [0.10.1] - 2026-07-05
 
 ### Modificato

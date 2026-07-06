@@ -33,12 +33,6 @@ jobs:
         run: |
           npm install @capacitor/core @capacitor/android @capacitor/cli
 
-      - name: Init Capacitor Android project
-        run: |
-          npx cap init tcr-notes com.tcrnotes.app \
-            --web-dir dist \
-            --no-interactive
-
       - name: Add Android platform
         run: npx cap add android
 
@@ -56,7 +50,7 @@ jobs:
           name: tcr-notes-apk-unsigned
           path: android/app/build/outputs/apk/release/app-release-unsigned.apk
 
-      - name: Upload build logs
+      - name: Upload build logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:

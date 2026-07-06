@@ -258,6 +258,18 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.10.2] — Fix workflow APK Android (capacitor.config.json)
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Corretto
+- `.github/workflows/build-apk.yml`: rimosso flag `--no-interactive` inesistente in `@capacitor/cli`.
+- Creato `capacitor.config.json` nella root del repository con configurazione predefinita (package ID `com.tcrnotes.app`, webDir `dist`).
+- Workflow semplificato: build web → install Capacitor → add android → sync → build APK.
+- `docs/GUIDA-APK.md`: aggiornata sezione build in locale (rimosso `cap init`, ora si usa il file config esistente).
+- Bump versione schematica a **0.10.2** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.10.1] — Fix package ID APK Android
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

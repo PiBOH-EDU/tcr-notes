@@ -93,22 +93,21 @@ npm run build
 # 4. Installa Capacitor
 npm install @capacitor/core @capacitor/android @capacitor/cli
 
-# 5. Inizializza il progetto Android
-npx cap init tcr-notes com.tcrnotes.app --web-dir dist
-
-# 6. Aggiungi la piattaforma Android
+# 5. Aggiungi la piattaforma Android
 npx cap add android
 
-# 7. Sincronizza
+# 6. Sincronizza
 npx cap sync
 
-# 8. Apri in Android Studio (opzionale, per debug)
+# 7. Apri in Android Studio (opzionale, per debug)
 npx cap open android
 
-# 9. Build da riga di comando
+# 8. Build da riga di comando
 cd android
 ./gradlew assembleRelease
 ```
+
+> Nota: il file `capacitor.config.json` è già presente nel repository con la configurazione predefinita. Non è necessario eseguire `npx cap init`.
 
 L'APK si troverà in:
 ```
