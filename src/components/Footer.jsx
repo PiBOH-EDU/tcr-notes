@@ -51,7 +51,7 @@ export default function Footer({ theme }) {
     >
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 max-w-7xl mx-auto">
         <span className="opacity-80 truncate">
-          Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)
+          Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)      ⚠️ Non inserire dati personali negli appunti
         </span>
         {showStatus ? (
           statusBadge()
