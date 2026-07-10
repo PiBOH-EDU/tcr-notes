@@ -7,6 +7,12 @@ e questo progetto aderisce a [Semantic Versioning](https://semver.org/lang/it/).
 
 ## [Unreleased]
 
+## [0.11.6] - 2026-07-05
+
+### Aggiunto
+- Ordinamento titoli: dropdown con Alfabetico (A-Z) predefinito, Più recenti, Più vecchi.
+- Bump versione a **0.11.6** ovunque.
+
 ## [0.11.5] - 2026-07-05
 
 ### Corretto

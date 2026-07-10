@@ -51,7 +51,7 @@ export default function Footer({ theme }) {
     >
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5 max-w-7xl mx-auto">
         <span className="opacity-80 truncate">
-          Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)      ⚠️ Non inserire dati personali negli appunti
+          Materiale privato — accesso riservato alla classe 1FT (A.S. 2025/2026)
         </span>
         {showStatus ? (
           statusBadge()
@@ -61,7 +61,7 @@ export default function Footer({ theme }) {
           </span>
         )}
         <span className="opacity-60 shrink-0">
-          v0.11.5 · PiBOH
+          v0.11.6 · PiBOH
         </span>
       </div>
     </footer>

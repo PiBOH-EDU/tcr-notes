@@ -258,6 +258,15 @@
   - Spostato `GUIDA-SUPABASE.md` in `docs/GUIDA-SUPABASE.md`.
   - Build di produzione eseguito per verificare integrità post-modifica.
 
+### [0.11.6] — Ordinamento titoli (alfabetico, recenti, vecchi)
+- **Autore:** PiBOH
+- **Data:** 2026-07-05
+
+#### Aggiunto
+- `Dashboard.jsx`: ordinamento titoli con dropdown a 3 opzioni — **Alfabetico (A-Z)** (predefinito), Più recenti prima, Più vecchi prima.
+- Bump versione schematica a **0.11.6** (`package.json`, `Footer.jsx`, `InfoMenu.jsx`, `CHANGELOG.md`, `arenaai.md`).
+- Build di produzione eseguito per verificare integrità.
+
 ### [0.11.5] — Fix icone APK mancanti (drawable base + drawable-port-*)
 - **Autore:** PiBOH
 - **Data:** 2026-07-05

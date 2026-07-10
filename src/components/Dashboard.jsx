@@ -39,6 +39,7 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
   const [editTitleValue, setEditTitleValue] = useState('');
   const [editChapterValue, setEditChapterValue] = useState('');
   const [chapterSort, setChapterSort] = useState('recent-desc'); // 'alphabetical' | 'recent-asc' | 'recent-desc'
+  const [titleSort, setTitleSort] = useState('alphabetical'); // 'alphabetical' | 'recent-asc' | 'recent-desc'
 
   const [supabaseStatus, setSupabaseStatus] = useState('checking'); // 'online' | 'offline' | 'checking'
 
@@ -295,6 +296,23 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
     setSelectedChapter(id);
     setView('editor');
     setSidebarOpen(false);
+  };
+
+  const getSortedTitles = () => {
+    const sorted = [...titles];
+    switch (titleSort) {
+      case 'recent-asc':
+        sorted.sort((a, b) => new Date(a.updated_at || 0) - new Date(b.updated_at || 0));
+        break;
+      case 'recent-desc':
+        sorted.sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
+        break;
+      case 'alphabetical':
+      default:
+        sorted.sort((a, b) => a.name.localeCompare(b.name, 'it'));
+        break;
+    }
+    return sorted;
   };
 
   const getSortedChapters = () => {
@@ -555,8 +573,25 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
               </div>
             )}
 
+            {/* Ordinamento titoli */}
+            <div className="mb-2">
+              <select
+                value={titleSort}
+                onChange={(e) => setTitleSort(e.target.value)}
+                className={`w-full text-xs rounded border px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                  theme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 text-gray-200'
+                    : 'bg-white border-gray-300 text-gray-700'
+                }`}
+              >
+                <option value="alphabetical">🔤 Alfabetico (A-Z)</option>
+                <option value="recent-desc">📅 Più recenti prima</option>
+                <option value="recent-asc">📅 Più vecchi prima</option>
+              </select>
+            </div>
+
             <div className="space-y-1">
-              {titles.map((t) => (
+              {getSortedTitles().map((t) => (
                 <div key={t.id}>
                   {editingTitleId === t.id ? (
                     <div className="flex items-center gap-1 px-2 py-1.5">
