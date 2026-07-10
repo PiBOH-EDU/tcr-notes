@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { APP_VERSION, EXPORT_FORMAT_VERSION } from '../version';
 
 /* ===================== TITOLI ===================== */
 
@@ -186,7 +187,12 @@ export async function exportAllData() {
   ]);
 
   const blob = new Blob(
-    [JSON.stringify({ version: '0.0.2.2', titles, chapters, history }, null, 2)],
+    [JSON.stringify({
+      appVersion: APP_VERSION,
+      formatVersion: EXPORT_FORMAT_VERSION,
+      exportedAt: new Date().toISOString(),
+      titles, chapters, history,
+    }, null, 2)],
     { type: 'application/json' }
   );
   const url = URL.createObjectURL(blob);
@@ -195,6 +201,19 @@ export async function exportAllData() {
   a.download = `tcr-notes-backup-${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   URL.revokeObjectURL(url);
+
+  // Smoke test (solo in dev): verifica che IL BLOB effettivamente scritto
+  // abbia lo schema dichiarato. Se qualcuno modifica i campi della export
+  // senza bumpare EXPORT_FORMAT_VERSION, l'assert avvisa in console.
+  // NB: in produzione (`import.meta.env.DEV === false`) il blocco è rimosso
+  // dal tree-shaking di Vite, quindi nessun overhead né log-spam.
+  if (import.meta.env.DEV) {
+    const serialized = await blob.text();
+    const parsed = JSON.parse(serialized);
+    if (parsed.appVersion !== APP_VERSION || parsed.formatVersion !== EXPORT_FORMAT_VERSION) {
+      console.warn(`[tcr-notes] exportAllData: schema mismatch — appVersion="${parsed.appVersion}" (atteso "${APP_VERSION}"), formatVersion="${parsed.formatVersion}" (atteso "${EXPORT_FORMAT_VERSION}"). Bumpa EXPORT_FORMAT_VERSION in src/version.js se hai modificato i campi.`);
+    }
+  }
 }
 
 export async function importAllData(file) {
@@ -205,6 +224,27 @@ export async function importAllData(file) {
         const data = JSON.parse(e.target.result);
         if (!data || !Array.isArray(data.titles)) {
           throw new Error('Formato file non valido');
+        }
+
+        // Avviso non bloccante: il file proviene da un formato/versione nota
+        // diversa da quella corrente. L'import riesce comunque perché lo
+        // schema è backward-compatible, ma l'utente (o lo sviluppatore) viene
+        // avvisato per evitare sorprese silenziose.
+        //
+        // Mappatura campi:
+        //   - formatVersion: schema del backup (EXPORT_FORMAT_VERSION corrente)
+        //   - version:       campo legacy dei backup < 0.11.6 (es. '0.0.2.2')
+        //   - appVersion:    campo nuovo dei backup >= 0.11.6 (APP_VERSION corrente)
+        // Li controlliamo separatamente così durante il debug è chiaro
+        // *quale* campo sorgente ha generato il mismatch.
+        if (data.formatVersion && data.formatVersion !== EXPORT_FORMAT_VERSION) {
+          console.warn(`[tcr-notes] Import da formatVersion '${data.formatVersion}' (attuale '${EXPORT_FORMAT_VERSION}').`);
+        }
+        if (data.version !== undefined && data.version !== APP_VERSION) {
+          console.warn(`[tcr-notes] Import da version legacy '${data.version}' (attuale appVersion '${APP_VERSION}').`);
+        }
+        if (data.appVersion !== undefined && data.appVersion !== APP_VERSION) {
+          console.warn(`[tcr-notes] Import da appVersion '${data.appVersion}' (attuale '${APP_VERSION}').`);
         }
 
         // Inserisce tutto (ignora conflitti su nomi unici)

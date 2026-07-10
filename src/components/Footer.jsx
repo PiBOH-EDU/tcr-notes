@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { APP_VERSION } from '../version';
 
 export default function Footer({ theme }) {
   const [appState, setAppState] = useState(null);
@@ -61,7 +62,7 @@ export default function Footer({ theme }) {
           </span>
         )}
         <span className="opacity-60 shrink-0">
-          v0.11.6 · PiBOH
+          v{APP_VERSION} · PiBOH
         </span>
       </div>
     </footer>
