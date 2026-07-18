@@ -111,7 +111,7 @@ export default function InfoMenu({ theme }) {
           <div className={`p-2 text-xs text-center border-t ${
             theme === 'dark' ? 'border-gray-700/30 text-gray-500' : 'border-gray-200 text-gray-400'
           }`}>
-            Classe 1FT — ITT "Barsanti"<br />A.S. 2025/2026
+            Classe 1FT — ITT "Barsanti"<br />A.S. 2026/2027
           </div>
         </div>
       )}
