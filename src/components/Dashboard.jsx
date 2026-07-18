@@ -493,7 +493,7 @@ export default function Dashboard({ user, role, theme, toggleTheme, onLogout }) 
 
       {supabaseStatus === 'offline' && (
         <div className="px-4 py-2 bg-red-900/40 text-red-300 text-xs text-center border-b border-red-800 animate-pulse">
-          ⚠️ Il progetto Supabase sembra essere in pausa o irraggiungibile. Riattivalo dalla dashboard di Supabase per ripristinare la sincronizzazione.
+          ⚠️ Il progetto Supabase (database dove vengono salvati gli appunti) sembra essere in pausa o irraggiungibile. Contatta l'amministratore del sito perché ne ripristini la connessione.
         </div>
       )}
 
