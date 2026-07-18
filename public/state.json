@@ -5,7 +5,7 @@
   "_comment_banner": "Se impostato su true Forza la visibilità del banner anche se status e' online. true/false.",
   "_comment_bannerType": "Colore banner: info (blu), warning (giallo/arancione), error (rosso)",
   "status": "testing",
-  "message": "Questo sito è nella fase di test prima di venire aperto a tutti i membri della classe. per favore se rilevi dei bug o ritieni che manchino delle funzioni fondamentali fai una segnalazione su github o tramite l'apposito titolo",
+  "message": "",
   "banner": true,
   "bannerType": "info"
 }
