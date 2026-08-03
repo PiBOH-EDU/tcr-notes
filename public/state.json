@@ -4,8 +4,8 @@
   "_comment_message": "Messaggio personalizzato mostrato nel banner. Lascia vuoto per usare il testo predefinito.",
   "_comment_banner": "Se impostato su true Forza la visibilità del banner anche se status e' online. true/false.",
   "_comment_bannerType": "Colore banner: info (blu), warning (giallo/arancione), error (rosso)",
-  "status": "testing",
-  "message": "Per segnalazione bug o funzionalità visita il segurnte link: https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose",
+  "status": "issue",
+  "message": "ordinamento titoli non funzionante. Per segnalare bug o funzionalità visita il segurnte link: https://github.com/PiBOH-EDU/tcr-notes/issues/new/choose",
   "banner": true,
   "bannerType": "info"
 }
