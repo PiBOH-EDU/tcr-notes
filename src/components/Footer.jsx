@@ -62,7 +62,7 @@ export default function Footer({ theme }) {
           </span>
         )}
         <span className="opacity-60 shrink-0">
-          v{APP_VERSION} · PiBOH
+          v{APP_VERSION} 
         </span>
       </div>
     </footer>
